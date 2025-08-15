@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
-import javax.sql.DataSource;
 import java.sql.*;
 import java.util.function.Consumer;
 
@@ -18,6 +17,10 @@ public class SQLCore {
 
     private SQLCore(String url, String username, String password) throws SQLException {
         this.dataSource = this.createDataSource(url, username, password);
+    }
+
+    public synchronized static void close() {
+        instance.dataSource.close();
     }
 
     public synchronized static boolean connect(String url, String userName, String passWord) {

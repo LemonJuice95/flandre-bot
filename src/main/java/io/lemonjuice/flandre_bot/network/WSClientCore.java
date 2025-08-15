@@ -35,6 +35,14 @@ public class WSClientCore {
         this.session = ContainerProvider.getWebSocketContainer().connectToServer(this, URI.create(url));
     }
 
+    public synchronized static void close() {
+        try {
+            instance.session.close();
+        } catch (IOException e) {
+            log.error("ws会话关闭异常！", e);
+        }
+    }
+
     public synchronized static boolean connect(String url, String token) {
         try {
             TOKEN = token;
