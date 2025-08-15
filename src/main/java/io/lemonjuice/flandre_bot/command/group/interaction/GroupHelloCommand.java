@@ -26,7 +26,7 @@ public class GroupHelloCommand extends GroupCommandRunner {
     @Override
     public boolean validate(Message command) {
         String message = command.message.replaceAll(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "你好");
+        return message.equals(CQCodeUtils.at(command.selfId) + "trigger你好");
     }
 
     @Override
