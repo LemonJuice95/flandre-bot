@@ -44,7 +44,7 @@ public class NicknameManager {
     public static synchronized void save() {
         try (Connection co = SQLCore.getInstance().startConnection();
              PreparedStatement insert = co.prepareStatement("INSERT INTO nicknames (user_id,nickname) VALUES(?,?) ON DUPLICATE KEY UPDATE nickname=?");
-             PreparedStatement del = co.prepareStatement("DELETE FROM nicknames WHERE user_id=?")) {
+             PreparedStatement delete = co.prepareStatement("DELETE FROM nicknames WHERE user_id=?")) {
             DIRTY.forEach((uid, nickname) -> {
                 if(nickname != null) {
                     if(!nickname.isEmpty()) {
@@ -58,8 +58,8 @@ public class NicknameManager {
                         }
                     } else {
                         try {
-                            del.setLong(1, uid);
-                            del.addBatch();
+                            delete.setLong(1, uid);
+                            delete.addBatch();
                         } catch (SQLException e) {
                             log.error(e);
                         }
@@ -67,7 +67,7 @@ public class NicknameManager {
                 }
             });
             insert.executeBatch();
-            del.executeBatch();
+            delete.executeBatch();
             DIRTY.clear();
             log.info("昵称已存入数据库");
         } catch (SQLException e) {
