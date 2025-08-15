@@ -1,0 +1,66 @@
+plugins {
+    id 'org.springframework.boot' version '3.5.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+}
+
+group = 'io.lemonjuice'
+version = '0.6.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    //lombok
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    //SpringBoot
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+    //Json处理
+    implementation 'org.json:json:20250517'
+
+    //MySQL
+    implementation 'mysql:mysql-connector-java:8.0.33'
+
+    //图片格式转换
+    implementation 'com.twelvemonkeys.imageio:imageio-core:3.9.4'
+    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.9.4'
+
+    //log4j
+    implementation 'org.apache.logging.log4j:log4j-api:2.25.1'
+    implementation 'org.apache.logging.log4j:log4j-core:2.25.1'
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.25.1'
+
+    //hikaricp
+    implementation 'com.zaxxer:HikariCP'
+
+}
+
+configurations.configureEach {
+    exclude group: "org.slf4j", module: "slf4j-log4j12"
+    exclude group: 'org.slf4j', module: 'slf4j-simple'
+//    exclude group: "org.slf4j", module: "slf4j-api"
+    exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
+    exclude group: "org.apache.logging.log4j", module: "log4j-to-slf4j"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar {
+    destinationDirectory = file('./output')
+}

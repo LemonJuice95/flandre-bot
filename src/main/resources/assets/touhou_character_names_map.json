@@ -1,0 +1,155 @@
+{
+  "博丽灵梦": "hakurei_reimu", "灵梦" : "hakurei_reimu",
+  "雾雨魔理沙": "kirisame_marisa", "魔理沙": "kirisame_marisa",
+  "冴月麟": "satsuki_rin",
+
+  "露米娅": "rumia", "⑩": "rumia",
+  "大妖精": "daiyousei", "大酱": "daiyousei",
+  "琪露诺": "cirno", "⑨": "cirno",
+  "红美铃": "hong_meiling", "美铃" : "hong_meiling", "红师傅": "hong_meiling",
+  "小恶魔": "koakuma",
+  "帕秋莉·诺雷姬": "patchouli_knowledge", "帕秋莉": "patchouli_knowledge", "帕琪": "patchouli_knowledge", "姆q": "patchouli_knowledge", "姆Q": "patchouli_knowledge",
+  "十六夜咲夜": "izayoi_sakuya", "咲夜": "izayoi_sakuya",
+  "蕾米莉亚·斯卡雷特": "remilia_scarlet", "蕾米莉亚": "remilia_scarlet", "蕾米": "remilia_scarlet", "大小姐": "remilia_scarlet",
+  "芙兰朵露·斯卡雷特": "flandre_scarlet", "芙兰朵露": "flandre_scarlet", "芙兰": "flandre_scarlet", "二小姐": "flandre_scarlet", "番茄炒蛋": "flandre_scarlet", "西红柿炒蛋": "flandre_scarlet", "西红柿炒鸡蛋": "flandre_scarlet",
+
+  "蕾蒂·霍瓦特洛克": "letty_whiterock", "蕾蒂": "letty_whiterock",
+  "橙": "chen", "橙喵": "chen",
+  "爱丽丝·玛格特洛伊德": "alice_margatroid", "爱丽丝": "alice_margatroid", "威震天": "alice_margatroid", "爱丽丝·妈个陀螺仪的": "alice_margatroid",
+  "莉莉白": "lily_white", "莉莉霍瓦特": "lily_white",
+  "露娜萨·普莉兹姆利巴": "lunasa_prismriver", "露娜萨": "lunasa_prismriver",
+  "梅露兰·普莉兹姆利巴": "merlin_prismriver", "梅露兰": "merlin_prismriver",
+  "莉莉卡·普莉兹姆利巴": "lyrica_prismriver", "丽丽卡·普莉兹姆利巴": "lyrica_prismriver", "莉莉卡": "lyrica_prismriver", "丽丽卡": "lyrica_prismriver",
+  "蕾拉·普莉兹姆利巴": "layla_prismriver", "蕾拉": "layla_prismriver",
+  "魂魄妖梦": "konpaku_youmu", "妖梦": "konpaku_youmu",
+  "魂魄妖忌": "konpaku_youki", "妖忌": "konpaku_youki",
+  "西行寺幽幽子": "saigyouji_yuyuko", "幽幽子": "saigyouji_yuyuko",
+  "八云蓝": "yakumo_ran", "蓝": "yakumo_ran",
+  "八云紫": "yakumo_yukari", "紫": "yakumo_yukari", "紫妈": "yakumo_yukari", "紫老太婆": "yakumo_yukari", "紫妹": "yakumo_yukari",
+
+  "伊吹萃香": "ibuki_suika", "萃香": "ibuki_suika", "西瓜": "ibuki_suika",
+
+  "莉格露·奈特巴格": "wriggle_nightbug", "莉格露": "wriggle_nightbug",
+  "米斯蒂娅·萝蕾拉": "mystia_lorelei", "米斯蒂娅": "mystia_lorelei", "米斯琪": "mystia_lorelei", "小碎骨": "mystia_lorelei", "夜雀": "mystia_lorelei",
+  "上白泽慧音": "kamishirasawa_keine", "慧音": "kamishirasawa_keine", "慧音老师": "kamishirasawa_keine",
+  "因幡帝": "inaba_tewi", "帝": "inaba_tewi", "因幡天为": "inaba_tewi", "天为": "inaba_tewi", "小老帝": "inaba_tewi",
+  "铃仙·优昙华院·因幡": "reisen_udongein_inaba", "铃仙": "reisen_udongein_inaba", "优昙华院": "reisen_udongein_inaba", "优昙华": "reisen_udongein_inaba", "受兔": "reisen_udongein_inaba",
+  "八意永琳": "yagokoro_eirin", "永琳": "yagokoro_eirin", "八亿永琳": "yagokoro_eirin",
+  "蓬莱山辉夜": "houraisan_kaguya", "辉夜": "houraisan_kaguya", "neet": "houraisan_kaguya", "neet姬": "houraisan_kaguya", "NEET": "houraisan_kaguya", "NEET姬": "houraisan_kaguya",
+  "藤原妹红": "mokou", "妹红": "mokou",
+
+  "梅蒂欣·梅兰可莉": "medicine_melancholy", "梅蒂欣": "medicine_melancholy", "梅子": "medicine_melancholy",
+  "风见幽香": "kazami_yuka", "幽香": "yuka",
+  "小野冢小町": "onozuka_komachi", "小町": "onozuka_komachi",
+  "四季映姬·夜摩仙那度": "shikieiki_yamaxanadu", "四季映姬": "shikieiki_yamaxanadu", "四季": "shikieiki_yamaxanadu", "老四季": "shikieiki_yamaxanadu",
+
+  "秋静叶": "aki_shizuha", "静叶": "aki_shizuha", "秋姐姐": "aki_shizuha",
+  "秋穰子": "aki_minoriko", "穰子": "aki_minoriho", "秋妹妹": "aki_moniriho",
+  "键山雏": "kagiyama_hina", "雏": "kagiyama_hina", "转转": "kagiyama_hina",
+  "河城荷取": "kawashiro_nitori", "荷取": "kawashiro_nitori", "河童": "kawashiro_nitori",
+  "犬走椛": "inubashiri_momiji", "椛": "inubashiri_momiji",
+  "射命丸文": "shameimaru_aya", "文": "shameimaru_aya", "文文": "shameimaru_aya",
+  "东风谷早苗": "kochiya_sanae", "早苗": "kochiya_sanae", "苗爷": "kochiya_sanae",
+  "八坂神奈子": "yasaka_kanako", "神奈子": "yasaka_kanako",
+  "泄矢诹访子": "moriya_suwako", "诹访子": "moriya_suwako", "呱呱": "moriya_suwako",
+
+  "永江衣玖": "nagae_iku", "衣玖": "nagae_iku", "19": "nagae_iku",
+  "比那名居天子": "hinanawi_tenshi", "天子": "hinanawi_tenshi",
+
+  "琪斯美": "kisume", "小桶": "kisume",
+  "黑谷山女": "kurodani_yamame", "山女": "kurodani_yamame", "土蜘蛛": "kurodani_yamame", "蜘蛛": "kurodani_yamame",
+  "水桥帕露西": "mizuhashi_parsee", "帕露西": "mizuhashi_parsee", "帕露": "mizuhashi_parsee",
+  "星熊勇仪": "hoshiguma_yuugi", "勇仪": "hoshiguma_yuugi",
+  "古明地觉": "komeiji_satori", "觉": "komeiji_satori", "⑤": "komeiji_satori", "小⑤": "komeiji_satori", "小5": "komeiji_satori",
+  "火焰猫燐": "kaenbyou_rin", "阿燐": "kaenbyou_rin",
+  "灵乌路空": "reiuji_utsuho", "阿空": "reiuji_utsuho",
+  "古明地恋": "komeiji_koishi", "恋": "komeiji_koishi", "恋恋": "komeiji_koishi", "514": "komeiji_koishi", "无意识": "komeiji_koishi",
+
+  "纳兹琳": "nazrin", "鼠鼠": "nazrin",
+  "多多良小伞": "tatara_kogasa", "小伞": "tatara_kogasa",
+  "云居一轮": "kumoi_ichirin", "一轮": "kumoi_ichirin",
+  "云山": "unzan",
+  "村纱水蜜": "murasa_minamitsu", "村纱": "murasa_minamitsu", "村纱船长": "murasa_minamitsu", "船长": "murasa_minamitsu",
+  "寅丸星": "toramaru_shou", "星": "toramaru_shou", "大师兄": "toramaru_shou",
+  "圣白莲": "hijiri_byakuren", "白莲": "hijiri_byakuren", "圣": "hijiri_byakuren",
+  "封兽鵺": "houjuu_nue", "鵺": "houjuu_nue", "好鵺": "houjuu_nue",
+
+  "姬海棠果": "himekaidou_hatate", "果": "himekaidou_hatate", "果果":"himekaidou_hatate", "姬海棠羽立": "himekaidou_hatate", "羽立": "himekaidou_hatate",
+
+  "幽谷响子": "kasodani_kyouko", "响子": "kasodani_kyouko",
+  "宫古芳香": "miyako_yoshika", "芳香": "miyako_yoshika", "僵尸": "miyako_yoshika",
+  "霍青娥": "kaku_seiga", "青娥": "kaku_seiga", "青娥娘娘": "kaku_seiga", "娘娘": "kaku_seiga",
+  "苏我屠自古": "soga_no_tojiko", "屠自古": "soga_no_tojiko",
+  "物部布都": "mononobe_no_futo", "布都": "mononobe_no_futo", "布嘟嘟": "mononobe_no_futo",
+  "丰聪耳神子": "toyosatomimi_no_miko", "神子": "toyosatomimi_no_miko", "圣德太子": "toyosatomimi_no_miko",
+  "二岩猯藏": "futatsuiwa_mamizou", "猯藏": "futatsuiwa_mamizou", "老狸猫": "futatsuiwa_mamizou", "大狸猫": "futatsuiwa_mamizou", "狸猫": "futatsuiwa_mamizou",
+
+  "秦心": "hata_no_kokoro", "心": "hata_no_kokoro",
+
+  "若鹭姬": "wakasagihime", "人鱼": "wakasagihime",
+  "赤蛮奇": "sekibanki", "飞头蛮": "sekibanki",
+  "今泉影狼": "imaizumi_kagerou", "影狼": "imaizumi_kagerou",
+  "九十九弁弁": "tsukumo_benben", "九十九姐姐": "tsukumo_benben", "弁弁": "tsukumo_benben",
+  "九十九八桥": "tsukumo_yatsuhashi", "九十九妹妹": "tsukumo_yatsuhashi", "八桥": "tsukumo_yatsuhashi",
+  "鬼人正邪": "kijin_seija", "正邪": "kijin_seija", "天邪鬼": "kijin_seija",
+  "少名针妙丸": "sukuna_shinmyoumaru", "针妙丸": "sukuna_shinmyoumaru", "小碗": "sukuna_shinmyoumaru",
+  "崛川雷鼓": "horikawa_raiko", "雷鼓": "horikawa_raiko", "鼓哥": "horikawa_raiko",
+
+  "宇佐见堇子": "usami_sumireko", "堇子": "usami_sumireko",
+  "宇佐见莲子": "usami_renko", "莲子": "usami_renko",
+  "玛艾露贝莉·赫恩": "maribel_han", "梅莉": "maribel_han",
+
+  "清兰": "seiran",
+  "铃瑚": "ringo",
+  "哆来咪·苏伊特": "doremy_sweet", "哆来咪": "doremy_sweet", "123": "doremy_sweet",
+  "稀神探女": "kishin_sagume", "探女": "kishin_sagume",
+  "克劳恩皮丝": "clownpiece", "皮丝": "clownpiece", "小丑": "clownpiece", "美国妖精": "clownpiece",
+  "纯狐": "junko", "纯狐麻麻": "junko", "纯妈": "junko",
+  "赫卡提亚·拉碧斯拉祖利": "hecatia_lapislazuli", "赫卡提亚": "hecatia_lapislazuli", "赫卡": "hecatia_lapislazuli",
+
+  "依神女苑": "yorigami_joon&site=konachan", "女苑": "yorigami_joon&site=konachan",
+  "依神紫苑": "yorigami_shion", "紫苑": "yorigami_shion",
+
+  "爱塔妮缇拉尔瓦": "eternity_larva", "拉尔瓦": "eternity_larva", "大扑棱蛾子": "eternity_larva", "凤蝶": "eternity_larva", "扑棱蛾子": "eternity_larva", "蛾子": "eternity_larva", "大蛾子": "eternity_larva",
+  "坂田合欢": "sakata", "坂田合欢乃": "sakata", "坂田合欢野": "sakata", "合欢": "sakata", "合欢野": "sakata", "合欢乃": "sakata", "山姥": "sakata",
+  "高丽野阿吽": "komano_aun", "阿吽": "komano_aun",
+  "矢田寺成美": "yatadera_narumi", "成美": "yatadera_narumi", "地藏": "yatadera_narumi",
+  "尔子田里乃": "nishida_satono", "里乃": "nishida_satono",
+  "丁礼田舞": "teireida_mai", "舞": "teireida_mai",
+  "摩多罗隐岐奈": "matara_okina", "摩多罗": "matara_okina", "电棍": "matara_okina", "乐子神": "matara_okina", "otto": "matara_okina", "OTTO": "matara_okina",
+
+  "戎璎花": "ebisu_eika",
+  "牛崎润美": "ushizaki_urumi", "润美": "ushizaki_urumi",
+  "庭渡久侘歌": "niwatari_kutaka", "久侘歌": "niwatari_kutaka", "鸡哥": "niwatari_kutaka", "鸡妹": "niwatari_kutaka",
+  "吉吊八千慧": "kicchou_yachie", "八千慧": "kicchou_yachie", "吉吊": "kicchou_yachie", "吉弔八千慧": "kicchou_yachie", "吉弔": "kicchou_yachie",
+  "杖刀偶磨弓": "mayumi", "磨弓": "mayumi", "埴轮兵长": "mayumi", "兵长": "mayumi",
+  "埴安神袿姬": "keiki", "袿姬": "keiki",
+  "骊驹早鬼": "kurokoma_saki", "早鬼": "kurokoma_saki",
+
+  "饕餮尤魔": "toutetsu_yuma", "饕餮": "toutetsu_yuma", "油馍": "toutetsu_yuma", "尤魔": "toutetsu_yuma", "油膜": "toutetsu_yuma",
+
+  "豪德寺三花": "goutokuji_mike", "三花": "goutokuji_mike", "招财猫": "goutokuji_mike",
+  "山城高岭": "yamashiro_takane", "高岭": "yamashiro_takane", "山童": "yamashiro_takane",
+  "驹草山如": "komakusa_sannyo&site=yandere", "驹草太夫": "komakusa_sannyo&site=yandere", "山如": "komakusa_sannyo&site=yandere", "太夫": "komakusa_sannyo&site=yandere",
+  "玉造魅须丸": "tamatsukuri_misumaru", "魅须丸": "tamatsukuri_misumaru",
+  "菅牧典": "kudamaki_tsukasa", "典": "kudamaki_tsukasa", "管狐": "kudamaki_tsukasa",
+  "饭纲丸龙": "iizunamaru_megumu", "龙": "iizunamaru_megumu",
+  "天弓千亦": "chimata", "千亦": "chimata", "千亿": "chimata",
+  "姬虫百百世": "himemushi_momoyo", "百百世": "himemushi_momoyo", "蜈蚣精": "himemushi_momoyo", "大蜈蚣": "himemushi_momoyo", "蜈蚣": "himemushi_momoyo",
+
+  "桑尼米尔克": "sunny_milk", "桑尼": "sunny_milk",
+  "露娜切露德": "luna_child", "露娜": "luna_child",
+  "斯塔萨菲雅": "star_sapphire", "斯塔": "star_sapphire",
+
+  "绵月丰姬": "watatsuki_no_toyohime", "丰姬": "watatsuki_no_toyohime",
+  "绵月依姬": "watatsuki_no_yorihime", "依姬": "watatsuki_no_yorihime",
+
+  "稗田阿求": "hieda_no_akyuu", "阿求": "hieda_no_akyuu", "阿加莎克里斯Q": "hieda_no_akyuu",
+
+  "茨木华扇": "ibaraki_kasen", "华扇": "ibaraki_kasen", "茨华仙": "ibaraki_kasen", "华仙": "ibaraki_kasen", "包子仙": "ibaraki_kasen", "本子仙": "ibaraki_kasen",
+
+  "本居小铃": "motoori_kosuzu", "小铃": "motoori_kosuzu", "防撞桶": "motoori_kosuzu",
+
+  "奥野田美宵": "okunoda_miyoi", "美宵": "okunoda_miyoi", "鲸鱼": "okunoda_miyoi", "鲸鱼妹": "okunoda_miyoi"
+
+}
