@@ -3,7 +3,7 @@ package io.lemonjuice.flandre_bot.handler;
 import io.lemonjuice.flandre_bot.command.group.interest.GroupFortuneCookieCommand;
 import io.lemonjuice.flandre_bot.network.SQLCore;
 import io.lemonjuice.flandre_bot.network.WSClientCore;
-import io.lemonjuice.flandre_bot.utils.NickNameManager;
+import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
@@ -42,7 +42,7 @@ public class RefreshHandler {
     @Scheduled(cron = "0 0 * * * ?")
     @Async
     public void refreshPerHour() {
-        NickNameManager.storage();
+        NicknameManager.save();
         GroupFortuneCookieCommand.refresh();
     }
 

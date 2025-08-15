@@ -5,7 +5,7 @@ import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
-import io.lemonjuice.flandre_bot.utils.NickNameManager;
+import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
 import java.util.regex.Matcher;
@@ -27,7 +27,7 @@ public class GroupNicknameCommand extends GroupCommandRunner {
     public void apply(Message command) {
         String nickname = this.getNickname(command);
         if(!nickname.isEmpty()) {
-            NickNameManager.updateNickname(command.userId, nickname);
+            NicknameManager.updateNickname(command.userId, nickname);
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "唔……记住啦！\n芙兰以后就叫你" + nickname + "啦！");
         } else {
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "诶？要芙兰叫你什么？没有听清呢……");

@@ -5,7 +5,7 @@ import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
-import io.lemonjuice.flandre_bot.utils.NickNameManager;
+import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 import io.lemonjuice.flandre_bot.utils.TimeNames;
 
@@ -34,7 +34,7 @@ public class GroupHelloCommand extends GroupCommandRunner {
         Random random = ThreadLocalRandom.current();
         List<String> repliesNow = REPLIES.get(TimeNames.getCurrent());
         String reply = repliesNow.get(random.nextInt(repliesNow.size()))
-                                 .replace("<user>", NickNameManager.getNickname(command.userId));
+                                 .replace("<user>", NicknameManager.getNickname(command.userId));
         SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply);
     }
 }

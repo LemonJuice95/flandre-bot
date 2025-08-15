@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Log4j2
-public class NickNameManager {
+public class NicknameManager {
     private static final ConcurrentHashMap<Long, String> NICKNAMES = new ConcurrentHashMap<>();
     private static final ConcurrentHashMap<Long, String> DIRTY = new ConcurrentHashMap<>();
 
@@ -41,7 +41,7 @@ public class NickNameManager {
         }
     }
 
-    public static synchronized void storage() {
+    public static synchronized void save() {
         try (Connection co = SQLCore.getInstance().startConnection();
              PreparedStatement insert = co.prepareStatement("INSERT INTO nicknames (user_id,nickname) VALUES(?,?) ON DUPLICATE KEY UPDATE nickname=?");
              PreparedStatement del = co.prepareStatement("DELETE FROM nicknames WHERE user_id=?")) {

@@ -5,12 +5,10 @@ import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
-import io.lemonjuice.flandre_bot.utils.NickNameManager;
+import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -45,7 +43,7 @@ public class GroupFortuneCookieCommand extends GroupCommandRunner {
             int index = ThreadLocalRandom.current().nextInt(COOKIES.size());
             CACHE.put(uuid, index);
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) +
-                    "送" + NickNameManager.getNickname(command.userId) + "一块可口的饼干！\n咦？饼干里面有一张纸条，上面写着: \n“" +
+                    "送" + NicknameManager.getNickname(command.userId) + "一块可口的饼干！\n咦？饼干里面有一张纸条，上面写着: \n“" +
                     COOKIES.get(index) + "”");
         } else {
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) +

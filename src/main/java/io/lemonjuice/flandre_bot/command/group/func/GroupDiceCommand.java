@@ -6,7 +6,7 @@ import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot.message.Message;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
-import io.lemonjuice.flandre_bot.utils.NickNameManager;
+import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class GroupDiceCommand extends GroupCommandRunner {
         } else if(result.equals("too_much")) {
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "骰子数量太多啦，芙兰会数不过来的……");
         } else {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + NickNameManager.getNickname(command.userId) + "投掷骰子的结果为：\n" + expression + "=" + result);
+            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + NicknameManager.getNickname(command.userId) + "投掷骰子的结果为：\n" + expression + "=" + result);
         }
     }
 

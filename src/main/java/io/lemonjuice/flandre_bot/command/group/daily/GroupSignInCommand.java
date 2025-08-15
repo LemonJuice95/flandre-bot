@@ -6,7 +6,7 @@ import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
 import io.lemonjuice.flandre_bot.network.SQLCore;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
-import io.lemonjuice.flandre_bot.utils.NickNameManager;
+import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 import lombok.extern.log4j.Log4j2;
 
@@ -70,7 +70,7 @@ public class GroupSignInCommand extends GroupCommandRunner {
             }
             SendingUtils.sendGroupText(command.groupId,
                     CQCodeUtils.reply(command.messageId) +
-                            NickNameManager.getNickname(command.userId) +
+                            NicknameManager.getNickname(command.userId) +
                             reply.toString().trim());
         } else {
             try (Connection co_ = SQLCore.getInstance().startConnection();
