@@ -79,7 +79,7 @@ public class SendingUtils {
         for(String m : messages) {
             node.put("type", "node");
             data.put("user_id", selfId);
-            data.put("nickname", "芙兰朵露·斯卡雷特");
+//            data.put("nickname", "芙兰朵露·斯卡雷特");
             data.put("content", m);
             node.put("data", data);
             jsonArray.put(node);
