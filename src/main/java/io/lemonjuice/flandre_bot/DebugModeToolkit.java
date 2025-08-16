@@ -28,23 +28,7 @@ public class DebugModeToolkit {
     private static final Set<Long> DEBUG_PERMISSION_IDS = new HashSet<>();
 
     static {
-        File cfg = new File(PATH);
-        if(!cfg.getParentFile().exists()) {
-            cfg.getParentFile().mkdir();
-        }
-        if(!cfg.exists()) {
-            releaseConfig();
-        }
         loadConfig();
-    }
-
-    private static void releaseConfig() {
-        try (InputStream input = DebugModeToolkit.class.getClassLoader().getResourceAsStream("release/config/debug.properties");
-             FileOutputStream output = new FileOutputStream(PATH)) {
-            output.write(input.readAllBytes());
-        } catch (Exception e) {
-            log.error("释放调试配置文件失败！", e);
-        }
     }
 
     private static void loadConfig() {

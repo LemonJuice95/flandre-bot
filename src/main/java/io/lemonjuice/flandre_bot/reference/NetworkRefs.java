@@ -17,23 +17,7 @@ public class NetworkRefs {
     public static String SQL_PASSWORD = "";
 
     static {
-        File cfg = new File(PATH);
-        if(!cfg.getParentFile().exists()) {
-            cfg.getParentFile().mkdir();
-        }
-        if(!cfg.exists()) {
-            releaseFile();
-        }
         load();
-    }
-
-    private static void releaseFile() {
-        try (InputStream input = NetworkRefs.class.getClassLoader().getResourceAsStream("release/config/network.properties");
-             FileOutputStream output = new FileOutputStream(PATH)) {
-            output.write(input.readAllBytes());
-        } catch (Exception e) {
-            log.error("释放网络相关配置文件失败！", e);
-        }
     }
 
     private static void load() {
