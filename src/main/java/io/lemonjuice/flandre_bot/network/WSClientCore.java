@@ -94,10 +94,6 @@ public class WSClientCore {
             if(postType.equals("notice")) {
                 if(jsonObject.getString("notice_type").equals("bot_offline")) {
                     log.warn("qq账号下线! 原始json文本: {}", json);
-//                    Thread.startVirtualThread(() -> {
-//                        String napCatPath = System.getenv("NAPCAT_HOME");
-//                        Runtime.getRuntime().exec("start " + napCatPath + "");
-//                    });
                 }
                 NoticeHandler.handleNotice(jsonObject);
             }
