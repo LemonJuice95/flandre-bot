@@ -40,7 +40,7 @@ public class Start implements CommandLineRunner {
         }
         try {
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-            Resource[] configs = resolver.getResources("classpath:release/config/*");
+            Resource[] configs = resolver.getResources("classpath:export/config/*");
             for (Resource cfg : configs) {
                 File cfgFile = new File(configFolder.getPath() + "/" + cfg.getFilename());
                 if(!cfgFile.exists()) {
@@ -53,7 +53,7 @@ public class Start implements CommandLineRunner {
     }
 
     private static void releaseConfig(String fileName) throws IOException {
-        try (InputStream input = Start.class.getClassLoader().getResourceAsStream("release/config/" + fileName);
+        try (InputStream input = Start.class.getClassLoader().getResourceAsStream("export/config/" + fileName);
              FileOutputStream output = new FileOutputStream("./config/" + fileName)) {
             output.write(input.readAllBytes());
         }
