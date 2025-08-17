@@ -2,10 +2,7 @@ package io.lemonjuice.flandre_bot.command;
 
 import io.lemonjuice.flandre_bot.DebugModeToolkit;
 import io.lemonjuice.flandre_bot.command.group.*;
-import io.lemonjuice.flandre_bot.command.group.debug.GroupCurrentTimeCommand;
-import io.lemonjuice.flandre_bot.command.group.debug.GroupImageTestCommand;
-import io.lemonjuice.flandre_bot.command.group.debug.GroupRefreshSignInStatusCommand;
-import io.lemonjuice.flandre_bot.command.group.debug.ManualDailyRefreshCommand;
+import io.lemonjuice.flandre_bot.command.group.debug.*;
 import io.lemonjuice.flandre_bot.command.group.func.*;
 import io.lemonjuice.flandre_bot.command.group.interaction.*;
 import io.lemonjuice.flandre_bot.command.group.interest.GroupFortuneCookieCommand;
@@ -44,6 +41,7 @@ public class CommandRegister {
             registerGroupCommand(new GroupImageTestCommand());
             registerGroupCommand(new GroupRefreshSignInStatusCommand());
             registerGroupCommand(new GroupCurrentTimeCommand());
+            registerGroupCommand(new B50RequestTestCommand());
         }
 
 
