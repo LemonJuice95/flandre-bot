@@ -14,7 +14,7 @@ public class ConfigInit {
     public static void initConfig() {
         File configFolder = new File("./config");
         if(!configFolder.exists()) {
-            configFolder.mkdir();
+            configFolder.mkdirs();
         }
         try {
             PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();

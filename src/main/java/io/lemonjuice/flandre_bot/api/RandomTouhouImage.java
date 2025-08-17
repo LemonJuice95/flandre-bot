@@ -17,7 +17,7 @@ public class RandomTouhouImage {
             file.delete();
         }
         if(!file.getParentFile().exists()) {
-            file.getParentFile().mkdir();
+            file.getParentFile().mkdirs();
         }
         try {
             String url1 = "https://img.paulzzh.com/touhou/random?type=json&size=all" + (tag.isEmpty() ? "" : "&tag=" + tag);
