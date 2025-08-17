@@ -32,7 +32,7 @@ public class B50RequestTestCommand extends GroupCommandRunner {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         Map<String, Object> body = new HashMap<>();
-        body.put("username", "LemonJuice95");
+        body.put("qq", "1582017385");
         HttpEntity<Object> requestEntity = new HttpEntity<>(body, headers);
         String url = "https://www.diving-fish.com/api/maimaidxprober/query/player";
         String resp = HttpCore.getInstance().getRestTemplate().exchange(url, HttpMethod.POST, requestEntity, String.class).getBody();
