@@ -79,8 +79,7 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
             for(Song s : songs) {
                 reply.append("id");
                 reply.append(s.id);
-                reply.append(".");
-                reply.append(" ".repeat(9 - String.valueOf(s.id).length()));
+                reply.append(":  ");
                 reply.append(s.title);
                 reply.append("\n");
             }
