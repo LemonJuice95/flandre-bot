@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.handler;
 
+import io.lemonjuice.flandre_bot.CacheCleaner;
 import io.lemonjuice.flandre_bot.command.group.interest.GroupFortuneCookieCommand;
 import io.lemonjuice.flandre_bot.network.SQLCore;
 import io.lemonjuice.flandre_bot.network.WSClientCore;
@@ -44,6 +45,12 @@ public class RefreshHandler {
     public void refreshPerHour() {
         NicknameManager.save();
         GroupFortuneCookieCommand.refresh();
+    }
+
+    @Scheduled(cron = "0 0 */3 * * ?")
+    @Async
+    public void refresh3Hours() {
+        CacheCleaner.clean();
     }
 
     private static void refreshSignIn() {

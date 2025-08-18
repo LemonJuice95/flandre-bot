@@ -16,6 +16,7 @@ public class Start implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        CacheCleaner.clean();
         ConfigInit.initConfig();
         ResourceLoadHandler.getInstance().loadResources();
         WSClientCore.startWatchDog();
