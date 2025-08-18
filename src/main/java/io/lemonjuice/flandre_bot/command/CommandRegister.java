@@ -7,6 +7,7 @@ import io.lemonjuice.flandre_bot.command.group.func.*;
 import io.lemonjuice.flandre_bot.command.group.interaction.*;
 import io.lemonjuice.flandre_bot.command.group.interest.GroupFortuneCookieCommand;
 import io.lemonjuice.flandre_bot.command.group.maimai.GroupB50Command;
+import io.lemonjuice.flandre_bot.command.group.maimai.GroupMaiHelpCommand;
 import io.lemonjuice.flandre_bot.command.group.misc.Choose1From2Command;
 import io.lemonjuice.flandre_bot.command.group.misc.GroupHelpCommand;
 import io.lemonjuice.flandre_bot.command.group.daily.GroupSignInCommand;
@@ -35,6 +36,7 @@ public class CommandRegister {
         registerGroupCommand(new GroupNicknameCommand());
         registerGroupCommand(new GroupClearNicknameCommand());
         registerGroupCommand(new GroupHitCommand());
+        registerGroupCommand(new GroupMaiHelpCommand());
         registerGroupCommand(new GroupB50Command());
 
         registerGroupCommand(new ManualDailyRefreshCommand());

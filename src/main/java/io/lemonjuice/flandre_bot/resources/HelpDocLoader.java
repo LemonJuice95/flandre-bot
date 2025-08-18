@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.resources;
 
+import io.lemonjuice.flandre_bot.command.group.maimai.GroupMaiHelpCommand;
 import io.lemonjuice.flandre_bot.command.group.misc.GroupHelpCommand;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 
@@ -16,10 +17,9 @@ import java.util.regex.Pattern;
 public class HelpDocLoader extends ResourceLoader {
     @Override
     public void load() {
-
-
         try {
-            GroupHelpCommand.DOC = loadDoc("assets/help_doc.txt");
+            GroupHelpCommand.DOC = loadDoc("assets/help_doc/help_doc.txt");
+            GroupMaiHelpCommand.DOC = loadDoc("assets/help_doc/maimai.txt");
         } catch (IOException e) {
             log.error("加载帮助文档失败! ");
             log.error(e);
