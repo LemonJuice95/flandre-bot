@@ -69,7 +69,7 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
             }
         }
         if(songs.isEmpty()) {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到别名为\"" + name + "\"的歌曲诶...");
+            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
         } else if(songs.size() == 1) {
             int songId = songs.getFirst().id;
             if(SongInfoGenerator.generate(songId)) {
