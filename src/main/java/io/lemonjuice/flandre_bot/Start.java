@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot;
 
+import io.lemonjuice.flan_mai_plugin.MaiPluginInit;
 import io.lemonjuice.flandre_bot.network.SQLCore;
 import io.lemonjuice.flandre_bot.network.WSClientCore;
 import io.lemonjuice.flandre_bot.network.WSReconnect;
@@ -16,6 +17,7 @@ public class Start implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        MaiPluginInit.init();
         CacheCleaner.clean();
         ConfigInit.initConfig();
         ResourceLoadHandler.getInstance().loadResources();

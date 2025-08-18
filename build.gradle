@@ -15,6 +15,14 @@ java {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/LemonJuice95/flan-mai-plugin")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("GITHUB_ACTOR")
+            password = project.findProperty("gpr.key") ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 
 dependencies {
@@ -46,6 +54,9 @@ dependencies {
 
     //hikaricp
     implementation 'com.zaxxer:HikariCP'
+
+    //舞萌插件
+    implementation 'io.lemonjuice:flan-mai-plugin:0.1.0-alpha'
 
 }
 

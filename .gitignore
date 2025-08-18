@@ -50,3 +50,4 @@ bin/
 ### Run ###
 /run/
 /output/
+/gradle.properties
