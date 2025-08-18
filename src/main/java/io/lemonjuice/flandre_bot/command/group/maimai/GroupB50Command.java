@@ -27,12 +27,12 @@ public class GroupB50Command extends GroupCommandRunner {
 
     @Override
     public void apply(Message command) {
-        SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "b50吗...芙兰查查看...");
-        DivingFishB50Generator.generate(command.userId);
-        File imageFile = new File("./cache/mai_b50/b50_" + command.userId + ".png");
-        if(imageFile.exists()) {
+        try {
+            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "b50吗...芙兰查查看...");
+            DivingFishB50Generator.generate(command.userId);
+            File imageFile = new File("./cache/mai_b50/b50_" + command.userId + ".png");
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.image("file:///" + imageFile.getAbsolutePath()));
-        } else {
+        } catch (Exception e) {
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n如果绑定了还是失败的话就联系一下bot管理员吧");
         }
     }
