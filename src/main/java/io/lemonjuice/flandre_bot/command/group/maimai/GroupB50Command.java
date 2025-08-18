@@ -33,7 +33,7 @@ public class GroupB50Command extends GroupCommandRunner {
             File imageFile = new File("./cache/mai_b50/b50_" + command.userId + ".png");
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.image("file:///" + imageFile.getAbsolutePath()));
         } catch (Exception e) {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n如果绑定了还是失败的话就联系一下bot管理员吧");
+            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n没绑定的话请前往https://www.diving-fish.com/maimaidx/prober/进行绑定\n如果绑定了还是失败的话就联系一下bot管理员吧");
         }
     }
 }
