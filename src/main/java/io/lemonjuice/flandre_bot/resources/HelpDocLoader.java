@@ -16,9 +16,20 @@ import java.util.regex.Pattern;
 public class HelpDocLoader extends ResourceLoader {
     @Override
     public void load() {
+
+
+        try {
+            GroupHelpCommand.DOC = loadDoc("assets/help_doc.txt");
+        } catch (IOException e) {
+            log.error("加载帮助文档失败! ");
+            log.error(e);
+        }
+    }
+
+    private List<String> loadDoc(String path) throws IOException {
         Pattern image_pattern = Pattern.compile("^<image:([a-zA-Z0-9_.-]+)>$");
 
-        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/help_doc.txt");
+        try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(path);
              InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8);
              BufferedReader bufferedReader = new BufferedReader(reader)) {
             List<String> contentsRaw = bufferedReader.lines().toList();
@@ -39,10 +50,7 @@ public class HelpDocLoader extends ResourceLoader {
             if(!reading.toString().trim().isEmpty()) {
                 contents.add(reading.toString().trim());
             }
-            GroupHelpCommand.DOC = contents;
-        } catch (IOException e) {
-            log.error("加载帮助文档失败! ");
-            log.error(e);
+            return contents;
         }
     }
 }
