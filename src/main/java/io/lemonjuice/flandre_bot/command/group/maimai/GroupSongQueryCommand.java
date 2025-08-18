@@ -77,7 +77,7 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
         } else {
             StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
             for(Song s : songs) {
-                reply.append("id").append(s.id).append(" ").append(s.title).append("\n");
+                reply.append("id").append(s.id).append(".    ").append(s.title).append("\n");
             }
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
         }
