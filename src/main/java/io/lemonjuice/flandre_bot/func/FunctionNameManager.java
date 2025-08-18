@@ -11,5 +11,6 @@ public class FunctionNameManager {
 //        GROUP_FUNCTIONS.put("机厅人数查询", "number_of_people");
         GROUP_FUNCTIONS.put("骰娘", "dice");
         GROUP_FUNCTIONS.put("随机东方图", "random_touhou_image");
+        GROUP_FUNCTIONS.put("舞萌查询", "maimai_query");
     }
 }
