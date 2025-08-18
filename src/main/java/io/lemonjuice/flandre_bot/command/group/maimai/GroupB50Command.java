@@ -30,6 +30,6 @@ public class GroupB50Command extends GroupCommandRunner {
         SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "b50吗...芙兰查查看...");
         DivingFishB50Generator.generate(command.userId);
         File imageFile = new File("./cache/mai_b50/b50_" + command.userId + ".png");
-        SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.localImage(imageFile.getAbsolutePath()));
+        SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.image("file:///" + imageFile.getAbsolutePath()));
     }
 }
