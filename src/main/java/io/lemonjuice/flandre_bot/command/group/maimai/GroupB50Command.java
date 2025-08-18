@@ -1,6 +1,6 @@
 package io.lemonjuice.flandre_bot.command.group.maimai;
 
-import io.lemonjuice.flan_mai_plugin.b50.DivingFishB50Generator;
+import io.lemonjuice.flan_mai_plugin.image_gen.DivingFishB50Generator;
 import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
@@ -27,12 +27,11 @@ public class GroupB50Command extends GroupCommandRunner {
 
     @Override
     public void apply(Message command) {
-        try {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "b50吗...芙兰查查看...");
-            DivingFishB50Generator.generate(command.userId);
+        SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "b50吗...芙兰查查看...");
+        if (DivingFishB50Generator.generate(command.userId)) {
             File imageFile = new File("./cache/mai_b50/b50_" + command.userId + ".png");
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.image("file:///" + imageFile.getAbsolutePath()));
-        } catch (Exception e) {
+        } else {
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n没绑定的话请前往https://www.diving-fish.com/maimaidx/prober/进行绑定\n如果绑定了还是失败的话就联系一下bot管理员吧");
         }
     }
