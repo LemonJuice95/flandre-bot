@@ -54,7 +54,7 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
         Pattern idQuery = Pattern.compile("^(id)?(\\d+)$");
         if(!name.isEmpty()) {
             Matcher idMatcher = idQuery.matcher(name);
-            if(idMatcher.matches() && idMatcher.find()) {
+            if(idMatcher.find()) {
                 int songId = Integer.parseInt(idMatcher.group(2));
                 songs.add(SongManager.getSongById(songId));
             } else {
