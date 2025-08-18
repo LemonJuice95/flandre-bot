@@ -61,7 +61,11 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
                 }
             }
             if(songs.isEmpty()) {
-                songs = SongManager.getSongByAlias(name);
+                if(SongManager.isSongTitleExists(name)) {
+                    songs = SongManager.getSongByTitle(name);
+                } else {
+                    songs = SongManager.getSongByAlias(name);
+                }
             }
         }
         if(songs.isEmpty()) {
