@@ -20,8 +20,8 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupSongQueryCommand extends GroupCommandRunner {
-    private static final String pattern1 = "^\\[CQ:at,qq=${selfId}][\\s+]?/mai\\s+song.+";
-    private static final String pattern2 = "^\\[CQ:at,qq=${selfId}][\\s+]?.+是什么歌$";
+    private static final String pattern1 = "^\\[CQ:at,qq=${selfId}]\\s*/mai\\s+song.+";
+    private static final String pattern2 = "^\\[CQ:at,qq=${selfId}]\\s*.+是什么歌$";
 
     @Override
     public IPermissionLevel getPermissionLevel(Message command) {
