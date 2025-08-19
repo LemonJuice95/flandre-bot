@@ -61,7 +61,7 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
             reply.append(song.id);
             reply.append(":  ");
             reply.append(song.title);
-            reply.append("\n有以下别名：\n");
+            reply.append("\n有以下别名：\n\n");
             for(String alias : song.alias) {
                 reply.append(alias).append("\n");
             }
