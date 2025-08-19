@@ -49,25 +49,8 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
             name = getName2(command);
         }
 
-        List<Song> songs = new ArrayList<>();
+        List<Song> songs = SongManager.searchSong(name);
 
-        Pattern idQuery = Pattern.compile("^(id)?(\\d+)$");
-        if(!name.isEmpty()) {
-            Matcher idMatcher = idQuery.matcher(name);
-            if(idMatcher.find()) {
-                int songId = Integer.parseInt(idMatcher.group(2));
-                if(SongManager.isSongIdExists(songId)) {
-                    songs.add(SongManager.getSongById(songId));
-                }
-            }
-            if(songs.isEmpty()) {
-                if(SongManager.isSongTitleExists(name)) {
-                    songs = SongManager.getSongByTitle(name);
-                } else {
-                    songs = SongManager.getSongByAlias(name);
-                }
-            }
-        }
         if(songs.isEmpty()) {
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
         } else if(songs.size() == 1) {

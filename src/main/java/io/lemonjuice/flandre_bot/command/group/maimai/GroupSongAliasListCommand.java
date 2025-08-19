@@ -33,25 +33,7 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
     @Override
     public void apply(Message command) {
         String name = getSongName(command);
-        List<Song> songList = new ArrayList<>();
-
-        Pattern idQuery = Pattern.compile("^(id)?(\\d+)$");
-        if(!name.isEmpty()) {
-            Matcher matcher = idQuery.matcher(name);
-            if(matcher.find()) {
-                int songId = Integer.parseInt(matcher.group(2));
-                if(SongManager.isSongIdExists(songId)) {
-                    songList.add(SongManager.getSongById(songId));
-                }
-            }
-            if(songList.isEmpty()) {
-                if(SongManager.isSongTitleExists(name)) {
-                    songList = SongManager.getSongByTitle(name);
-                } else {
-                    songList = SongManager.getSongByAlias(name);
-                }
-            }
-        }
+        List<Song> songList = SongManager.searchSong(name);
 
         if(songList.isEmpty()) {
             SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
