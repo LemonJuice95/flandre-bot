@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.command.group.maimai;
 
+import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flan_mai_plugin.image_gen.SongInfoGenerator;
 import io.lemonjuice.flan_mai_plugin.song.Song;
 import io.lemonjuice.flan_mai_plugin.song.SongManager;
@@ -49,28 +50,32 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
             name = getName2(command);
         }
 
-        List<Song> songs = SongManager.searchSong(name);
+        try {
+            List<Song> songs = SongManager.searchSong(name);
 
-        if(songs.isEmpty()) {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
-        } else if(songs.size() == 1) {
-            int songId = songs.getFirst().id;
-            if(SongInfoGenerator.generate(songId)) {
-                File file = new File("./cache/mai_song_info/" + songId + ".png");
-                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "你要找的是不是：\n" + CQCodeUtils.image("file:///" + file.getAbsolutePath()));
+            if (songs.isEmpty()) {
+                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
+            } else if (songs.size() == 1) {
+                int songId = songs.getFirst().id;
+                if (SongInfoGenerator.generate(songId)) {
+                    File file = new File("./cache/mai_song_info/" + songId + ".png");
+                    SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "你要找的是不是：\n" + CQCodeUtils.image("file:///" + file.getAbsolutePath()));
+                } else {
+                    SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "诶？！图片生成失败了...");
+                }
             } else {
-                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "诶？！图片生成失败了...");
+                StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
+                for (Song s : songs) {
+                    reply.append("id");
+                    reply.append(s.id);
+                    reply.append(":  ");
+                    reply.append(s.title);
+                    reply.append("\n");
+                }
+                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
             }
-        } else {
-            StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
-            for(Song s : songs) {
-                reply.append("id");
-                reply.append(s.id);
-                reply.append(":  ");
-                reply.append(s.title);
-                reply.append("\n");
-            }
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
+        } catch (NotInitializedException e) {
+            SendingUtils.sendGroupText(command.groupId, "曲目信息还没加载完呢，稍等一会吧~");
         }
     }
 

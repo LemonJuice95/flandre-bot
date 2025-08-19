@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.command.group.maimai;
 
+import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flan_mai_plugin.song.Song;
 import io.lemonjuice.flan_mai_plugin.song.SongManager;
 import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
@@ -33,31 +34,35 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
     @Override
     public void apply(Message command) {
         String name = getSongName(command);
-        List<Song> songList = SongManager.searchSong(name);
+        try {
+            List<Song> songList = SongManager.searchSong(name);
 
-        if(songList.isEmpty()) {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
-        } else if(songList.size() == 1) {
-            Song song = songList.getFirst();
-            StringBuilder reply = new StringBuilder("找到啦！\nid");
-            reply.append(song.id);
-            reply.append(":  ");
-            reply.append(song.title);
-            reply.append("\n有以下别名：\n\n");
-            for(String alias : song.alias) {
-                reply.append(alias).append("\n");
-            }
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
-        } else {
-            StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
-            for(Song s : songList) {
-                reply.append("id");
-                reply.append(s.id);
+            if (songList.isEmpty()) {
+                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
+            } else if (songList.size() == 1) {
+                Song song = songList.getFirst();
+                StringBuilder reply = new StringBuilder("找到啦！\nid");
+                reply.append(song.id);
                 reply.append(":  ");
-                reply.append(s.title);
-                reply.append("\n");
+                reply.append(song.title);
+                reply.append("\n有以下别名：\n\n");
+                for (String alias : song.alias) {
+                    reply.append(alias).append("\n");
+                }
+                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
+            } else {
+                StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
+                for (Song s : songList) {
+                    reply.append("id");
+                    reply.append(s.id);
+                    reply.append(":  ");
+                    reply.append(s.title);
+                    reply.append("\n");
+                }
+                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
             }
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
+        } catch (NotInitializedException e) {
+            SendingUtils.sendGroupText(command.groupId, "曲目信息还没加载完呢，稍等一会吧~");
         }
     }
 
