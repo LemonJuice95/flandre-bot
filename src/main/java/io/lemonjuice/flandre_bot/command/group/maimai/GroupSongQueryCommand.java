@@ -56,7 +56,7 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
             Matcher idMatcher = idQuery.matcher(name);
             if(idMatcher.find()) {
                 int songId = Integer.parseInt(idMatcher.group(2));
-                if(SongManager.getSongById(songId) != null) {
+                if(SongManager.isSongIdExists(songId)) {
                     songs.add(SongManager.getSongById(songId));
                 }
             }
