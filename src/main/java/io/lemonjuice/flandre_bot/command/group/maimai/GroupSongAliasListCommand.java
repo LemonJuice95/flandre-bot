@@ -1,0 +1,88 @@
+package io.lemonjuice.flandre_bot.command.group.maimai;
+
+import io.lemonjuice.flan_mai_plugin.song.Song;
+import io.lemonjuice.flan_mai_plugin.song.SongManager;
+import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
+import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
+import io.lemonjuice.flandre_bot.func.FunctionCommand;
+import io.lemonjuice.flandre_bot.message.Message;
+import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
+import io.lemonjuice.flandre_bot.utils.SendingUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+@FunctionCommand("maimai_query")
+public class GroupSongAliasListCommand extends GroupCommandRunner {
+    private static final String commandPattern = "^\\[CQ:at,qq=${selfId}]\\s*.+有什么别[名称]$";
+
+    @Override
+    public IPermissionLevel getPermissionLevel(Message command) {
+        return PermissionLevel.NORMAL;
+    }
+
+    @Override
+    public boolean validate(Message command) {
+        Pattern pattern = Pattern.compile(commandPattern.replace("${selfId}", String.valueOf(command.selfId)));
+        return pattern.matcher(command.message).matches();
+    }
+
+    @Override
+    public void apply(Message command) {
+        String name = getSongName(command);
+        List<Song> songList = new ArrayList<>();
+
+        Pattern idQuery = Pattern.compile("^(id)?(\\d+)$");
+        if(!name.isEmpty()) {
+            Matcher matcher = idQuery.matcher(name);
+            if(matcher.find()) {
+                int songId = Integer.parseInt(matcher.group(2));
+                if(SongManager.isSongIdExists(songId)) {
+                    songList.add(SongManager.getSongById(songId));
+                }
+            }
+            if(songList.isEmpty()) {
+                if(SongManager.isSongTitleExists(name)) {
+                    songList = SongManager.getSongByTitle(name);
+                } else {
+                    songList = SongManager.getSongByAlias(name);
+                }
+            }
+        }
+
+        if(songList.isEmpty()) {
+            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
+        } else if(songList.size() == 1) {
+            Song song = songList.getFirst();
+            StringBuilder reply = new StringBuilder("找到啦！\nid");
+            reply.append(song.id);
+            reply.append(":  ");
+            reply.append(song.title);
+            reply.append("\n有以下别名：\n");
+            for(String alias : song.alias) {
+                reply.append(alias).append("\n");
+            }
+            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
+        } else {
+            StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
+            for(Song s : songList) {
+                reply.append("id");
+                reply.append(s.id);
+                reply.append(":  ");
+                reply.append(s.title);
+                reply.append("\n");
+            }
+            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
+        }
+    }
+
+    private static String getSongName(Message command) {
+        String message = command.message.replace(CQCodeUtils.at(command.selfId), "").trim();
+        Pattern pattern = Pattern.compile("^(.+)有什么别[名称]$");
+        Matcher matcher = pattern.matcher(message);
+        return matcher.find() ? matcher.group(1) : "";
+    }
+}

@@ -8,6 +8,7 @@ import io.lemonjuice.flandre_bot.command.group.interaction.*;
 import io.lemonjuice.flandre_bot.command.group.interest.GroupFortuneCookieCommand;
 import io.lemonjuice.flandre_bot.command.group.maimai.GroupB50Command;
 import io.lemonjuice.flandre_bot.command.group.maimai.GroupMaiHelpCommand;
+import io.lemonjuice.flandre_bot.command.group.maimai.GroupSongAliasListCommand;
 import io.lemonjuice.flandre_bot.command.group.maimai.GroupSongQueryCommand;
 import io.lemonjuice.flandre_bot.command.group.misc.Choose1From2Command;
 import io.lemonjuice.flandre_bot.command.group.misc.GroupHelpCommand;
@@ -41,6 +42,7 @@ public class CommandRegister {
         registerGroupCommand(new GroupMaiHelpCommand());
         registerGroupCommand(new GroupB50Command());
         registerGroupCommand(new GroupSongQueryCommand());
+        registerGroupCommand(new GroupSongAliasListCommand());
 
         registerGroupCommand(new ManualDailyRefreshCommand());
 
