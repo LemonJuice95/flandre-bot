@@ -11,9 +11,13 @@ import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupB50Command extends GroupCommandRunner {
+    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/(mai\\s+)?b50(\\s+\\d+)?$";
+
     @Override
     public IPermissionLevel getPermissionLevel(Message command) {
         return PermissionLevel.NORMAL;
@@ -21,16 +25,17 @@ public class GroupB50Command extends GroupCommandRunner {
 
     @Override
     public boolean validate(Message command) {
-        String message = command.message.replace(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "/b50") ||
-                message.equals(CQCodeUtils.at(command.selfId) + "/maib50");
+        Pattern pattern = Pattern.compile(String.format(commandPattern, command.selfId));
+        return pattern.matcher(command.message).matches();
     }
 
     @Override
     public void apply(Message command) {
         SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "b50吗...芙兰查查看...");
         try {
-            if (DivingFishB50Generator.generate(command.userId)) {
+            long qq = getQQIdParam(command);
+            qq = qq == -1 ? command.userId : qq;
+            if (DivingFishB50Generator.generate(qq)) {
                 File imageFile = new File("./cache/mai_b50/b50_" + command.userId + ".png");
                 SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.image("file:///" + imageFile.getAbsolutePath()));
             } else {
@@ -39,5 +44,14 @@ public class GroupB50Command extends GroupCommandRunner {
         } catch (NotInitializedException e) {
             SendingUtils.sendGroupText(command.groupId, "曲目信息还没加载完呢，稍等一会吧~");
         }
+    }
+
+    private long getQQIdParam(Message command) {
+        Pattern pattern = Pattern.compile(String.format(commandPattern, command.selfId));
+        Matcher matcher = pattern.matcher(command.message);
+        if(matcher.find() && matcher.group(2) != null) {
+            return Long.parseLong(matcher.group(2).trim());
+        }
+        return -1;
     }
 }
