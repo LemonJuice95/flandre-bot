@@ -36,7 +36,7 @@ public class GroupB50Command extends GroupCommandRunner {
             long qq = getQQIdParam(command);
             qq = qq == -1 ? command.userId : qq;
             if (DivingFishB50Generator.generate(qq)) {
-                File imageFile = new File("./cache/mai_b50/b50_" + command.userId + ".png");
+                File imageFile = new File("./cache/mai_b50/b50_" + qq + ".png");
                 SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.image("file:///" + imageFile.getAbsolutePath()));
             } else {
                 SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n没绑定的话请前往https://www.diving-fish.com/maimaidx/prober/进行绑定\n如果绑定了还是失败的话就联系一下bot管理员吧");
