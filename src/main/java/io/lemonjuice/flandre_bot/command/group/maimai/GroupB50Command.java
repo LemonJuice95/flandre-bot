@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupB50Command extends GroupCommandRunner {
-    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/(mai\\s+)?b50(\\s+)?(\\[CQ:at,qq=(?=.*]))?(\\d+\\s*)?$";
+    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/(mai\\s+)?b50(\\s+)?(\\[CQ:at,qq=)?(\\d+\\s*)?(])?$";
 
     @Override
     public IPermissionLevel getPermissionLevel(Message command) {
