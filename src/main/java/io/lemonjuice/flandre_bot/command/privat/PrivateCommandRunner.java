@@ -2,7 +2,10 @@ package io.lemonjuice.flandre_bot.command.privat;
 
 import io.lemonjuice.flandre_bot.message.Message;
 
-public abstract class PrivateCommandRunner implements Cloneable {
+/**
+ * 此类的实现应当线程安全
+ */
+public abstract class PrivateCommandRunner {
     public boolean needsFriend() {
         return false;
     }
@@ -13,13 +16,4 @@ public abstract class PrivateCommandRunner implements Cloneable {
 
     public abstract boolean validate(Message command);
     public abstract void apply(Message command);
-
-    @Override
-    public PrivateCommandRunner clone() {
-        try {
-            return (PrivateCommandRunner) super.clone();
-        } catch (CloneNotSupportedException e) {
-            return null;
-        }
-    }
 }

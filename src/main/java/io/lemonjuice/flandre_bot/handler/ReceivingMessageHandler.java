@@ -27,8 +27,7 @@ public class ReceivingMessageHandler {
 
     private static void handleGroupCommand(Message message) {
         Thread.startVirtualThread(() -> {
-            for (GroupCommandRunner runnerRaw : CommandRegister.GROUP_COMMANDS) {
-                GroupCommandRunner runner = runnerRaw.clone();
+            for (GroupCommandRunner runner : CommandRegister.GROUP_COMMANDS) {
                 if (runner.validate(message)) {
                     if (runner.getClass().isAnnotationPresent(FunctionCommand.class)) {
                         FunctionCommand annotation = runner.getClass().getAnnotation(FunctionCommand.class);
@@ -53,8 +52,7 @@ public class ReceivingMessageHandler {
 
     private static void handlePrivateCommand(Message message) {
         Thread.startVirtualThread(() -> {
-            for (PrivateCommandRunner runnerRaw : CommandRegister.PRIVATE_COMMANDS) {
-                PrivateCommandRunner runner = runnerRaw.clone();
+            for (PrivateCommandRunner runner : CommandRegister.PRIVATE_COMMANDS) {
                 if (runner.validate(message)) {
                     if(runner.needsFriend() && !message.subType.equals("friend")) {
                         break;
