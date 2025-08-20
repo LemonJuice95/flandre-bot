@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupSongQueryCommand extends GroupCommandRunner {
-    private static final String pattern1 = "^\\[CQ:at,qq=${selfId}]\\s*/mai\\s+song.+";
-    private static final String pattern2 = "^\\[CQ:at,qq=${selfId}]\\s*.+是什么歌$";
+    private static final String pattern1 = "^\\[CQ:at,qq=%d]\\s*/mai\\s+song.+";
+    private static final String pattern2 = "^\\[CQ:at,qq=%d]\\s*.+是什么歌$";
 
     @Override
     public IPermissionLevel getPermissionLevel(Message command) {
@@ -31,8 +31,8 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
 
     @Override
     public boolean validate(Message command) {
-        Pattern commandPattern1 = Pattern.compile(pattern1.replace("${selfId}", String.valueOf(command.selfId)));
-        Pattern commandPattern2 = Pattern.compile(pattern2.replace("${selfId}", String.valueOf(command.selfId)));
+        Pattern commandPattern1 = Pattern.compile(String.format(pattern1, command.selfId));
+        Pattern commandPattern2 = Pattern.compile(String.format(pattern2, command.selfId));
 
         return commandPattern1.matcher(command.message).matches() ||
                 commandPattern2.matcher(command.message).matches();
@@ -40,8 +40,8 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
 
     @Override
     public void apply(Message command) {
-        Pattern commandPattern1 = Pattern.compile(pattern1.replace("${selfId}", String.valueOf(command.selfId)));
-        Pattern commandPattern2 = Pattern.compile(pattern2.replace("${selfId}", String.valueOf(command.selfId)));
+        Pattern commandPattern1 = Pattern.compile(String.format(pattern1, command.selfId));
+        Pattern commandPattern2 = Pattern.compile(String.format(pattern2, command.selfId));
 
         String name = "";
         if(commandPattern1.matcher(command.message).matches()) {

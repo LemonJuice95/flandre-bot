@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupSongAliasListCommand extends GroupCommandRunner {
-    private static final String commandPattern = "^\\[CQ:at,qq=${selfId}]\\s*.+有什么别[名称]$";
+    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*.+有什么别[名称]$";
 
     @Override
     public IPermissionLevel getPermissionLevel(Message command) {
@@ -27,7 +27,7 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
 
     @Override
     public boolean validate(Message command) {
-        Pattern pattern = Pattern.compile(commandPattern.replace("${selfId}", String.valueOf(command.selfId)));
+        Pattern pattern = Pattern.compile(String.format(commandPattern, command.selfId));
         return pattern.matcher(command.message).matches();
     }
 
