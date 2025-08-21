@@ -2,8 +2,8 @@ package io.lemonjuice.flandre_bot.command.group.maimai;
 
 import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flan_mai_plugin.api.SongInfoGenerator;
-import io.lemonjuice.flan_mai_plugin.song.Song;
-import io.lemonjuice.flan_mai_plugin.song.SongManager;
+import io.lemonjuice.flan_mai_plugin.model.Song;
+import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
