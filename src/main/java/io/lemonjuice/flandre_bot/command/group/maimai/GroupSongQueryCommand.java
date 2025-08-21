@@ -1,7 +1,7 @@
 package io.lemonjuice.flandre_bot.command.group.maimai;
 
 import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
-import io.lemonjuice.flan_mai_plugin.image_gen.SongInfoGenerator;
+import io.lemonjuice.flan_mai_plugin.api.SongInfoGenerator;
 import io.lemonjuice.flan_mai_plugin.song.Song;
 import io.lemonjuice.flan_mai_plugin.song.SongManager;
 import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
@@ -57,7 +57,8 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
                 SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
             } else if (songs.size() == 1) {
                 int songId = songs.getFirst().id;
-                if (SongInfoGenerator.generate(songId)) {
+                String path = SongInfoGenerator.generate(songId);
+                if (!path.isEmpty()) {
                     File file = new File("./cache/mai_song_info/" + songId + ".png");
                     SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "你要找的是不是：\n" + CQCodeUtils.image("file:///" + file.getAbsolutePath()));
                 } else {

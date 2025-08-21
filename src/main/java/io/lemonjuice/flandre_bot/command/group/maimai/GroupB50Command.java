@@ -1,7 +1,7 @@
 package io.lemonjuice.flandre_bot.command.group.maimai;
 
 import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
-import io.lemonjuice.flan_mai_plugin.image_gen.DivingFishB50Generator;
+import io.lemonjuice.flan_mai_plugin.api.DivingFishB50Generator;
 import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
@@ -35,8 +35,9 @@ public class GroupB50Command extends GroupCommandRunner {
         try {
             long qq = getQQIdParam(command);
             qq = qq == -1 ? command.userId : qq;
-            if (DivingFishB50Generator.generate(qq)) {
-                File imageFile = new File("./cache/mai_b50/b50_" + qq + ".png");
+            String path = DivingFishB50Generator.generate(qq);
+            if (!path.isEmpty()) {
+                File imageFile = new File(path);
                 SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.image("file:///" + imageFile.getAbsolutePath()));
             } else {
                 SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n没绑定的话请前往https://www.diving-fish.com/maimaidx/prober/进行绑定\n如果绑定了还是失败的话就联系一下bot管理员吧");
