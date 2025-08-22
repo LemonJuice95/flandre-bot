@@ -12,34 +12,38 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GroupNicknameCommand extends GroupCommandRunner {
+    public GroupNicknameCommand(Message command) {
+        super(command);
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.startsWith(CQCodeUtils.at(command.selfId) + "/称呼");
+    public boolean validate() {
+        String message = this.command.message.replace(" ", "");
+        return message.startsWith(CQCodeUtils.at(this.command.selfId) + "/称呼");
     }
 
     @Override
-    public void apply(Message command) {
-        String nickname = this.getNickname(command);
+    public void apply() {
+        String nickname = this.getNickname();
         if(!nickname.isEmpty()) {
-            NicknameManager.updateNickname(command.userId, nickname);
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "唔……记住啦！\n芙兰以后就叫你" + nickname + "啦！");
+            NicknameManager.updateNickname(this.command.userId, nickname);
+            SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "唔……记住啦！\n芙兰以后就叫你" + nickname + "啦！");
         } else {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "诶？要芙兰叫你什么？没有听清呢……");
+            SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "诶？要芙兰叫你什么？没有听清呢……");
         }
     }
 
-    private String getNickname(Message command) {
-        if(Pattern.compile("\\[CQ:\\S+]").matcher(command.message).results().count() > 1) {
+    private String getNickname() {
+        if(Pattern.compile("\\[CQ:\\S+]").matcher(this.command.message).results().count() > 1) {
             return "";
         }
-        String message = command.message
-                .replace(CQCodeUtils.at(command.selfId), "")
+        String message = this.command.message
+                .replace(CQCodeUtils.at(this.command.selfId), "")
                 .replace("[]", "")
                 .trim();
         Pattern pattern = Pattern.compile("/称呼\\s+(\\S+)");

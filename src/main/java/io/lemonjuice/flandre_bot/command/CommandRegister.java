@@ -12,53 +12,57 @@ import io.lemonjuice.flandre_bot.command.group.misc.GroupHelpCommand;
 import io.lemonjuice.flandre_bot.command.group.daily.GroupSignInCommand;
 import io.lemonjuice.flandre_bot.command.privat.PrivateCommandRunner;
 import io.lemonjuice.flandre_bot.command.privat.PrivateHelloCommand;
+import io.lemonjuice.flandre_bot.message.Message;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class CommandRegister {
-    public static List<GroupCommandRunner> GROUP_COMMANDS = new ArrayList<>();
-    public static List<PrivateCommandRunner> PRIVATE_COMMANDS = new ArrayList<>();
+    public static List<Function<Message, GroupCommandRunner>> GROUP_COMMANDS = new ArrayList<>();
+    public static List<Function<Message, PrivateCommandRunner>> PRIVATE_COMMANDS = new ArrayList<>();
 
     static {
-        registerGroupCommand(new GroupHelloCommand());
-        registerGroupCommand(new GroupSignInCommand());
-        registerGroupCommand(new Choose1From2Command());
-        registerGroupCommand(new EnableFunctionCommand());
-        registerGroupCommand(new DisableFunctionCommand());
-        registerGroupCommand(new ShowFunctionsCommand());
-        registerGroupCommand(new GroupDiceCommand());
-        registerGroupCommand(new GroupPingCommand());
-        registerGroupCommand(new RandomTouhouImageCommand());
-        registerGroupCommand(new GroupHelpCommand());
-        registerGroupCommand(new GroupFortuneCookieCommand());
-        registerGroupCommand(new GroupNicknameCommand());
-        registerGroupCommand(new GroupClearNicknameCommand());
-        registerGroupCommand(new GroupHitCommand());
+        registerGroupCommand(GroupHelloCommand::new);
+        registerGroupCommand(GroupSignInCommand::new);
+        registerGroupCommand(Choose1From2Command::new);
+        registerGroupCommand(EnableFunctionCommand::new);
+        registerGroupCommand(DisableFunctionCommand::new);
+        registerGroupCommand(ShowFunctionsCommand::new);
+        registerGroupCommand(GroupDiceCommand::new);
+        registerGroupCommand(GroupPingCommand::new);
+        registerGroupCommand(RandomTouhouImageCommand::new);
+        registerGroupCommand(GroupHelpCommand::new);
+        registerGroupCommand(GroupFortuneCookieCommand::new);
+        registerGroupCommand(GroupNicknameCommand::new);
+        registerGroupCommand(GroupClearNicknameCommand::new);
+        registerGroupCommand(GroupHitCommand::new);
 
-        registerGroupCommand(new GroupMaiHelpCommand());
-        registerGroupCommand(new GroupB50Command());
-        registerGroupCommand(new GroupSongQueryCommand());
-        registerGroupCommand(new GroupSongAliasListCommand());
-        registerGroupCommand(new GroupSongInfoCommand());
+        registerGroupCommand(GroupMaiHelpCommand::new);
+        registerGroupCommand(GroupB50Command::new);
+        registerGroupCommand(GroupSongQueryCommand::new);
+        registerGroupCommand(GroupSongAliasListCommand::new);
+        registerGroupCommand(GroupSongInfoCommand::new);
 
-        registerGroupCommand(new ManualDailyRefreshCommand());
+        registerGroupCommand(ManualDailyRefreshCommand::new);
+
+
 
         if(DebugModeToolkit.isDebugMode()) {
-            registerGroupCommand(new GroupImageTestCommand());
-            registerGroupCommand(new GroupRefreshSignInStatusCommand());
-            registerGroupCommand(new GroupCurrentTimeCommand());
+            registerGroupCommand(GroupImageTestCommand::new);
+            registerGroupCommand(GroupRefreshSignInStatusCommand::new);
+            registerGroupCommand(GroupCurrentTimeCommand::new);
         }
 
 
-        registerPrivateCommand(new PrivateHelloCommand());
+        registerPrivateCommand(PrivateHelloCommand::new);
     }
 
-    public static void registerGroupCommand(GroupCommandRunner runner) {
-        GROUP_COMMANDS.add(runner);
+    public static void registerGroupCommand(Function<Message, GroupCommandRunner> constructor) {
+        GROUP_COMMANDS.add(constructor);
     }
 
-    public static void registerPrivateCommand(PrivateCommandRunner runner) {
-        PRIVATE_COMMANDS.add(runner);
+    public static void registerPrivateCommand(Function<Message, PrivateCommandRunner> constructor) {
+        PRIVATE_COMMANDS.add(constructor);
     }
 }

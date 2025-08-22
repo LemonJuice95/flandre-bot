@@ -17,27 +17,31 @@ import java.util.regex.Pattern;
 public class RandomTouhouImageCommand extends GroupCommandRunner {
     public static JSONObject NAME_TAGS = new JSONObject();
 
+    public RandomTouhouImageCommand(Message command) {
+        super(command);
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.startsWith(CQCodeUtils.at(command.selfId) + "/随机东方图");
+    public boolean validate() {
+        String message = this.command.message.replaceAll(" ", "");
+        return message.startsWith(CQCodeUtils.at(this.command.selfId) + "/随机东方图");
     }
 
     @Override
-    public void apply(Message command) {
-        String tag = this.getTag(command);
+    public void apply() {
+        String tag = this.getTag();
         tag = tryMappingTag(tag);
-        String image = RandomTouhouImage.get(tag, command.groupId);
+        String image = RandomTouhouImage.get(tag, this.command.groupId);
         if(image.isEmpty()) {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "获取失败……芙兰明明已经很努力了……");
+            SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "获取失败……芙兰明明已经很努力了……");
             return;
         }
-        SendingUtils.sendGroupText(command.groupId, CQCodeUtils.image(image));
+        SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.image(image));
     }
 
     private String tryMappingTag(String rawTag) {
@@ -46,9 +50,9 @@ public class RandomTouhouImageCommand extends GroupCommandRunner {
         return rawTag;
     }
 
-    private String getTag(Message command) {
-        String message = command.message
-                .replace(CQCodeUtils.at(command.selfId), "")
+    private String getTag() {
+        String message = this.command.message
+                .replace(CQCodeUtils.at(this.command.selfId), "")
                 .replace("\\[]", "")
                 .trim();
         Matcher matcher = Pattern.compile("/随机东方图\\s+(\\S+)").matcher(message);

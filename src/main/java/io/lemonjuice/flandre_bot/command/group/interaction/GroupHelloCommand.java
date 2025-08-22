@@ -18,23 +18,27 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GroupHelloCommand extends GroupCommandRunner {
     public static Map<TimeNames, List<String>> REPLIES = new HashMap<>();
 
+    public GroupHelloCommand(Message command) {
+        super(command);
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "你好");
+    public boolean validate() {
+        String message = this.command.message.replace(" ", "");
+        return message.equals(CQCodeUtils.at(this.command.selfId) + "你好");
     }
 
     @Override
-    public void apply(Message command) {
+    public void apply() {
         Random random = ThreadLocalRandom.current();
         List<String> repliesNow = REPLIES.get(TimeNames.getCurrent());
         String reply = repliesNow.get(random.nextInt(repliesNow.size()))
-                                 .replace("<user>", NicknameManager.getNickname(command.userId));
-        SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply);
+                                 .replace("<user>", NicknameManager.getNickname(this.command.userId));
+        SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + reply);
     }
 }

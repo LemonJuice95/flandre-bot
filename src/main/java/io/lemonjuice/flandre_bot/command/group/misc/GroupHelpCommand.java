@@ -13,20 +13,24 @@ import java.util.List;
 public class GroupHelpCommand extends GroupCommandRunner {
     public static List<String> DOC = new ArrayList<>();
 
+    public GroupHelpCommand(Message command) {
+        super(command);
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "/help") ||
-                message.equals(CQCodeUtils.at(command.selfId) + "/帮助");
+    public boolean validate() {
+        String message = this.command.message.replaceAll(" ", "");
+        return message.equals(CQCodeUtils.at(this.command.selfId) + "/help") ||
+                message.equals(CQCodeUtils.at(this.command.selfId) + "/帮助");
     }
 
     @Override
-    public void apply(Message command) {
-        SendingUtils.sendGroupForwardText(command.selfId, command.groupId, DOC);
+    public void apply() {
+        SendingUtils.sendGroupForwardText(this.command.selfId, this.command.groupId, DOC);
     }
 }

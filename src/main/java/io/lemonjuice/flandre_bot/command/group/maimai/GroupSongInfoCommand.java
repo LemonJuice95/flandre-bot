@@ -1,6 +1,5 @@
 package io.lemonjuice.flandre_bot.command.group.maimai;
 
-import io.lemonjuice.flan_mai_plugin.api.SongInfoGenerator;
 import io.lemonjuice.flan_mai_plugin.api.SongPlayDataGenerator;
 import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flan_mai_plugin.model.Song;
@@ -21,34 +20,40 @@ import java.util.regex.Pattern;
 @FunctionCommand("maimai_query")
 public class GroupSongInfoCommand extends GroupCommandRunner {
     private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/m(ai\\s+)?info\\s+(.+)$";
+    
+    private final Pattern pattern;
+
+    public GroupSongInfoCommand(Message command) {
+        super(command);
+        this.pattern = Pattern.compile(String.format(commandPattern, command.selfId));
+    }
 
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        Pattern pattern = Pattern.compile(String.format(commandPattern, command.selfId));
-        return pattern.matcher(command.message).matches();
+    public boolean validate() {
+        return this.pattern.matcher(this.command.message).matches();
     }
 
     @Override
-    public void apply(Message command) {
-        String name = getSongName(command);
+    public void apply() {
+        String name = getSongName();
         try {
             List<Song> songs = SongManager.searchSong(name);
 
             if (songs.isEmpty()) {
-                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
+                SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
             } else if (songs.size() == 1) {
                 int songId = songs.getFirst().id;
-                String path = SongPlayDataGenerator.generate(command.userId, songId);
+                String path = SongPlayDataGenerator.generate(this.command.userId, songId);
                 if (!path.isEmpty()) {
                     File file = new File(path);
-                    SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.image("file:///" + file.getAbsolutePath()));
+                    SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + CQCodeUtils.image("file:///" + file.getAbsolutePath()));
                 } else {
-                    SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "诶？！图片生成失败了...");
+                    SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "诶？！图片生成失败了...");
                 }
             } else {
                 StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
@@ -59,16 +64,15 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
                     reply.append(s.title);
                     reply.append("\n");
                 }
-                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
+                SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + reply.toString().trim());
             }
         } catch (NotInitializedException e) {
-            SendingUtils.sendGroupText(command.groupId, "曲目信息还没加载完呢，稍等一会吧~");
+            SendingUtils.sendGroupText(this.command.groupId, "曲目信息还没加载完呢，稍等一会吧~");
         }
     }
 
-    private String getSongName(Message command) {
-        Pattern pattern = Pattern.compile(String.format(commandPattern, command.selfId));
-        Matcher matcher = pattern.matcher(command.message);
+    private String getSongName() {
+        Matcher matcher = this.pattern.matcher(this.command.message);
         return matcher.find() ? matcher.group(2).trim() : "";
     }
 }

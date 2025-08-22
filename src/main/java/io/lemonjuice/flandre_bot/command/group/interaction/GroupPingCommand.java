@@ -8,28 +8,33 @@ import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 public class GroupPingCommand extends GroupCommandRunner {
-    public static List<String> REPLIES = new ArrayList<>();
+    public static List<String> REPLIES = Collections.unmodifiableList(new ArrayList<>());
+
+    public GroupPingCommand(Message command) {
+        super(command);
+    }
 
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message;
-        return message.equals(CQCodeUtils.at(command.selfId)) ||
+    public boolean validate() {
+        String message = this.command.message;
+        return message.equals(CQCodeUtils.at(this.command.selfId)) ||
                 message.trim().equals("芙兰") ||
-                message.replaceAll(" ", "").equals(CQCodeUtils.at(command.selfId) + "芙兰");
+                message.replace(" ", "").equals(CQCodeUtils.at(this.command.selfId) + "芙兰");
     }
 
     @Override
-    public void apply(Message command) {
+    public void apply() {
         String reply = REPLIES.get(new Random().nextInt(REPLIES.size()));
-        SendingUtils.sendGroupText(command.groupId, reply);
+        SendingUtils.sendGroupText(this.command.groupId, reply);
     }
 }

@@ -17,36 +17,40 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("dice")
 public class GroupDiceCommand extends GroupCommandRunner {
-    private final Pattern standard = Pattern.compile("^(\\d+)?d\\d+$", Pattern.CASE_INSENSITIVE);
-    private final Pattern fudge2 = Pattern.compile("^(\\d+)?dF(.2)?$", Pattern.CASE_INSENSITIVE);
-    private final Pattern fudge1 = Pattern.compile("^(\\d+)?dF.1$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern standard = Pattern.compile("^(\\d+)?d\\d+$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern fudge2 = Pattern.compile("^(\\d+)?dF(.2)?$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern fudge1 = Pattern.compile("^(\\d+)?dF.1$", Pattern.CASE_INSENSITIVE);
+
+    public GroupDiceCommand(Message command) {
+        super(command);
+    }
 
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.startsWith(CQCodeUtils.at(command.selfId) + "/rd");
+    public boolean validate() {
+        String message = this.command.message.replaceAll(" ", "");
+        return message.startsWith(CQCodeUtils.at(this.command.selfId) + "/rd");
     }
 
     @Override
-    public void apply(Message command) {
-        String expression = this.getExpression(command);
+    public void apply() {
+        String expression = this.getExpression();
         String result = getResult(expression);
         if(result.isEmpty()) {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "诶？骰子表达式好像不对……\n再检查一下吧~");
+            SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "诶？骰子表达式好像不对……\n再检查一下吧~");
         } else if(result.equals("too_much")) {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "骰子数量太多啦，芙兰会数不过来的……");
+            SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "骰子数量太多啦，芙兰会数不过来的……");
         } else {
-            SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + NicknameManager.getNickname(command.userId) + "投掷骰子的结果为：\n" + expression + "=" + result);
+            SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + NicknameManager.getNickname(this.command.userId) + "投掷骰子的结果为：\n" + expression + "=" + result);
         }
     }
 
-    private String getExpression(Message command) {
-        String message = command.message.replace(CQCodeUtils.at(command.selfId), "").replace("\\[]", "").trim();
+    private String getExpression() {
+        String message = this.command.message.replace(CQCodeUtils.at(this.command.selfId), "").replace("\\[]", "").trim();
         Pattern pattern = Pattern.compile("/rd\\s+(\\S+)");
         Matcher matcher = pattern.matcher(message);
         return matcher.find() ? matcher.group(1) : "";

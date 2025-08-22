@@ -11,7 +11,6 @@ import io.lemonjuice.flandre_bot.message.Message;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,25 +19,31 @@ import java.util.regex.Pattern;
 public class GroupSongAliasListCommand extends GroupCommandRunner {
     private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*.+有什么别[名称]$";
 
+    private final Pattern pattern;
+
+    public GroupSongAliasListCommand(Message command) {
+        super(command);
+        this.pattern = Pattern.compile(String.format(commandPattern, command.selfId));
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        Pattern pattern = Pattern.compile(String.format(commandPattern, command.selfId));
-        return pattern.matcher(command.message).matches();
+    public boolean validate() {
+        return this.pattern.matcher(this.command.message).matches();
     }
 
     @Override
-    public void apply(Message command) {
-        String name = getSongName(command);
+    public void apply() {
+        String name = getSongName();
         try {
             List<Song> songList = SongManager.searchSong(name);
 
             if (songList.isEmpty()) {
-                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
+                SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "没有找到叫做\"" + name + "\"的歌曲诶...");
             } else if (songList.size() == 1) {
                 Song song = songList.getFirst();
                 StringBuilder reply = new StringBuilder("找到啦！\nid");
@@ -49,7 +54,7 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
                 for (String alias : song.alias) {
                     reply.append(alias).append("\n");
                 }
-                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
+                SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + reply.toString().trim());
             } else {
                 StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
                 for (Song s : songList) {
@@ -59,15 +64,15 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
                     reply.append(s.title);
                     reply.append("\n");
                 }
-                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
+                SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + reply.toString().trim());
             }
         } catch (NotInitializedException e) {
-            SendingUtils.sendGroupText(command.groupId, "曲目信息还没加载完呢，稍等一会吧~");
+            SendingUtils.sendGroupText(this.command.groupId, "曲目信息还没加载完呢，稍等一会吧~");
         }
     }
 
-    private static String getSongName(Message command) {
-        String message = command.message.replace(CQCodeUtils.at(command.selfId), "").trim();
+    private String getSongName() {
+        String message = this.command.message.replace(CQCodeUtils.at(this.command.selfId), "").trim();
         Pattern pattern = Pattern.compile("^(.+)有什么别[名称]$");
         Matcher matcher = pattern.matcher(message);
         return matcher.find() ? matcher.group(1) : "";

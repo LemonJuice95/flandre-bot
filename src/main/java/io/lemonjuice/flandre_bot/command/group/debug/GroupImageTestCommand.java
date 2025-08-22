@@ -9,20 +9,24 @@ import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
 public class GroupImageTestCommand extends GroupCommandRunner {
+    public GroupImageTestCommand(Message command) {
+        super(command);
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.DEBUG;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "/图片发送测试");
+    public boolean validate() {
+        String message = this.command.message.replace(" ", "");
+        return message.equals(CQCodeUtils.at(this.command.selfId) + "/图片发送测试");
     }
 
     @Override
-    public void apply(Message command) {
-        SendingUtils.sendGroupText(command.groupId, CQCodeUtils.localExpressionImage(LocalImages.FLAN_LOVE));
+    public void apply() {
+        SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.localExpressionImage(LocalImages.FLAN_LOVE));
     }
 
 }

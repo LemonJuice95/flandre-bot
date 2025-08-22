@@ -12,19 +12,23 @@ import java.sql.SQLException;
 
 @Log4j2
 public class GroupRefreshSignInStatusCommand extends GroupDebugCommandRunner {
-    @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "/刷新签到状态");
+    public GroupRefreshSignInStatusCommand(Message command) {
+        super(command);
     }
 
     @Override
-    public void apply(Message command) {
+    public boolean validate() {
+        String message = this.command.message.replace(" ", "");
+        return message.equals(CQCodeUtils.at(this.command.selfId) + "/刷新签到状态");
+    }
+
+    @Override
+    public void apply() {
         try (Connection co = SQLCore.getInstance().startConnection();
              PreparedStatement ps = co.prepareStatement("DELETE FROM sign_in WHERE group_id=?")) {
-            ps.setLong(1, command.groupId);
+            ps.setLong(1, this.command.groupId);
             ps.execute();
-            SendingUtils.sendGroupText(command.groupId, "[Debug]已清除本群本日的签到记录");
+            SendingUtils.sendGroupText(this.command.groupId, "[Debug]已清除本群本日的签到记录");
         } catch (SQLException e) {
             log.error(e);
         }

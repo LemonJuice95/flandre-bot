@@ -9,20 +9,24 @@ import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
 public class GroupClearNicknameCommand extends GroupCommandRunner {
+    public GroupClearNicknameCommand(Message command) {
+        super(command);
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "/清除称呼");
+    public boolean validate() {
+        String message = this.command.message.replaceAll(" ", "");
+        return message.equals(CQCodeUtils.at(this.command.selfId) + "/清除称呼");
     }
 
     @Override
-    public void apply(Message command) {
-        NicknameManager.removeNickname(command.userId);
-        SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "了解~ 芙兰以后不会再用昵称称呼你啦");
+    public void apply() {
+        NicknameManager.removeNickname(this.command.userId);
+        SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "了解~ 芙兰以后不会再用昵称称呼你啦");
     }
 }

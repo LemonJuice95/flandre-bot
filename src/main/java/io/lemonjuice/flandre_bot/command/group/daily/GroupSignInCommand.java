@@ -23,20 +23,24 @@ public class GroupSignInCommand extends GroupCommandRunner {
     public static List<String> FORTUNES = new ArrayList<>();
     public static List<String> THINGS = new ArrayList<>();
 
+    public GroupSignInCommand(Message command) {
+        super(command);
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "/签到");
+    public boolean validate() {
+        String message = this.command.message.replaceAll(" ", "");
+        return message.equals(CQCodeUtils.at(this.command.selfId) + "/签到");
     }
 
     @Override
-    public void apply(Message command) {
-        if(this.checkSignIn(command.userId, command.groupId)) {
+    public void apply() {
+        if(this.checkSignIn(this.command.userId, this.command.groupId)) {
             if(THINGS.size() < 4) {
                 return;
             }
@@ -51,9 +55,9 @@ public class GroupSignInCommand extends GroupCommandRunner {
 
             try (Connection co = SQLCore.getInstance().startConnection();
                  PreparedStatement ps = co.prepareStatement("INSERT INTO sign_in VALUES(?,?,?,?,?)")) {
-                ps.setLong(1, command.userId);
-                ps.setLong(2, command.groupId);
-                ps.setLong(3, (long) command.time);
+                ps.setLong(1, this.command.userId);
+                ps.setLong(2, this.command.groupId);
+                ps.setLong(3, (long) this.command.time);
                 ps.setInt(4, fortune);
                 ps.setString(5, thingsStr);
                 ps.execute();
@@ -68,15 +72,15 @@ public class GroupSignInCommand extends GroupCommandRunner {
                     tmp = "忌 ";
                 }
             }
-            SendingUtils.sendGroupText(command.groupId,
-                    CQCodeUtils.reply(command.messageId) +
-                            NicknameManager.getNickname(command.userId) +
+            SendingUtils.sendGroupText(this.command.groupId,
+                    CQCodeUtils.reply(this.command.messageId) +
+                            NicknameManager.getNickname(this.command.userId) +
                             reply.toString().trim());
         } else {
             try (Connection co_ = SQLCore.getInstance().startConnection();
                  PreparedStatement ps_ = co_.prepareStatement("SELECT * FROM sign_in WHERE uid=? AND group_id=?")) {
-                ps_.setLong(1, command.userId);
-                ps_.setLong(2, command.groupId);
+                ps_.setLong(1, this.command.userId);
+                ps_.setLong(2, this.command.groupId);
                 try (ResultSet record = ps_.executeQuery()) {
                     record.next();
                     int fortune = record.getInt("fortune");
@@ -90,7 +94,7 @@ public class GroupSignInCommand extends GroupCommandRunner {
                             tmp = "忌 ";
                         }
                     }
-                    SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + reply.toString().trim());
+                    SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + reply.toString().trim());
                 }
             } catch (SQLException e) {
                 log.error(e);

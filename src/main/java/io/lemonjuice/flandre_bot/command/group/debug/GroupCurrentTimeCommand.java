@@ -6,14 +6,18 @@ import io.lemonjuice.flandre_bot.utils.SendingUtils;
 import io.lemonjuice.flandre_bot.utils.TimeNames;
 
 public class GroupCurrentTimeCommand extends GroupDebugCommandRunner {
-    @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "/当前时间");
+    public GroupCurrentTimeCommand(Message command) {
+        super(command);
     }
 
     @Override
-    public void apply(Message command) {
-        SendingUtils.sendGroupText(command.groupId, TimeNames.getCurrent().toString());
+    public boolean validate() {
+        String message = this.command.message.replace(" ", "");
+        return message.equals(CQCodeUtils.at(this.command.selfId) + "/当前时间");
+    }
+
+    @Override
+    public void apply() {
+        SendingUtils.sendGroupText(this.command.groupId, TimeNames.getCurrent().toString());
     }
 }

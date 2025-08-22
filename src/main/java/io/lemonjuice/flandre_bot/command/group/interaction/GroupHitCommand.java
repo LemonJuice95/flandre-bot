@@ -8,21 +8,25 @@ import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
 public class GroupHitCommand extends GroupCommandRunner {
+    public GroupHitCommand(Message command) {
+        super(command);
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        String message = command.message.replaceAll(" ", "");
-        return message.equals(CQCodeUtils.at(command.selfId) + "打你") ||
-               message.equals(CQCodeUtils.at(command.selfId) + "打芙兰") ||
+    public boolean validate() {
+        String message = this.command.message.replace(" ", "");
+        return message.equals(CQCodeUtils.at(this.command.selfId) + "打你") ||
+               message.equals(CQCodeUtils.at(this.command.selfId) + "打芙兰") ||
                message.equals("打芙兰");
     }
 
     @Override
-    public void apply(Message command) {
-        SendingUtils.sendGroupText(command.groupId, "不许打芙兰！（捏拳）");
+    public void apply() {
+        SendingUtils.sendGroupText(this.command.groupId, "不许打芙兰！（捏拳）");
     }
 }

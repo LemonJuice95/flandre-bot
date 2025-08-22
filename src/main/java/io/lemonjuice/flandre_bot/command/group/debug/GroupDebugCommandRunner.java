@@ -6,8 +6,12 @@ import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
 
 public abstract class GroupDebugCommandRunner extends GroupCommandRunner {
+    public GroupDebugCommandRunner(Message command) {
+        super(command);
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.DEBUG;
     }
 }

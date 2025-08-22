@@ -4,13 +4,17 @@ import io.lemonjuice.flandre_bot.message.Message;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
 public class PrivateHelloCommand extends PrivateCommandRunner{
-    @Override
-    public boolean validate(Message command) {
-        return command.message.trim().equals("你好");
+    public PrivateHelloCommand(Message command) {
+        super(command);
     }
 
     @Override
-    public void apply(Message command) {
-        SendingUtils.replyPrivateText(command, "你好~");
+    public boolean validate() {
+        return this.command.message.trim().equals("你好");
+    }
+
+    @Override
+    public void apply() {
+        SendingUtils.replyPrivateText(this.command, "你好~");
     }
 }

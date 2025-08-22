@@ -18,38 +18,43 @@ import java.util.regex.Pattern;
 public class GroupB50Command extends GroupCommandRunner {
     private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/(mai\\s+)?b50(\\s+((\\[CQ:at,qq=(\\d+)])|(\\d+)))?\\s*$";
 
+    private final Pattern pattern;
+    
+    public GroupB50Command(Message command) {
+        super(command);
+        this.pattern = Pattern.compile(String.format(commandPattern, this.command.selfId));
+    }
+
     @Override
-    public IPermissionLevel getPermissionLevel(Message command) {
+    public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
     }
 
     @Override
-    public boolean validate(Message command) {
-        Pattern pattern = Pattern.compile(String.format(commandPattern, command.selfId));
-        return pattern.matcher(command.message).matches();
+    public boolean validate() {
+        return this.pattern.matcher(this.command.message).matches();
     }
 
     @Override
-    public void apply(Message command) {
-        SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "b50吗...芙兰查查看...");
+    public void apply() {
+        SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "b50吗...芙兰查查看...");
         try {
-            long qq = getQQIdParam(command);
-            qq = qq == -1 ? command.userId : qq;
+            long qq = getQQIdParam();
+            qq = qq == -1 ? this.command.userId : qq;
             String path = DivingFishB50Generator.generate(qq);
             if (!path.isEmpty()) {
                 File imageFile = new File(path);
-                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + CQCodeUtils.image("file:///" + imageFile.getAbsolutePath()));
+                SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + CQCodeUtils.image("file:///" + imageFile.getAbsolutePath()));
             } else {
-                SendingUtils.sendGroupText(command.groupId, CQCodeUtils.reply(command.messageId) + "抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n没绑定的话请前往https://www.diving-fish.com/maimaidx/prober/进行绑定\n如果绑定了还是失败的话就联系一下bot管理员吧");
+                SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n没绑定的话请前往https://www.diving-fish.com/maimaidx/prober/进行绑定\n如果绑定了还是失败的话就联系一下bot管理员吧");
             }
         } catch (NotInitializedException e) {
-            SendingUtils.sendGroupText(command.groupId, "曲目信息还没加载完呢，稍等一会吧~");
+            SendingUtils.sendGroupText(this.command.groupId, "曲目信息还没加载完呢，稍等一会吧~");
         }
     }
 
-    private long getQQIdParam(Message command) {
-        Pattern pattern = Pattern.compile(String.format(commandPattern, command.selfId));
-        Matcher matcher = pattern.matcher(command.message);
+    private long getQQIdParam() {
+        Matcher matcher = this.pattern.matcher(this.command.message);
         if(matcher.find()) {
             if(matcher.group(5) != null) {
                 return Long.parseLong(matcher.group(5).trim());

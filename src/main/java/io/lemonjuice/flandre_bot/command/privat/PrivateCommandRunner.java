@@ -2,10 +2,13 @@ package io.lemonjuice.flandre_bot.command.privat;
 
 import io.lemonjuice.flandre_bot.message.Message;
 
-/**
- * 此类的实现应当线程安全
- */
 public abstract class PrivateCommandRunner {
+    protected final Message command;
+
+    public PrivateCommandRunner(Message command) {
+        this.command = command;
+    }
+
     public boolean needsFriend() {
         return false;
     }
@@ -14,6 +17,6 @@ public abstract class PrivateCommandRunner {
         return false;
     }
 
-    public abstract boolean validate(Message command);
-    public abstract void apply(Message command);
+    public abstract boolean validate();
+    public abstract void apply();
 }

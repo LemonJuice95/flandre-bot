@@ -11,6 +11,8 @@ import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 import lombok.extern.log4j.Log4j2;
 
+import java.util.function.Function;
+
 @Log4j2
 public class ReceivingMessageHandler {
     public static void handle(Message message) {
@@ -27,8 +29,9 @@ public class ReceivingMessageHandler {
 
     private static void handleGroupCommand(Message message) {
         Thread.startVirtualThread(() -> {
-            for (GroupCommandRunner runner : CommandRegister.GROUP_COMMANDS) {
-                if (runner.validate(message)) {
+            for (Function<Message, GroupCommandRunner> constructor : CommandRegister.GROUP_COMMANDS) {
+                GroupCommandRunner runner = constructor.apply(message);
+                if (runner.validate()) {
                     if (runner.getClass().isAnnotationPresent(FunctionCommand.class)) {
                         FunctionCommand annotation = runner.getClass().getAnnotation(FunctionCommand.class);
                         if (!FunctionEnableManager.isGroupFuncEnable(message.groupId, annotation.value())) {
@@ -38,11 +41,11 @@ public class ReceivingMessageHandler {
                             break;
                         }
                     }
-                    if (!runner.getPermissionLevel(message).validatePermission(message)) {
+                    if (!runner.getPermissionLevel().validatePermission(message)) {
                         SendingUtils.sendGroupText(message.groupId, CQCodeUtils.reply(message.messageId) + "权限不足，芙兰办不到呢……");
                         break;
                     }
-                    runner.apply(message);
+                    runner.apply();
                     break;
                 }
             }
@@ -52,15 +55,16 @@ public class ReceivingMessageHandler {
 
     private static void handlePrivateCommand(Message message) {
         Thread.startVirtualThread(() -> {
-            for (PrivateCommandRunner runner : CommandRegister.PRIVATE_COMMANDS) {
-                if (runner.validate(message)) {
+            for (Function<Message, PrivateCommandRunner> constructor : CommandRegister.PRIVATE_COMMANDS) {
+                PrivateCommandRunner runner = constructor.apply(message);
+                if (runner.validate()) {
                     if(runner.needsFriend() && !message.subType.equals("friend")) {
                         break;
                     }
                     if (runner.isDebugCommand() && !DebugModeToolkit.hasDebugPermission(message.userId)) {
                         break;
                     }
-                    runner.apply(message);
+                    runner.apply();
                 }
             }
         });
