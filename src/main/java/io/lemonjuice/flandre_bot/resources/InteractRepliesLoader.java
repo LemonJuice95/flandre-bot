@@ -2,7 +2,7 @@ package io.lemonjuice.flandre_bot.resources;
 
 import io.lemonjuice.flandre_bot.command.group.interaction.GroupHelloCommand;
 import io.lemonjuice.flandre_bot.command.group.interaction.GroupPingCommand;
-import io.lemonjuice.flandre_bot.utils.TimeNames;
+import io.lemonjuice.flandre_bot.utils.PeriodOfDay;
 import lombok.extern.log4j.Log4j2;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,9 +14,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.jar.JarFile;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Log4j2
 public class InteractRepliesLoader extends ResourceLoader {
@@ -42,14 +41,14 @@ public class InteractRepliesLoader extends ResourceLoader {
         try (InputStream input = this.getClass().getClassLoader().getResourceAsStream("assets/interact/hello.json")) {
             JSONTokener jsonTokener = new JSONTokener(input);
             JSONObject json = new JSONObject(jsonTokener);
-            for(String v : json.keySet()) {
-                TimeNames tn = TimeNames.fromString(v);
-                JSONArray array = json.getJSONArray(v);
-                List<String> list = new ArrayList<>();
-                array.forEach((reply) -> {
-                    list.add(reply.toString());
-                });
-                GroupHelloCommand.REPLIES.put(tn, list);
+
+            for(PeriodOfDay period : PeriodOfDay.values()) {
+                String key = period.toString().toLowerCase();
+                JSONArray array = json.optJSONArray(key);
+                List<String> list = array != null ?
+                        StreamSupport.stream(array.spliterator(), false).map(Object::toString).collect(Collectors.toList()) :
+                        new ArrayList<>();
+                GroupHelloCommand.REPLIES.put(period, list);
             }
         } catch (IOException e) {
             log.error("加载“你好”回复文本异常！");
