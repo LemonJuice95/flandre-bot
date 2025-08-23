@@ -2,7 +2,7 @@ package io.lemonjuice.flandre_bot.utils;
 
 import java.time.LocalTime;
 
-public enum TimeNames {
+public enum PeriodOfDay {
     DAWN(4, 6),
     MORNING(6, 9),
     FORENOON(9, 11),
@@ -15,23 +15,19 @@ public enum TimeNames {
     private final int startsAt; //包含这个整点
     private final int endsAt; //不包含这个整点
 
-    private TimeNames(int startsAt, int endsAt) {
+    private PeriodOfDay(int startsAt, int endsAt) {
         this.startsAt = startsAt;
         this.endsAt = endsAt;
     }
 
-    public static TimeNames getCurrent() {
+    public static PeriodOfDay getCurrent() {
         LocalTime time = LocalTime.now();
         int hour = time.getHour();
-        for(int i = 0; i < TimeNames.values().length - 1; i++) {
-            if(hour >= TimeNames.values()[i].startsAt && hour < TimeNames.values()[i].endsAt) {
-                return TimeNames.values()[i];
+        for(int i = 0; i < PeriodOfDay.values().length - 1; i++) {
+            if(hour >= PeriodOfDay.values()[i].startsAt && hour < PeriodOfDay.values()[i].endsAt) {
+                return PeriodOfDay.values()[i];
             }
         }
         return LATE_NIGHT;
-    }
-
-    public static TimeNames fromString(String s) {
-        return TimeNames.valueOf(s.toUpperCase());
     }
 }
