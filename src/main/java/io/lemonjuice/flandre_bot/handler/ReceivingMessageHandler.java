@@ -47,7 +47,7 @@ public class ReceivingMessageHandler {
                         break;
                     }
                     runner.apply();
-                    CommandRunningStatistics.addUsingCount(runner.getClass().getName());
+                    CommandRunningStatistics.addUsingCount(runner.getClass().getSimpleName());
                     break;
                 }
             }
@@ -67,7 +67,7 @@ public class ReceivingMessageHandler {
                         break;
                     }
                     runner.apply();
-                    CommandRunningStatistics.addUsingCount(runner.getClass().getName());
+                    CommandRunningStatistics.addUsingCount(runner.getClass().getSimpleName());
                 }
             }
         });

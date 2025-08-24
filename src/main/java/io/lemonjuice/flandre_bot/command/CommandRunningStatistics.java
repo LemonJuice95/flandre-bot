@@ -30,11 +30,11 @@ public class CommandRunningStatistics {
         if(all) {
             CommandRegister.GROUP_COMMANDS.forEach((f) -> {
                 GroupCommandRunner runner = f.apply(Message.DUMMY);
-                result.put(runner.getClass().getName(), 0);
+                result.put(runner.getClass().getSimpleName(), 0);
             });
             CommandRegister.PRIVATE_COMMANDS.forEach((f) -> {
                 PrivateCommandRunner runner = f.apply(Message.DUMMY);
-                result.put(runner.getClass().getName(), 0);
+                result.put(runner.getClass().getSimpleName(), 0);
             });
         }
 
