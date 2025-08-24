@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot.handler;
 
 import io.lemonjuice.flandre_bot.DebugModeToolkit;
 import io.lemonjuice.flandre_bot.command.CommandRegister;
+import io.lemonjuice.flandre_bot.command.CommandRunningStatistics;
 import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot.command.privat.PrivateCommandRunner;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
@@ -46,6 +47,7 @@ public class ReceivingMessageHandler {
                         break;
                     }
                     runner.apply();
+                    CommandRunningStatistics.addUsingCount(runner.getClass().getName());
                     break;
                 }
             }
@@ -65,6 +67,7 @@ public class ReceivingMessageHandler {
                         break;
                     }
                     runner.apply();
+                    CommandRunningStatistics.addUsingCount(runner.getClass().getName());
                 }
             }
         });

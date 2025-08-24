@@ -1,6 +1,8 @@
 package io.lemonjuice.flandre_bot.message;
 
 public class Message {
+    public static final Message DUMMY = new Message();
+
     public long selfId;
     public long userId;
     public long groupId;
@@ -25,5 +27,21 @@ public class Message {
         public String nickName;
         public String card;
         public String role;
+    }
+
+    static {
+        DUMMY.realSeq = "";
+        DUMMY.type = "";
+        DUMMY.subType = "";
+        DUMMY.format = "";
+        DUMMY.message = "";
+        DUMMY.rawMessage = "";
+
+        Sender dummySender = new Sender();
+        dummySender.nickName = "";
+        dummySender.card = "";
+        dummySender.role = "";
+
+        DUMMY.sender = dummySender;
     }
 }
