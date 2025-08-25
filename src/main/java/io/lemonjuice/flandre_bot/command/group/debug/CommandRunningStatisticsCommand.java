@@ -41,7 +41,7 @@ public class CommandRunningStatisticsCommand extends GroupCommandRunner {
     public void apply() {
         this.handleArgs();
 
-        Map<String, Integer> statistics = CommandRunningStatistics.getUsingCounts(this.all, this.history);
+        Map<String, Integer> statistics = CommandRunningStatistics.getUsingCounts(this.all, !this.history);
         if(this.sorted) {
             statistics = statistics.entrySet()
                     .stream()
