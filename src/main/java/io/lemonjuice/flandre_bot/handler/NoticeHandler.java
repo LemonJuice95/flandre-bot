@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.handler;
 
+import io.lemonjuice.flandre_bot.command.CommandRunningStatistics;
 import io.lemonjuice.flandre_bot.network.SQLCore;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 import lombok.extern.log4j.Log4j2;
@@ -50,6 +51,7 @@ public class NoticeHandler {
                if(message.has("sender_id")) {
                    SendingUtils.sendPrivateText(message.getLong("sender_id"), "戳芙兰干嘛owo");
                }
+               CommandRunningStatistics.addUsingCount("Poke");
            }
        } catch (JSONException e) {
            log.error(e);

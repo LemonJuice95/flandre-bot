@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.handler;
 
 import io.lemonjuice.flandre_bot.CacheCleaner;
+import io.lemonjuice.flandre_bot.command.CommandRunningStatistics;
 import io.lemonjuice.flandre_bot.command.group.interest.GroupFortuneCookieCommand;
 import io.lemonjuice.flandre_bot.network.SQLCore;
 import io.lemonjuice.flandre_bot.network.WSClientCore;
@@ -31,6 +32,7 @@ public class RefreshHandler {
     @Async
     public void dailyRefresh() {
         refreshSignIn();
+        CommandRunningStatistics.dailyClear();
         log.info("每日刷新已完成！");
     }
 
