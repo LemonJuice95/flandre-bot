@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CommandRunningStatisticsCommand extends GroupCommandRunner {
-    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/命令统计.+";
+    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/命令统计.*";
 
     private final Pattern argsPattern = Pattern.compile("\\s+-(a(ll)?|h(istory)?|s(orted)?)");
 
