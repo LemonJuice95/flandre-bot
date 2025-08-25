@@ -14,8 +14,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class CommandRunningStatisticsCommand extends GroupCommandRunner {
-    private static final String commandPattern = "^[CQ:at,qq=%d]\\s*/命令统计";
-    private static final Pattern argsPattern = Pattern.compile("\\s+-(a(ll)?|h(istory)?|s(orted)?)");
+    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/命令统计";
+
+    private final Pattern argsPattern = Pattern.compile("\\s+-(a(ll)?|h(istory)?|s(orted)?)");
 
     private boolean all = false;
     private boolean history = false;
@@ -67,7 +68,7 @@ public class CommandRunningStatisticsCommand extends GroupCommandRunner {
     }
 
     private void handleArgs() {
-        Matcher matcher = argsPattern.matcher(this.command.message);
+        Matcher matcher = this.argsPattern.matcher(this.command.message);
         while (matcher.find()) {
             String arg = matcher.group(1);
             switch (arg) {
