@@ -17,7 +17,7 @@ public class CommandRunningStatistics {
              PreparedStatement ps = connection.prepareStatement("INSERT INTO command_statistics (command_name,using_count) VALUES(?,1) ON DUPLICATE KEY UPDATE using_count=using_count+1");
              PreparedStatement ps2 = connection.prepareStatement("INSERT INTO command_statistics_today (command_name,using_count) VALUES(?,1) ON DUPLICATE KEY UPDATE using_count=using_count+1")) {
             ps.setString(1, commandName);
-            ps2.setString(2, commandName);
+            ps2.setString(1, commandName);
             ps.execute();
             ps2.execute();
         } catch (SQLException e) {
