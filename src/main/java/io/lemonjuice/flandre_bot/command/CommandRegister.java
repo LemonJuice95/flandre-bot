@@ -46,7 +46,7 @@ public class CommandRegister {
 
         registerGroupCommand(ManualDailyRefreshCommand::new);
 
-
+        registerGroupCommand(CommandRunningStatisticsCommand::new);
 
         if(DebugModeToolkit.isDebugMode()) {
             registerGroupCommand(GroupImageTestCommand::new);
