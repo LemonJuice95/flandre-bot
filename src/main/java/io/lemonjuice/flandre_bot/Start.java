@@ -4,8 +4,8 @@ import io.lemonjuice.flan_mai_plugin.MaiPluginInit;
 import io.lemonjuice.flandre_bot.network.SQLCore;
 import io.lemonjuice.flandre_bot.network.WSClientCore;
 import io.lemonjuice.flandre_bot.network.WSReconnect;
-import io.lemonjuice.flandre_bot.handler.ResourceLoadHandler;
 import io.lemonjuice.flandre_bot.reference.NetworkRefs;
+import io.lemonjuice.flandre_bot.resources.ResourceRegister;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +20,7 @@ public class Start implements CommandLineRunner {
         MaiPluginInit.init();
         CacheCleaner.clean();
         ConfigInit.initConfig();
-        ResourceLoadHandler.getInstance().loadResources();
+        ResourceRegister.init();
         WSClientCore.startWatchDog();
         if(!WSClientCore.connect(NetworkRefs.WS_URL, NetworkRefs.WS_TOKEN)) {
             Thread.startVirtualThread(new WSReconnect());

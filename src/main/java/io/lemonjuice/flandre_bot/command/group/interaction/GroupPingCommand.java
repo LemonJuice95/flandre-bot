@@ -4,6 +4,7 @@ import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
+import io.lemonjuice.flandre_bot.resources.ResourceRegister;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GroupPingCommand extends GroupCommandRunner {
-    public static List<String> REPLIES = Collections.unmodifiableList(new ArrayList<>());
+    private static final List<String> REPLIES = ResourceRegister.PING_REPLIES.get();
 
     public GroupPingCommand(Message command) {
         super(command);

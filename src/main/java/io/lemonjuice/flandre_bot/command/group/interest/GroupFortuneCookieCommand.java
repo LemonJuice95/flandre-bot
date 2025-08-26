@@ -4,6 +4,7 @@ import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
+import io.lemonjuice.flandre_bot.resources.ResourceRegister;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
@@ -16,7 +17,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GroupFortuneCookieCommand extends GroupCommandRunner {
-    public static List<String> COOKIES = new ArrayList<>();
+    private static final List<String> COOKIES = ResourceRegister.FORTUNE_COOKIES.get();
+
     private static final ConcurrentHashMap<UUID, Integer> CACHE = new ConcurrentHashMap<>();
 
     public GroupFortuneCookieCommand(Message command) {

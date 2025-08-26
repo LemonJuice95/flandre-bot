@@ -4,6 +4,7 @@ import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
+import io.lemonjuice.flandre_bot.resources.ResourceRegister;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
@@ -16,7 +17,7 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GroupHelloCommand extends GroupCommandRunner {
-    public static Map<PeriodOfDay, List<String>> REPLIES = new HashMap<>();
+    private static final Map<PeriodOfDay, List<String>> REPLIES = ResourceRegister.HELLO_REPLIES.get();
 
     public GroupHelloCommand(Message command) {
         super(command);

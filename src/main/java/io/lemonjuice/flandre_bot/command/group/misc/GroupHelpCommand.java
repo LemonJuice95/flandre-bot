@@ -4,6 +4,7 @@ import io.lemonjuice.flandre_bot.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
+import io.lemonjuice.flandre_bot.resources.ResourceRegister;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupHelpCommand extends GroupCommandRunner {
-    public static List<String> DOC = new ArrayList<>();
+    private static final List<String> DOC = ResourceRegister.HELP_DOC_MAIN.get();
 
     public GroupHelpCommand(Message command) {
         super(command);

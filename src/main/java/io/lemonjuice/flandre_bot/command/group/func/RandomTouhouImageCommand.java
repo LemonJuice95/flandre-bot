@@ -6,6 +6,7 @@ import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot.message.Message;
+import io.lemonjuice.flandre_bot.resources.ResourceRegister;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
 import org.json.JSONObject;
@@ -15,7 +16,7 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("random_touhou_image")
 public class RandomTouhouImageCommand extends GroupCommandRunner {
-    public static JSONObject NAME_TAGS = new JSONObject();
+    private static final JSONObject NAME_TAGS = ResourceRegister.TOUHOU_CHARACTER_NAMES.get();
 
     public RandomTouhouImageCommand(Message command) {
         super(command);

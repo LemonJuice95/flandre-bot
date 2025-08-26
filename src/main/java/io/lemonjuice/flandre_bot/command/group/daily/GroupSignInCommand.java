@@ -5,6 +5,7 @@ import io.lemonjuice.flandre_bot.command.group.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot.command.group.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot.message.Message;
 import io.lemonjuice.flandre_bot.network.SQLCore;
+import io.lemonjuice.flandre_bot.resources.ResourceRegister;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot.utils.SendingUtils;
@@ -20,8 +21,8 @@ import java.util.stream.Collectors;
 
 @Log4j2
 public class GroupSignInCommand extends GroupCommandRunner {
-    public static List<String> FORTUNES = new ArrayList<>();
-    public static List<String> THINGS = new ArrayList<>();
+    private static final List<String> FORTUNES = ResourceRegister.SIGN_IN_FORTUNES.get();
+    private static final List<String> THINGS = ResourceRegister.SIGN_IN_THINGS.get();
 
     public GroupSignInCommand(Message command) {
         super(command);
