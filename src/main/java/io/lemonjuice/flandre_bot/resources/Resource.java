@@ -30,16 +30,13 @@ public abstract class Resource<T> implements Supplier<T> {
     }
 
     public synchronized void init() {
+        log.info("正在加载资源: {}", this.resPath);
         try (InputStream input = this.getClass().getClassLoader().getResourceAsStream(this.resPath)) {
             this.res = this.load(input);
         } catch (Exception e) {
             log.error("加载内部资源失败: {}", this.resPath, e);
             this.res = this.dummyValue;
         }
-    }
-
-    public String getName() {
-        return this.resPath;
     }
 
     protected abstract T load(InputStream input) throws IOException;

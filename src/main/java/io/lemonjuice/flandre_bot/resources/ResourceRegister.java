@@ -1,14 +1,12 @@
 package io.lemonjuice.flandre_bot.resources;
 
 import io.lemonjuice.flandre_bot.utils.PeriodOfDay;
-import lombok.extern.log4j.Log4j2;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Log4j2
 public class ResourceRegister {
     private static final List<Resource<?>> RESOURCES = new ArrayList<>();
 
@@ -36,9 +34,6 @@ public class ResourceRegister {
     }
 
     public static void init() {
-        RESOURCES.forEach((res) -> {
-            log.info("正在加载资源: {}", res.getName());
-            res.get();
-        });
+        RESOURCES.forEach(Resource::init);
     }
 }
