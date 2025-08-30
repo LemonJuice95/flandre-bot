@@ -58,7 +58,7 @@ dependencies {
     implementation 'com.zaxxer:HikariCP'
 
     //舞萌插件
-    implementation 'io.lemonjuice:flan-mai-plugin:0.5.3'
+    implementation 'io.lemonjuice:flan-mai-plugin:0.5.4'
 }
 
 configurations.configureEach {
