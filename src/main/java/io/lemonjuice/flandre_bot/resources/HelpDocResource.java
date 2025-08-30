@@ -1,7 +1,5 @@
 package io.lemonjuice.flandre_bot.resources;
 
-import io.lemonjuice.flandre_bot.command.group.maimai.GroupMaiHelpCommand;
-import io.lemonjuice.flandre_bot.command.group.misc.GroupHelpCommand;
 import io.lemonjuice.flandre_bot.utils.CQCodeUtils;
 import lombok.extern.log4j.Log4j2;
 

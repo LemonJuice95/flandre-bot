@@ -1,4 +1,4 @@
-package io.lemonjuice.flandre_bot.command.group.maimai;
+package io.lemonjuice.flandre_bot.command.group.maimai.query;
 
 import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flan_mai_plugin.api.DivingFishB50Generator;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupB50Command extends GroupCommandRunner {
-    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/(mai\\s+)?b50(\\s+((\\[CQ:at,qq=(\\d+)])|(\\d+)))?\\s*$";
+    private static final String commandPattern = "^(\\[CQ:at,qq=%d]\\s*)?/?(mai\\s+)?b50(\\s+((\\[CQ:at,qq=(\\d+)])|(\\d+)))?\\s*$";
 
     private final Pattern pattern;
     
@@ -56,10 +56,10 @@ public class GroupB50Command extends GroupCommandRunner {
     private long getQQIdParam() {
         Matcher matcher = this.pattern.matcher(this.command.message);
         if(matcher.find()) {
-            if(matcher.group(5) != null) {
-                return Long.parseLong(matcher.group(5).trim());
-            } else if(matcher.group(6) != null) {
+            if(matcher.group(6) != null) {
                 return Long.parseLong(matcher.group(6).trim());
+            } else if(matcher.group(7) != null) {
+                return Long.parseLong(matcher.group(7).trim());
             }
         }
         return -1;

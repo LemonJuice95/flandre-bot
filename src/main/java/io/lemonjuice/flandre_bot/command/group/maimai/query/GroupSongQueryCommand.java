@@ -1,4 +1,4 @@
-package io.lemonjuice.flandre_bot.command.group.maimai;
+package io.lemonjuice.flandre_bot.command.group.maimai.query;
 
 import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flan_mai_plugin.api.SongInfoGenerator;
@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupSongQueryCommand extends GroupCommandRunner {
-    private static final String pattern1 = "^\\[CQ:at,qq=%d]\\s*/mai\\s+song.+";
-    private static final String pattern2 = "^\\[CQ:at,qq=%d]\\s*.+是什么歌$";
+    private static final String pattern1 = "^(\\[CQ:at,qq=%d]\\s*)?/mai\\s+song.+";
+    private static final String pattern2 = "^(\\[CQ:at,qq=%d]\\s*)?.+是什么歌$";
     
     private final Pattern commandPattern1;
     private final Pattern commandPattern2;
