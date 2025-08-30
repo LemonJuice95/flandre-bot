@@ -18,7 +18,6 @@ public class Start implements CommandLineRunner {
     @Override
     public void run(String... args) {
         MaiPluginInit.init();
-        CacheCleaner.clean();
         ConfigInit.initConfig();
         ResourceRegister.init();
         WSClientCore.startWatchDog();
