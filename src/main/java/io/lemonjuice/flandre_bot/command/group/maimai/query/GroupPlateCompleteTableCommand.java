@@ -53,7 +53,7 @@ public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
                 String picPath = CompletionTableGenerator.generateWithPlates(this.command.userId, plateName);
                 if (!picPath.isEmpty()) {
                     File picFile = new File(picPath);
-                    SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + CQCodeUtils.image("file:///" + picPath));
+                    SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + CQCodeUtils.image("file:///" + picFile.getAbsolutePath()));
                 } else {
                     SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "诶？生成失败了……\n芙兰不是故意的……");
                 }
