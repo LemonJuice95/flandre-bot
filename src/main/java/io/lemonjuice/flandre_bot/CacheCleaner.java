@@ -29,6 +29,7 @@ public class CacheCleaner {
     }
 
     public static void clean() {
+        log.info("正在清理缓存...");
         try {
             Files.walkFileTree(Path.of(PATH).toAbsolutePath().normalize(), new SimpleFileVisitor<>() {
                 @Override
