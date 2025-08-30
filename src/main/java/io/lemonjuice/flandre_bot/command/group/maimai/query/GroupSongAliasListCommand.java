@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupSongAliasListCommand extends GroupCommandRunner {
-    private static final String commandPattern = "^(\\[CQ:at,qq=%d]\\s*)?.+有什么别[名称]$";
+    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*.+有什么别[名称]$";
 
     private final Pattern pattern;
 

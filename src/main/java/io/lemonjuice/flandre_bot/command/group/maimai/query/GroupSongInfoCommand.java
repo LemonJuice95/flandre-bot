@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupSongInfoCommand extends GroupCommandRunner {
-    private static final String commandPattern = "^(\\[CQ:at,qq=%d]\\s*)?/m(ai\\s+)?info\\s+(.+)$";
+    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/?m(ai\\s+)?info\\s+(.+)$";
     
     private final Pattern pattern;
 
@@ -73,6 +73,6 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
 
     private String getSongName() {
         Matcher matcher = this.pattern.matcher(this.command.message);
-        return matcher.find() ? matcher.group(3).trim() : "";
+        return matcher.find() ? matcher.group(2).trim() : "";
     }
 }

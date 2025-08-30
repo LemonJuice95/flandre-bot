@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupB50Command extends GroupCommandRunner {
-    private static final String commandPattern = "^(\\[CQ:at,qq=%d]\\s*)?/?(mai\\s+)?b50(\\s+((\\[CQ:at,qq=(\\d+)])|(\\d+)))?\\s*$";
+    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/?(mai\\s+)?b50(\\s+((\\[CQ:at,qq=(\\d+)])|(\\d+)))?\\s*$";
 
     private final Pattern pattern;
     
@@ -56,9 +56,9 @@ public class GroupB50Command extends GroupCommandRunner {
     private long getQQIdParam() {
         Matcher matcher = this.pattern.matcher(this.command.message);
         if(matcher.find()) {
-            if(matcher.group(6) != null) {
+            if(matcher.group(5) != null) {
                 return Long.parseLong(matcher.group(6).trim());
-            } else if(matcher.group(7) != null) {
+            } else if(matcher.group(6) != null) {
                 return Long.parseLong(matcher.group(7).trim());
             }
         }
