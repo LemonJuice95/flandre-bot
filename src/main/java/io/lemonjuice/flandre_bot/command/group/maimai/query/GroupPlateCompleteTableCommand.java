@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @FunctionCommand("maimai_query")
 public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
-    private static final String versions = Arrays.stream(MaiVersion.values()).map(MaiVersion::getMatchingNames).collect(Collectors.joining());
+    private static final String versions = Arrays.stream(MaiVersion.values()).map(MaiVersion::getMatchingNames).collect(Collectors.joining()).replaceFirst("真", "");
     private static final String commandPatternRaw = "^\\[CQ:at,qq=%d]\\s*([%s霸][极|将|神|舞舞|者])完成表";
 
     private final Pattern commandPattern;
