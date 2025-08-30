@@ -11,7 +11,7 @@ public class Stop {
     @PreDestroy
     public void onStop() {
         NicknameManager.save();
-
+        CacheCleaner.clean();
         SQLCore.close();
         WSClientCore.close();
     }
