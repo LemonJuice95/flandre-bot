@@ -44,6 +44,7 @@ public class CommandRegister {
         registerGroupCommand(GroupSongQueryCommand::new);
         registerGroupCommand(GroupSongAliasListCommand::new);
         registerGroupCommand(GroupSongInfoCommand::new);
+        registerGroupCommand(GroupPlateCompleteTableCommand::new);
 
         registerGroupCommand(ManualDailyRefreshCommand::new);
 
