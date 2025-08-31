@@ -73,6 +73,6 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
 
     private String getSongName() {
         Matcher matcher = this.pattern.matcher(this.command.message);
-        return matcher.find() ? matcher.group(2).trim() : "";
+        return matcher.find() ? matcher.group(2).trim().replace("&#91;", "[").replace("&#93;", "]") : "";
     }
 }

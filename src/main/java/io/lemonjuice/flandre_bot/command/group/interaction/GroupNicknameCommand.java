@@ -45,6 +45,8 @@ public class GroupNicknameCommand extends GroupCommandRunner {
         String message = this.command.message
                 .replace(CQCodeUtils.at(this.command.selfId), "")
                 .replace("[]", "")
+                .replace("&#91;", "[")
+                .replace("&#93;", "]")
                 .trim();
         Pattern pattern = Pattern.compile("/称呼\\s+(\\S+)");
         Matcher matcher = pattern.matcher(message);

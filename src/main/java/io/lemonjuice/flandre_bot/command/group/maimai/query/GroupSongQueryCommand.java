@@ -92,6 +92,6 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
         String message = this.command.message.replace(CQCodeUtils.at(this.command.selfId), "").trim();
         Pattern pattern = Pattern.compile("^(.+)是什么歌$");
         Matcher matcher = pattern.matcher(message);
-        return matcher.find() ? matcher.group(1) : "";
+        return matcher.find() ? matcher.group(1).replace("&#91;", "[").replace("&#93;", "]") : "";
     }
 }
