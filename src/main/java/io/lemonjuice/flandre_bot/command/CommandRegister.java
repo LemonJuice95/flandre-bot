@@ -7,6 +7,10 @@ import io.lemonjuice.flandre_bot.command.group.func.*;
 import io.lemonjuice.flandre_bot.command.group.interaction.*;
 import io.lemonjuice.flandre_bot.command.group.interest.GroupFortuneCookieCommand;
 import io.lemonjuice.flandre_bot.command.group.maimai.GroupMaiHelpCommand;
+import io.lemonjuice.flandre_bot.command.group.maimai.open_chars.OCGuessSongCommand;
+import io.lemonjuice.flandre_bot.command.group.maimai.open_chars.OpenCharCommand;
+import io.lemonjuice.flandre_bot.command.group.maimai.open_chars.StartOpenCharsCommand;
+import io.lemonjuice.flandre_bot.command.group.maimai.open_chars.StopOpenCharsCommand;
 import io.lemonjuice.flandre_bot.command.group.maimai.query.*;
 import io.lemonjuice.flandre_bot.command.group.misc.Choose1From2Command;
 import io.lemonjuice.flandre_bot.command.group.misc.GroupHelpCommand;
@@ -45,6 +49,11 @@ public class CommandRegister {
         registerGroupCommand(GroupSongAliasListCommand::new);
         registerGroupCommand(GroupSongInfoCommand::new);
         registerGroupCommand(GroupPlateCompleteTableCommand::new);
+
+        registerGroupCommand(StartOpenCharsCommand::new);
+        registerGroupCommand(StopOpenCharsCommand::new);
+        registerGroupCommand(OpenCharCommand::new);
+        registerGroupCommand(OCGuessSongCommand::new);
 
         registerGroupCommand(ManualDailyRefreshCommand::new);
 
