@@ -26,12 +26,12 @@ public class OpenCharCommand extends GroupCommandRunner {
     @Override
     public boolean validate() {
         return OpenCharsManager.hasProcess(this.command.groupId) &&
-                commandPattern.matcher(this.command.message).matches();
+                commandPattern.matcher(this.command.rawMessage).matches();
     }
 
     @Override
     public void apply() {
-        Matcher matcher = commandPattern.matcher(this.command.message.trim());
+        Matcher matcher = commandPattern.matcher(this.command.rawMessage.trim());
         if(matcher.find()) {
             String str = matcher.group(1);
             if(str.length() != 1) {
