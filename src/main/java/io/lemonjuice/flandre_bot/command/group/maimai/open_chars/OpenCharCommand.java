@@ -44,7 +44,7 @@ public class OpenCharCommand extends GroupCommandRunner {
                 SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "一次只能开一个字符哦~");
             } else {
                 OpenCharsProcess process = OpenCharsManager.getProcess(this.command.groupId);
-                if(process.openChar(matcher.group(1).charAt(0))) {
+                if(process.openChar(str.charAt(0))) {
                     SendingUtils.sendGroupText(this.command.groupId, OpenCharsManager.makeMessage(this.command.groupId));
                     if(process.checkAccomplished()) {
                         OpenCharsManager.stopProcess(this.command.groupId);

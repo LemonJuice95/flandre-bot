@@ -35,7 +35,7 @@ public class OCGuessSongCommand extends GroupCommandRunner {
         Matcher matcher = commandPattern.matcher(this.command.message.trim());
         if(matcher.find()) {
             int index = Integer.parseInt(matcher.group(1));
-            String name = matcher.group(2);
+            String name = matcher.group(2).replace("&#91;", "[").replace("&#93;", "]");
             try {
                 OpenCharsProcess process = OpenCharsManager.getProcess(this.command.groupId);
                 if(!process.isSongUnknown(index)) {
