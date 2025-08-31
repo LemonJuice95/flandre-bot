@@ -26,14 +26,20 @@ public class OpenCharCommand extends GroupCommandRunner {
     @Override
     public boolean validate() {
         return OpenCharsManager.hasProcess(this.command.groupId) &&
-                commandPattern.matcher(this.command.rawMessage).matches();
+                commandPattern.matcher(this.command.message).matches();
     }
 
     @Override
     public void apply() {
-        Matcher matcher = commandPattern.matcher(this.command.rawMessage.trim());
+        Matcher matcher = commandPattern.matcher(this.command.message.trim());
         if(matcher.find()) {
             String str = matcher.group(1);
+            if(str.equals("&#91;")) {
+                str = "[";
+            }
+            if(str.equals("&#93;")) {
+                str = "]";
+            }
             if(str.length() != 1) {
                 SendingUtils.sendGroupText(this.command.groupId, CQCodeUtils.reply(this.command.messageId) + "一次只能开一个字符哦~");
             } else {
