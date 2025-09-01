@@ -46,6 +46,7 @@ public class StopOpenCharsCommand extends GroupCommandRunner {
                 answer.append("\n");
             }
             SendingUtils.sendGroupText(this.command.groupId, answer.toString().trim());
+            OpenCharsManager.stopProcess(this.command.groupId);
         } else {
             SendingUtils.sendGroupText(this.command.groupId, "群里没有正在进行的开字母哦~");
         }
