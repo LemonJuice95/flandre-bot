@@ -1,7 +1,10 @@
 package io.lemonjuice.flandre_bot.command.group.maimai.open_chars;
 
+import io.lemonjuice.flan_mai_plugin.games.condition.SongFilterCondition;
 import io.lemonjuice.flan_mai_plugin.games.open_chars.OpenCharsProcess;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -25,10 +28,14 @@ public class OpenCharsManager {
     }
 
     public static boolean startNewProcess(long groupId) {
+        return startNewProcess(groupId, new ArrayList<>());
+    }
+
+    public static boolean startNewProcess(long groupId, List<SongFilterCondition> conditions) {
         if(PROCESSES.containsKey(groupId)) {
             return false;
         }
-        return Objects.equals(PROCESSES.putIfAbsent(groupId, new OpenCharsProcess(DEFAULT_SONG_NUM)), null);
+        return Objects.equals(PROCESSES.putIfAbsent(groupId, new OpenCharsProcess(DEFAULT_SONG_NUM, conditions)), null);
     }
 
     public static boolean stopProcess(long groupId) {
