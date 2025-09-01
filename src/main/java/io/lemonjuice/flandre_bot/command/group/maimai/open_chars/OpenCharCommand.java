@@ -41,6 +41,10 @@ public class OpenCharCommand extends GroupCommandRunner {
                 if(process.openChar(str.charAt(0))) {
                     SendingUtils.sendGroupText(this.command.groupId, OpenCharsManager.makeMessage(this.command.groupId));
                     if(process.checkAccomplished()) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ignored) {
+                        }
                         OpenCharsManager.stopProcess(this.command.groupId);
                         SendingUtils.sendGroupText(this.command.groupId, "看样子游戏结束了呢~");
                     }

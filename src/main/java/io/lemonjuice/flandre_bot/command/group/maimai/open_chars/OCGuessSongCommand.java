@@ -49,6 +49,10 @@ public class OCGuessSongCommand extends GroupCommandRunner {
                     SendingUtils.sendGroupText(this.command.groupId, reply.toString());
                     if(process.checkAccomplished()) {
                         OpenCharsManager.stopProcess(this.command.groupId);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ignored) {
+                        }
                         SendingUtils.sendGroupText(this.command.groupId, "看样子游戏结束了呢~");
                     }
                 } else {

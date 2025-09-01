@@ -45,6 +45,10 @@ public class StopOpenCharsCommand extends GroupCommandRunner {
                 answer.append(songs.get(i).title);
                 answer.append("\n");
             }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ignored) {
+            }
             SendingUtils.sendGroupText(this.command.groupId, answer.toString().trim());
             OpenCharsManager.stopProcess(this.command.groupId);
         } else {
