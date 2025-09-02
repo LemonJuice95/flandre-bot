@@ -27,13 +27,18 @@ public class GroupSimpleInteractionCommand extends GroupCommandRunner {
 
     @Override
     public boolean validate() {
-        String message = this.command.message.replace(CQCodeUtils.at(this.command.selfId), "<selfAt>").trim();
+        String message = this.command.message
+                .replace("<selfAt>", "")
+                .replace(CQCodeUtils.at(this.command.selfId), "<selfAt>")
+                .replace(" ", "");
         return INTERACTION_MAP.containsKey(message);
     }
 
     @Override
     public void apply() {
-        String message = this.command.message.replace(CQCodeUtils.at(this.command.selfId), "<selfAt>").trim();
+        String message = this.command.message
+                .replace(CQCodeUtils.at(this.command.selfId), "<selfAt>")
+                .replace(" ", "");
         List<String> repliesPool = INTERACTION_MAP.get(message);
         String reply = repliesPool.get(ThreadLocalRandom.current().nextInt(repliesPool.size()))
                 .replace("<reply>", CQCodeUtils.reply(this.command.messageId))

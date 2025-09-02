@@ -8,7 +8,7 @@
     "replies": ["不许打芙兰！（捏拳）"]
   },
   "closeTo": {
-    "msg": ["芙兰贴贴"],
+    "msg": ["芙兰贴贴", "<selfAt>贴贴"],
     "replies": ["<user>贴贴哦~"]
   }
 }
