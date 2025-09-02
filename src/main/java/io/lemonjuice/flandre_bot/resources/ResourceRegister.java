@@ -22,7 +22,7 @@ public class ResourceRegister {
     public static final Resource<List<String>> FORTUNE_COOKIES = register(new TextLinesResource("assets/fortune_cookies.txt"));
 
     //互动功能
-    public static final Resource<List<String>> PING_REPLIES = register(new TextLinesResource("assets/interact/ping.txt"));
+    public static final Resource<Map<String, List<String>>> SIMPLE_INTERACTION_REPLIES = register(new SimpleInteractRepliesLoader());
     public static final Resource<Map<PeriodOfDay, List<String>>> HELLO_REPLIES = register(new HelloRepliesResource());
 
     //角色名映射表

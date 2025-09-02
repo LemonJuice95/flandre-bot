@@ -28,6 +28,7 @@ public class CommandRegister {
     public static List<Function<Message, PrivateCommandRunner>> PRIVATE_COMMANDS = new ArrayList<>();
 
     static {
+        registerGroupCommand(GroupSimpleInteractionCommand::new);
         registerGroupCommand(GroupHelloCommand::new);
         registerGroupCommand(GroupSignInCommand::new);
         registerGroupCommand(Choose1From2Command::new);
@@ -35,7 +36,6 @@ public class CommandRegister {
         registerGroupCommand(DisableFunctionCommand::new);
         registerGroupCommand(ShowFunctionsCommand::new);
         registerGroupCommand(GroupDiceCommand::new);
-        registerGroupCommand(GroupPingCommand::new);
         registerGroupCommand(RandomTouhouImageCommand::new);
         registerGroupCommand(GroupHelpCommand::new);
         registerGroupCommand(GroupFortuneCookieCommand::new);
