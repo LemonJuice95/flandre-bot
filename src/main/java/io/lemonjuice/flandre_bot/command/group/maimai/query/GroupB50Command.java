@@ -57,9 +57,9 @@ public class GroupB50Command extends GroupCommandRunner {
         Matcher matcher = this.pattern.matcher(this.command.message);
         if(matcher.find()) {
             if(matcher.group(5) != null) {
-                return Long.parseLong(matcher.group(6).trim());
+                return Long.parseLong(matcher.group(5).trim());
             } else if(matcher.group(6) != null) {
-                return Long.parseLong(matcher.group(7).trim());
+                return Long.parseLong(matcher.group(6).trim());
             }
         }
         return -1;
