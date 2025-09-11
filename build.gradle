@@ -1,0 +1,53 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'io.github.lemonjuice95'
+version = '0.1.0'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'io.lemonjuice.flandre_bot_framework.FlandreBot'
+        )
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.slf4j:slf4j-api:1.7.36'
+    }
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    compileOnly 'org.projectlombok:lombok:1.18.36'
+    annotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    //框架及插件
+    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.6.0'
+    implementation 'io.github.lemonjuice95:flandre-sql-support:0.4.1'
+    implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.8.0'
+
+    //定时任务
+    implementation 'org.quartz-scheduler:quartz:2.5.0'
+    implementation 'org.quartz-scheduler:quartz-jobs:2.5.0'
+
+    //http
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+
+    //图片格式转换
+    implementation 'com.twelvemonkeys.imageio:imageio-core:3.9.4'
+    implementation 'com.twelvemonkeys.imageio:imageio-webp:3.9.4'
+}
+
+test {
+    useJUnitPlatform()
+}
