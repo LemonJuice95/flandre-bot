@@ -18,12 +18,6 @@ jar {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        force 'org.slf4j:slf4j-api:1.7.36'
-    }
-}
-
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -32,7 +26,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
     //框架及插件
-    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.6.2'
+    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.6.3'
     implementation 'io.github.lemonjuice95:flandre-sql-support:0.4.1'
     implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.8.0'
 
