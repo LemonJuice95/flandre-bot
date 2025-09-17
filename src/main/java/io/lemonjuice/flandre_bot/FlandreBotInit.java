@@ -53,7 +53,6 @@ public class FlandreBotInit {
         log.info("msg 1, Time={}", System.currentTimeMillis());
         BotEventBus.post(new TestEvent2());
         log.info("msg 3, Time={}", System.currentTimeMillis());
-//        SQLCore.close();
     }
 
     @Subscribe
