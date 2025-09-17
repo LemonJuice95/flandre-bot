@@ -51,11 +51,8 @@ public class FlandreBotInit {
     @Subscribe
     public void onTest(TestEvent event) {
         log.info("msg 1, Time={}", System.currentTimeMillis());
-        CompletableFuture.runAsync(() -> {
-            BotEventBus.post(new TestEvent2());
-        }).thenRun(() -> {
-            log.info("msg 3, Time={}", System.currentTimeMillis());
-        });
+        BotEventBus.post(new TestEvent2());
+        log.info("msg 3, Time={}", System.currentTimeMillis());
 //        SQLCore.close();
     }
 
