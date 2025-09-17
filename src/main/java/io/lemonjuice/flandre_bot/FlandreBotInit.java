@@ -18,6 +18,8 @@ import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotStopEvent;
 import lombok.extern.log4j.Log4j2;
 
+import java.util.concurrent.CompletableFuture;
+
 @EventSubscriber
 @Log4j2
 public class FlandreBotInit {
@@ -49,8 +51,11 @@ public class FlandreBotInit {
     @Subscribe
     public void onTest(TestEvent event) {
         log.info("msg 1, Time={}", System.currentTimeMillis());
-        BotEventBus.post(new TestEvent2());
-        log.info("msg 3, Time={}", System.currentTimeMillis());
+        CompletableFuture.runAsync(() -> {
+            BotEventBus.post(new TestEvent2());
+        }).thenRun(() -> {
+            log.info("msg 3, Time={}", System.currentTimeMillis());
+        });
 //        SQLCore.close();
     }
 
