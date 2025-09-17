@@ -49,7 +49,8 @@ public class FlandreBotInit {
     public void onTest(TestEvent event) {
         log.info("msg 1");
         BotEventBus.post(new SQLPreCloseEvent());
-        SQLCore.close();
+        log.info("msg 2");
+//        SQLCore.close();
     }
 
     @Subscribe
