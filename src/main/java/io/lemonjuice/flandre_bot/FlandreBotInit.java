@@ -2,11 +2,13 @@ package io.lemonjuice.flandre_bot;
 
 import com.google.common.eventbus.Subscribe;
 import io.lemonjuice.flan_sql_support.event.SQLPreCloseEvent;
+import io.lemonjuice.flan_sql_support.network.SQLCore;
 import io.lemonjuice.flandre_bot.commands.CommandInit;
 import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
 import io.lemonjuice.flandre_bot.console.ConsoleCommandInit;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot.scheduled.ScheduledTaskManager;
+import io.lemonjuice.flandre_bot.test.TestEvent;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
@@ -33,7 +35,7 @@ public class FlandreBotInit {
             } catch (InterruptedException e) {
 
             }
-            BotEventBus.post(new BotStopEvent());
+            BotEventBus.post(new TestEvent());
             log.info("Test 1");
         }, "Test").start();
     }
@@ -41,6 +43,13 @@ public class FlandreBotInit {
     @Subscribe
     public void onBotStop(BotStopEvent event) {
         CacheCleaner.clean();
+    }
+
+    @Subscribe
+    public void onTest(TestEvent event) {
+        log.info("msg 1");
+        BotEventBus.post(new SQLPreCloseEvent());
+        SQLCore.close();
     }
 
     @Subscribe
