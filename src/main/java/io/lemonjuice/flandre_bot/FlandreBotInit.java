@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot;
 
 import com.google.common.eventbus.Subscribe;
+import io.lemonjuice.flan_sql_support.event.SQLPreCloseEvent;
 import io.lemonjuice.flandre_bot.commands.CommandInit;
 import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
 import io.lemonjuice.flandre_bot.console.ConsoleCommandInit;
@@ -25,8 +26,12 @@ public class FlandreBotInit {
 
     @Subscribe
     public void onBotStop(BotStopEvent event) {
+        CacheCleaner.clean();
+    }
+
+    @Subscribe
+    public void preSqlClose(SQLPreCloseEvent event) {
         K11PeopleNumberCommand.save();
         NicknameManager.save();
-        CacheCleaner.clean();
     }
 }
