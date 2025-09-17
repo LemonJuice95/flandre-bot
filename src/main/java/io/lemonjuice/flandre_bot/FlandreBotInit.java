@@ -28,8 +28,9 @@ public class FlandreBotInit {
             try {
                 Thread.sleep(10000L);
             } catch (InterruptedException e) {
-                BotEventBus.post(new BotStopEvent());
+
             }
+            BotEventBus.post(new BotStopEvent());
         });
     }
 
