@@ -38,8 +38,19 @@ public class FlandreBotInit {
         }, "Test").start();
     }
 
+//    @Subscribe
+//    public void onBotStop(BotStopEvent event) {
+//        CacheCleaner.clean();
+//    }
+
     @Subscribe
-    public void onBotStop(BotStopEvent event) {
-        CacheCleaner.clean();
+    public void preSqlClose(SQLPreCloseEvent event) {
+        K11PeopleNumberCommand.save();
+        NicknameManager.save();
+        try {
+            Thread.sleep(1000L);
+        } catch (InterruptedException e) {
+
+        }
     }
 }
