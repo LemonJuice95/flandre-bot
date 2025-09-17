@@ -31,16 +31,6 @@ public class FlandreBotInit {
         NicknameManager.init();
         ScheduledTaskManager.init();
         K11PeopleNumberCommand.init();
-
-        new Thread(() -> {
-            try {
-                Thread.sleep(10000L);
-            } catch (InterruptedException e) {
-
-            }
-            BotEventBus.post(new TestEvent());
-            log.info("Test 1");
-        }, "Test").start();
     }
 
     @Subscribe
@@ -49,34 +39,7 @@ public class FlandreBotInit {
     }
 
     @Subscribe
-    public void onTest(TestEvent event) {
-        log.info("msg 1, Time={}", System.currentTimeMillis());
-        BotEventBus.post(new TestEvent2());
-        log.info("msg 3, Time={}", System.currentTimeMillis());
-    }
-
-    @Subscribe
-    public void onTest2(TestEvent2 event) {
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-
-        }
-        log.info("msg 2, Time={}", System.currentTimeMillis());
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-
-        }
-    }
-
-    @Subscribe
     public void preSqlClose(SQLPreCloseEvent event) {
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-
-        }
         K11PeopleNumberCommand.save();
         NicknameManager.save();
 
