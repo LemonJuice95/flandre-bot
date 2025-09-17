@@ -8,6 +8,7 @@ import io.lemonjuice.flandre_bot.console.ConsoleCommandInit;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot.scheduled.ScheduledTaskManager;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
+import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
 import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotStopEvent;
@@ -22,6 +23,14 @@ public class FlandreBotInit {
         NicknameManager.init();
         ScheduledTaskManager.init();
         K11PeopleNumberCommand.init();
+
+        Thread.startVirtualThread(() -> {
+            try {
+                Thread.sleep(10000L);
+            } catch (InterruptedException e) {
+                BotEventBus.post(new BotStopEvent());
+            }
+        });
     }
 
     @Subscribe
