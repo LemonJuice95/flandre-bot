@@ -48,9 +48,9 @@ public class FlandreBotInit {
 
     @Subscribe
     public void onTest(TestEvent event) {
-        log.info("msg 1");
+        log.info("msg 1, Time={}", System.currentTimeMillis());
         BotEventBus.post(new TestEvent2());
-        log.info("msg 3");
+        log.info("msg 3, Time={}", System.currentTimeMillis());
 //        SQLCore.close();
     }
 
@@ -61,7 +61,7 @@ public class FlandreBotInit {
         } catch (InterruptedException e) {
 
         }
-        log.info("msg 2");
+        log.info("msg 2, Time={}", System.currentTimeMillis());
         try {
             Thread.sleep(1000L);
         } catch (InterruptedException e) {
