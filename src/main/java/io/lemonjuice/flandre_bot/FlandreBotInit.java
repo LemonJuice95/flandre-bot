@@ -9,6 +9,7 @@ import io.lemonjuice.flandre_bot.console.ConsoleCommandInit;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot.scheduled.ScheduledTaskManager;
 import io.lemonjuice.flandre_bot.test.TestEvent;
+import io.lemonjuice.flandre_bot.test.TestEvent2;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.event.BotEventBus;
@@ -48,9 +49,24 @@ public class FlandreBotInit {
     @Subscribe
     public void onTest(TestEvent event) {
         log.info("msg 1");
-        BotEventBus.post(new SQLPreCloseEvent());
-        log.info("msg 2");
+        BotEventBus.post(new TestEvent2());
+        log.info("msg 3");
 //        SQLCore.close();
+    }
+
+    @Subscribe
+    public void onTest2(TestEvent2 event) {
+        try {
+            Thread.sleep(1000L);
+        } catch (InterruptedException e) {
+
+        }
+        log.info("msg 2");
+        try {
+            Thread.sleep(1000L);
+        } catch (InterruptedException e) {
+
+        }
     }
 
     @Subscribe
