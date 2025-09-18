@@ -58,6 +58,6 @@ public class RandomTouhouImageCommand extends GroupCommandRunner {
                 .replace(CQCode.at(this.command.selfId), "")
                 .trim();
         Matcher matcher = commandPattern.matcher(message);
-        return matcher.find() ? matcher.group(1).trim() : "";
+        return matcher.find() && matcher.group(1) != null ? matcher.group(1).trim() : "";
     }
 }
