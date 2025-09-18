@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 public class RandomTouhouImageCommand extends GroupCommandRunner {
     private static final JSONObject NAME_TAGS = ResourceInit.TOUHOU_CHARACTER_NAMES.get();
 
-    private static final Pattern commandPattern = Pattern.compile("/随机东方图\\s+(\\S+)");
+    private static final Pattern commandPattern = Pattern.compile("/随机东方图(\\s+\\S+)?");
 
     public RandomTouhouImageCommand(Message command) {
         super(command);
@@ -58,6 +58,6 @@ public class RandomTouhouImageCommand extends GroupCommandRunner {
                 .replace(CQCode.at(this.command.selfId), "")
                 .trim();
         Matcher matcher = commandPattern.matcher(message);
-        return matcher.find() ? matcher.group(1) : "";
+        return matcher.find() ? matcher.group(1).trim() : "";
     }
 }
