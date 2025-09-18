@@ -1,9 +1,9 @@
 package io.lemonjuice.flandre_bot.events;
 
-import com.google.common.eventbus.Subscribe;
 import io.lemonjuice.flan_sql_support.network.SQLCore;
 import io.lemonjuice.flandre_bot.commands.CommandRunningStatistics;
 import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
+import io.lemonjuice.flandre_bot_framework.event.annotation.SubscribeEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.WSMessageEvent;
 import io.lemonjuice.flandre_bot_framework.message.FriendContext;
 import io.lemonjuice.flandre_bot_framework.message.GroupContext;
@@ -19,7 +19,7 @@ import java.sql.SQLException;
 @EventSubscriber
 @Log4j2
 public class NoticeEvents {
-    @Subscribe
+    @SubscribeEvent
     public void onWSMessage(WSMessageEvent event) {
         JSONObject json = event.getMessage();
         String postType = json.optString("post_type", "");
