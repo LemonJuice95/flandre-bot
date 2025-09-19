@@ -11,6 +11,7 @@ import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Pattern;
 
 public class GroupSimpleInteractionCommand extends GroupCommandRunner {
     private static final Map<String, List<String>> INTERACTION_MAP = ResourceInit.SIMPLE_INTERACTION_REPLIES.get();
@@ -28,16 +29,14 @@ public class GroupSimpleInteractionCommand extends GroupCommandRunner {
     public boolean matches() {
         String message = this.command.message
                 .replace("<selfAt>", "")
-                .replace(CQCode.at(this.command.selfId), "<selfAt>")
-                .replace(" ", "");
+                .replaceAll( String.format("\\s+%s\\s+", Pattern.quote(CQCode.at(this.command.selfId))), "<selfAt>");
         return INTERACTION_MAP.containsKey(message);
     }
 
     @Override
     public void apply() {
         String message = this.command.message
-                .replace(CQCode.at(this.command.selfId), "<selfAt>")
-                .replace(" ", "");
+                .replaceAll( String.format("\\s+%s\\s+", Pattern.quote(CQCode.at(this.command.selfId))), "<selfAt>");
         List<String> repliesPool = INTERACTION_MAP.get(message);
         String reply = repliesPool.get(ThreadLocalRandom.current().nextInt(repliesPool.size()))
                 .replace("<reply>", CQCode.reply(this.command.messageId))
