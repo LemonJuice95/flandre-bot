@@ -1,7 +1,11 @@
 {
   "ping": {
     "msg": ["芙兰", "<selfAt>"],
-    "replies": ["芙兰在的哦~", "（探头）找我有什么事吗~", "是要陪芙兰一起玩吗~", "来了来了~<localImage:images/flan_lantern_part.jpg>"]
+    "replies": [
+      "芙兰在的哦~", "（探头）找我有什么事吗~",
+      "是要陪芙兰一起玩吗~",
+      "来了来了~<localImage:images/flan_lantern_part.jpg>"
+    ]
   },
   "hit": {
     "msg": ["打芙兰"],
@@ -10,5 +14,12 @@
   "closeTo": {
     "msg": ["芙兰贴贴", "<selfAt>贴贴"],
     "replies": ["<user>贴贴哦~"]
+  },
+  "fondle": {
+    "msg": ["摸摸芙兰", "摸芙兰", "<selfAt>摸摸"],
+    "replies": [
+      "<user>的手很温暖呢~", "呜哇？！（吓到）",
+      "<user>的摸摸很舒服呢，现实里的<user>一定也是个温柔的人吧"
+    ]
   }
 }
