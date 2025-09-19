@@ -29,14 +29,14 @@ public class GroupSimpleInteractionCommand extends GroupCommandRunner {
     public boolean matches() {
         String message = this.command.message
                 .replace("<selfAt>", "")
-                .replaceAll( String.format("\\s+%s\\s+", Pattern.quote(CQCode.at(this.command.selfId))), "<selfAt>");
+                .replaceAll( String.format("\\s*%s\\s*", Pattern.quote(CQCode.at(this.command.selfId))), "<selfAt>");
         return INTERACTION_MAP.containsKey(message);
     }
 
     @Override
     public void apply() {
         String message = this.command.message
-                .replaceAll( String.format("\\s+%s\\s+", Pattern.quote(CQCode.at(this.command.selfId))), "<selfAt>");
+                .replaceAll( String.format("\\s*%s\\s*", Pattern.quote(CQCode.at(this.command.selfId))), "<selfAt>");
         List<String> repliesPool = INTERACTION_MAP.get(message);
         String reply = repliesPool.get(ThreadLocalRandom.current().nextInt(repliesPool.size()))
                 .replace("<reply>", CQCode.reply(this.command.messageId))
