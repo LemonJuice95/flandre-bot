@@ -1,7 +1,7 @@
 {
   "ping": {
     "msg": ["芙兰", "<selfAt>"],
-    "replies": ["芙兰在的哦~", "（探头）找我有什么事吗~", "是要陪芙兰一起玩吗~"]
+    "replies": ["芙兰在的哦~<localImage:images/flan_lantern_part.jpg>", "（探头）找我有什么事吗~", "是要陪芙兰一起玩吗~"]
   },
   "hit": {
     "msg": ["打芙兰"],
