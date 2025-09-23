@@ -21,5 +21,12 @@
       "<user>的手很温暖呢~", "呜哇？！（吓到）",
       "<user>的摸摸很舒服呢，现实里的<user>一定也是个温柔的人吧~"
     ]
+  },
+  "baka": {
+    "msg": ["baka芙兰", "芙兰baka", "<selfAt>baka"],
+    "replies": [
+      "芙兰才不是baka！",
+      "<user>才是baka！（恼）"
+    ]
   }
 }
