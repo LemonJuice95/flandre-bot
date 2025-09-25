@@ -32,6 +32,7 @@ public class PokeCommand extends ConsoleCommandRunner {
                 default -> throw new IllegalArgumentException("未知类型");
             }
             context.poke();
+            BotConsole.println("戳一戳已发送");
         } catch (Exception e) {
             BotConsole.println("格式错误，命令用法：poke <g(roup)|p(rivate)> [群号] <qq号>");
         }
@@ -44,7 +45,7 @@ public class PokeCommand extends ConsoleCommandRunner {
 
     @Override
     public String getUsingFormat() {
-        return "poke <g(roup)|p(rivate)> [群号] <qq号>";
+        return "'poke <g(roup)|p(rivate)> [群号] <qq号>'";
     }
 
     @Override
