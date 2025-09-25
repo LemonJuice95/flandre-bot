@@ -33,7 +33,7 @@ public class NoticeEvents {
             }
         }
 
-        log.info(event.getMessage());
+//        log.info(event.getMessage());
     }
 
     private static void onGroupDecrease(JSONObject message) {
