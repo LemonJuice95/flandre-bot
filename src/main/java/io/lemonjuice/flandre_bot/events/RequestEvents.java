@@ -17,9 +17,4 @@ public class RequestEvents {
             request.deny("芙兰不想被别人拉进群诶……");
         }
     }
-
-    @SubscribeEvent
-    public void onFriendRequest(FriendRequestEvent event) {
-        event.getRequest().accept();
-    }
 }
