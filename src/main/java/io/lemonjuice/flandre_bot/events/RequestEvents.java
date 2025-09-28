@@ -20,6 +20,6 @@ public class RequestEvents {
 
     @SubscribeEvent
     public void onFriendRequest(FriendRequestEvent event) {
-        event.getRequest().deny();
+        event.getRequest().accept();
     }
 }
