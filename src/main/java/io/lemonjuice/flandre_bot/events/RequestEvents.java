@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot.events;
 
 import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
 import io.lemonjuice.flandre_bot_framework.event.annotation.SubscribeEvent;
+import io.lemonjuice.flandre_bot_framework.event.request.FriendRequestEvent;
 import io.lemonjuice.flandre_bot_framework.event.request.GroupRequestEvent;
 import io.lemonjuice.flandre_bot_framework.model.request.GroupRequest;
 
@@ -15,5 +16,10 @@ public class RequestEvents {
         } else {
             request.deny("芙兰不想被别人拉进群诶……");
         }
+    }
+
+    @SubscribeEvent
+    public void onFriendRequest(FriendRequestEvent event) {
+        event.getRequest().deny();
     }
 }
