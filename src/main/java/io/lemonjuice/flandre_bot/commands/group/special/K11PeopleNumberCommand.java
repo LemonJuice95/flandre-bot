@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 @FunctionCommand(value = "k11_number", report = false)
 public class K11PeopleNumberCommand extends GroupCommandRunner {
     private static final Object lock = new Object();
-    private static final Pattern commandPattern = Pattern.compile("k(\\d+|j)");
+    private static final Pattern commandPattern = Pattern.compile("k([+\\-]?)(\\d+|j)");
 
     private volatile static UpdateInfo lastInfo;
 
@@ -40,7 +40,7 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
 
     @Override
     public void apply() {
-        String arg = this.matcher.group(1);
+        String arg = this.matcher.group(2);
 
         if(arg.equals("j")) {
             synchronized (lock) {
@@ -59,9 +59,17 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
                 }
             }
         } else {
+            String operator = this.matcher.group(1);
             int number = Integer.parseInt(arg);
+            switch (operator) {
+                case "+" -> number += lastInfo.number;
+                case "-" -> number = lastInfo.number - number;
+                default -> {}
+            }
             if(number > 100) {
                 this.command.getContext().replyWithText("诶？！这么多人真的装得下吗？");
+            } else if(number < 0) {
+                this.command.getContext().replyWithText("诶？！人数是负数吗？这个要怎么做到呢……");
             } else {
                 synchronized (lock) {
                     lastInfo = new UpdateInfo(
