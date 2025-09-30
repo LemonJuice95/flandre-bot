@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot.scheduled;
 
 import io.lemonjuice.flan_sql_support.network.SQLCore;
 import io.lemonjuice.flandre_bot.commands.CommandRunningStatistics;
+import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
 import lombok.extern.log4j.Log4j2;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -17,6 +18,7 @@ public class DailyRefreshJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         this.refreshSignIn();
         CommandRunningStatistics.dailyClear();
+        K11PeopleNumberCommand.refresh();
     }
 
     private void refreshSignIn() {
