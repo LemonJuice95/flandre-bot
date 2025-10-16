@@ -38,7 +38,7 @@
   "hug": {
     "msg": ["抱抱芙兰", "<selfAt>抱抱你", "<selfAt>抱抱芙兰"],
     "replies": [
-      "喜欢<user>的怀抱……", "想在<user>的怀里多待一会呢~"
+      "喜欢<user>的怀抱~", "想在<user>的怀里多待一会呢~"
     ]
   },
   "hug-reversed": {
