@@ -10,6 +10,7 @@ import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -49,14 +50,19 @@ public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
                     this.command.getContext().replyWithText("芙兰暂时还不会画[舞]系牌子的表格呢……");
                     return;
                 }
-                String picPath = CompletionTableGenerator.generateWithPlates(this.command.userId, plateName);
-                if(picPath.equals(CompletionTableGenerator.PLATE_NOT_FOUND)) {
-                    this.command.getContext().replyWithText("没有这样的牌子哦~");
-                } else if (!picPath.isEmpty()) {
-                    File picFile = new File(picPath);
-                    this.command.getContext().replyWithText(CQCode.image("file:///" + picFile.getAbsolutePath()));
-                } else {
-                    this.command.getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
+                try {
+                    BufferedImage image = CompletionTableGenerator.generateWithPlates(this.command.userId, plateName);
+                    if (image != null) {
+                        this.command.getContext().replyWithText(CQCode.image(image));
+                    } else {
+                        this.command.getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
+                    }
+                } catch (IllegalArgumentException e) {
+                    if(e.getMessage().equals("不存在的牌子")) {
+                        this.command.getContext().replyWithText("没有这样的牌子哦~");
+                    } else {
+                        throw e;
+                    }
                 }
             } catch (NotInitializedException e) {
                 this.command.getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");

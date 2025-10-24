@@ -11,6 +11,7 @@ import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -47,10 +48,9 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
                 this.command.getContext().replyWithText("没有找到叫做\"" + name + "\"的歌曲诶...");
             } else if (songs.size() == 1) {
                 int songId = songs.getFirst().id;
-                String path = SongPlayDataGenerator.generate(this.command.userId, songId);
-                if (!path.isEmpty()) {
-                    File file = new File(path);
-                    this.command.getContext().replyWithText(CQCode.image("file:///" + file.getAbsolutePath()));
+                BufferedImage image = SongPlayDataGenerator.generate(this.command.userId, songId);
+                if (image != null) {
+                    this.command.getContext().replyWithText(CQCode.image(image));
                 } else {
                     this.command.getContext().replyWithText("诶？！图片生成失败了...");
                 }

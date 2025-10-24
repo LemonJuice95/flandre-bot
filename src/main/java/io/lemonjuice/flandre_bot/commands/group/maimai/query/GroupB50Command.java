@@ -9,6 +9,7 @@ import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
 import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,10 +41,9 @@ public class GroupB50Command extends GroupCommandRunner {
         try {
             long qq = getQQIdParam();
             qq = qq == -1 ? this.command.userId : qq;
-            String path = DivingFishB50Generator.generate(qq);
-            if (!path.isEmpty()) {
-                File imageFile = new File(path);
-                this.command.getContext().replyWithText(CQCode.image("file:///" + imageFile.getAbsolutePath()));
+            BufferedImage image = DivingFishB50Generator.generate(qq);
+            if (image != null) {
+                this.command.getContext().replyWithText(CQCode.image(image));
             } else {
                 this.command.getContext().replyWithText("抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n没绑定的话请前往https://www.diving-fish.com/maimaidx/prober/进行绑定\n如果绑定了还是失败的话就联系一下bot管理员吧");
             }
