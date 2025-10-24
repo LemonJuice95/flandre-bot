@@ -60,7 +60,7 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
                 int songId = songs.getFirst().id;
                 BufferedImage image = SongInfoGenerator.generate(songId);
                 if (image != null) {
-                    this.command.getContext().replyWithText("你要找的是不是：\n" + CQCode.image(image));
+                    this.command.getContext().replyWithText("你要找的是不是：\n" + CQCode.image(image, "PNG"));
                 } else {
                     this.command.getContext().replyWithText("诶？！图片生成失败了...");
                 }

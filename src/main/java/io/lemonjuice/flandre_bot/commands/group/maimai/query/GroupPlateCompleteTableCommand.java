@@ -53,7 +53,7 @@ public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
                 try {
                     BufferedImage image = CompletionTableGenerator.generateWithPlates(this.command.userId, plateName);
                     if (image != null) {
-                        this.command.getContext().replyWithText(CQCode.image(image));
+                        this.command.getContext().replyWithText(CQCode.image(image, "PNG"));
                     } else {
                         this.command.getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
                     }

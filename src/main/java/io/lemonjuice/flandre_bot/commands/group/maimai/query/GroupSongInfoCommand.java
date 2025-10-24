@@ -50,7 +50,7 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
                 int songId = songs.getFirst().id;
                 BufferedImage image = SongPlayDataGenerator.generate(this.command.userId, songId);
                 if (image != null) {
-                    this.command.getContext().replyWithText(CQCode.image(image));
+                    this.command.getContext().replyWithText(CQCode.image(image, "PNG"));
                 } else {
                     this.command.getContext().replyWithText("诶？！图片生成失败了...");
                 }

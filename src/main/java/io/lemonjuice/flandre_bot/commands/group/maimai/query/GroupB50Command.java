@@ -43,7 +43,7 @@ public class GroupB50Command extends GroupCommandRunner {
             qq = qq == -1 ? this.command.userId : qq;
             BufferedImage image = DivingFishB50Generator.generate(qq);
             if (image != null) {
-                this.command.getContext().replyWithText(CQCode.image(image));
+                this.command.getContext().replyWithText(CQCode.image(image, "PNG"));
             } else {
                 this.command.getContext().replyWithText("抱歉...获取失败了...\n你的水鱼绑定qq号了吗？\n没绑定的话请前往https://www.diving-fish.com/maimaidx/prober/进行绑定\n如果绑定了还是失败的话就联系一下bot管理员吧");
             }
