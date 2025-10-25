@@ -28,7 +28,7 @@ dependencies {
     //框架及插件
     implementation 'io.github.lemonjuice95:flandre-bot-framework:0.17.0'
     implementation 'io.github.lemonjuice95:flandre-sql-support:0.6.0'
-    implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.10.0'
+    implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.10.1'
 
     //定时任务
     implementation 'org.quartz-scheduler:quartz:2.5.0'
