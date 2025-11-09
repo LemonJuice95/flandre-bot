@@ -46,6 +46,7 @@ public class RandomTouhouImage {
                 ImageIO.write(bufferedImage, "PNG", file);
             }
         } catch (Exception e) {
+            log.error("随机东方图获取失败！", e);
             return "";
         }
         return file.getAbsolutePath();
