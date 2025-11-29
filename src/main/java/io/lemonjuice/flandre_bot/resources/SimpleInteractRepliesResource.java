@@ -64,6 +64,7 @@ public class SimpleInteractRepliesResource extends Resource<Map<String, List<Str
                     str = matcher.replaceFirst(CQCode.image("file:///" + imageFile.getAbsolutePath()));
                 } else {
                     log.warn("找不到简单回复文本中的本地图片: {}", path);
+                    str = matcher.replaceFirst("");
                 }
             } else {
                 str = matcher.replaceFirst(CQCode.image(path));
