@@ -7,6 +7,5 @@ public class ConsoleCommandInit {
 
     static {
         CONSOLE_COMMANDS.register(SendTextCommand::new);
-        CONSOLE_COMMANDS.register(TempCommand::new);
     }
 }
