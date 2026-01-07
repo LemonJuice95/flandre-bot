@@ -26,7 +26,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
     //框架及插件
-    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.20.2'
+    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.20.5'
     implementation 'io.github.lemonjuice95:flandre-sql-support:0.7.0'
     implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.12.2'
 
