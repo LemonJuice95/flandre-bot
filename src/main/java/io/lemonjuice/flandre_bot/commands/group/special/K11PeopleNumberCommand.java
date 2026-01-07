@@ -25,7 +25,7 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
 
     public K11PeopleNumberCommand(Message command) {
         super(command);
-        this.matcher = commandPattern.matcher(command.message.trim());
+        this.matcher = commandPattern.matcher(command.message.toString().trim());
     }
 
     @Override

@@ -6,26 +6,28 @@ import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupSongInfoCommand extends GroupCommandRunner {
-    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*/?m(ai\\s+)?info\\s+(.+)$";
-    
-    private final Pattern pattern;
+    private static final Pattern commandPattern = Pattern.compile("/?m(ai\\s+)?info\\s+(.+)");
+    private static final MessagePattern messagePattern = new MessagePattern.Builder()
+            .nextNode(AtNode.atBot())
+            .nextNode(new RegexNode(commandPattern))
+            .build();
 
     public GroupSongInfoCommand(Message command) {
         super(command);
-        this.pattern = Pattern.compile(String.format(commandPattern, command.selfId));
     }
 
     @Override
@@ -35,7 +37,7 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return this.pattern.matcher(this.command.message).matches();
+        return messagePattern.matcher(this.command.message).matches();
     }
 
     @Override
@@ -50,7 +52,10 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
                 int songId = songs.getFirst().id;
                 BufferedImage image = SongPlayDataGenerator.generate(this.command.userId, songId);
                 if (image != null) {
-                    this.command.getContext().replyWithText(CQCode.image(image, "PNG"));
+                    this.command.getContext().prepareMessageToSend()
+                            .appendReply()
+                            .appendImage(image, "PNG")
+                            .send();
                 } else {
                     this.command.getContext().replyWithText("诶？！图片生成失败了...");
                 }
@@ -71,7 +76,7 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
     }
 
     private String getSongName() {
-        Matcher matcher = this.pattern.matcher(this.command.message);
+        Matcher matcher = commandPattern.matcher(this.command.message.getSegments().get(1).toString());
         return matcher.find() ? matcher.group(2).trim() : "";
     }
 }

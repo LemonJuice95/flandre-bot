@@ -3,10 +3,12 @@ package io.lemonjuice.flandre_bot.commands.group.func;
 import io.lemonjuice.flan_sql_support.network.SQLCore;
 import io.lemonjuice.flandre_bot.func.FunctionNameManager;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
@@ -19,6 +21,10 @@ import java.util.regex.Pattern;
 @Log4j2
 public class EnableFunctionCommand extends GroupCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/启用功能\\s+(\\S+)");
+    private static final MessagePattern messagePattern = new MessagePattern.Builder()
+            .nextNode(AtNode.atBot())
+            .nextNode(new RegexNode(commandPattern))
+            .build();
 
     public EnableFunctionCommand(Message command) {
         super(command);
@@ -31,9 +37,7 @@ public class EnableFunctionCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        String message = this.command.message.replace(CQCode.at(this.command.selfId), "").trim();
-        return this.command.message.startsWith(CQCode.at(this.command.selfId)) &&
-                commandPattern.matcher(message).matches();
+        return messagePattern.matcher(this.command.message).matches();
     }
 
     @Override
@@ -68,8 +72,9 @@ public class EnableFunctionCommand extends GroupCommandRunner {
     }
 
     private String getFuncMessage() {
-        String message = this.command.message
-                .replace(CQCode.at(this.command.selfId), "")
+        String message = this.command.message.getSegments()
+                .get(1)
+                .toString()
                 .trim();
         Matcher matcher = commandPattern.matcher(message);
 

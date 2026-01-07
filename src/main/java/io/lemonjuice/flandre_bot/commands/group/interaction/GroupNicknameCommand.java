@@ -2,17 +2,26 @@ package io.lemonjuice.flandre_bot.commands.group.interaction;
 
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.AnySegmentNode;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GroupNicknameCommand extends GroupCommandRunner {
-    private static final Pattern cqPattern = Pattern.compile("\\[CQ:\\S+]");
-    private static final Pattern commandPattern = Pattern.compile("/称呼\\s+(\\S+)");
+    private static final Pattern commandPattern = Pattern.compile("/称呼\\s+(\\S*)");
+    private static final MessagePattern messagePattern = new MessagePattern.Builder()
+            .nextNode(AtNode.atBot())
+            .nextNode(new RegexNode(commandPattern))
+            .startGroup()
+            .nextNode(new AnySegmentNode())
+            .endGroup(MessagePattern.GroupFlag.LOOP, MessagePattern.GroupFlag.OPTIONAL)
+            .build();
 
     public GroupNicknameCommand(Message command) {
         super(command);
@@ -25,9 +34,7 @@ public class GroupNicknameCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        String message = this.command.message.replace(CQCode.at(this.command.selfId), "").trim();
-        return this.command.message.startsWith(CQCode.at(this.command.selfId)) &&
-                message.startsWith("/称呼");
+        return messagePattern.matcher(this.command.message).matches();
     }
 
     @Override
@@ -42,11 +49,10 @@ public class GroupNicknameCommand extends GroupCommandRunner {
     }
 
     private String getNickname() {
-        if(cqPattern.matcher(this.command.message).results().count() > 1) {
-            return "";
-        }
         String message = this.command.message
-                .replace(CQCode.at(this.command.selfId), "")
+                .getSegments()
+                .get(1)
+                .toString()
                 .trim();
         Matcher matcher = commandPattern.matcher(message);
         return matcher.find() ? matcher.group(1) : "";

@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.resources;
 
 import io.lemonjuice.flandre_bot.utils.PeriodOfDay;
+import io.lemonjuice.flandre_bot_framework.message.segment.MessageSegment;
 import io.lemonjuice.flandre_bot_framework.resource.*;
 import org.json.JSONObject;
 
@@ -11,11 +12,11 @@ public class ResourceInit {
     public static final ResourceRegister RESOURCES = new ResourceRegister();
 
     //简单互动回复
-    public static final Resource<Map<String, List<String>>> SIMPLE_INTERACTION_REPLIES = RESOURCES.register(new SimpleInteractRepliesResource());
+    public static final Resource<Map<String, List<List<MessageSegment>>>> SIMPLE_INTERACTION_REPLIES = RESOURCES.register(new SimpleInteractRepliesResource());
 
     //帮助文档
-    public static final Resource<List<String>> HELP_DOC_MAIN = RESOURCES.register(new HelpDocResource("assets/help_doc/help_doc.txt"));
-    public static final Resource<List<String>> HELP_DOC_MAI = RESOURCES.register(new HelpDocResource("assets/help_doc/maimai.txt"));
+    public static final Resource<List<List<MessageSegment>>> HELP_DOC_MAIN = RESOURCES.register(new HelpDocResource("assets/help_doc/help_doc.txt"));
+    public static final Resource<List<List<MessageSegment>>> HELP_DOC_MAI = RESOURCES.register(new HelpDocResource("assets/help_doc/maimai.txt"));
 
     //签到
     public static final Resource<List<String>> SIGN_IN_FORTUNES = RESOURCES.register(new TextLinesResource("assets/sign_in/fortunes.txt"));

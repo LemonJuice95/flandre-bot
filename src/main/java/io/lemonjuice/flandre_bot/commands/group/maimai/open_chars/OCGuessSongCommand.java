@@ -25,12 +25,12 @@ public class OCGuessSongCommand extends GroupCommandRunner {
     @Override
     public boolean matches() {
         return OpenCharsManager.hasProcess(this.command.groupId) &&
-                commandPattern.matcher(this.command.message.trim()).matches();
+                commandPattern.matcher(this.command.message.toString().trim()).matches();
     }
 
     @Override
     public void apply() {
-        Matcher matcher = commandPattern.matcher(this.command.message.trim());
+        Matcher matcher = commandPattern.matcher(this.command.message.toString().trim());
         if(matcher.find()) {
             int index = Integer.parseInt(matcher.group(1));
             String name = matcher.group(2);

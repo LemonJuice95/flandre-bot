@@ -1,14 +1,13 @@
 package io.lemonjuice.flandre_bot.utils;
 
 import io.lemonjuice.flan_sql_support.network.SQLCore;
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
+import io.lemonjuice.flandre_bot_framework.message.MessageToSend;
 import lombok.extern.log4j.Log4j2;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Log4j2
@@ -27,7 +26,15 @@ public class NicknameManager {
     }
 
     public static String getNickname(long uid) {
-        return Optional.ofNullable(NICKNAMES.get(uid)).orElse(CQCode.at(uid));
+        return NICKNAMES.get(uid);
+    }
+
+    public static void appendNickname(long uid, MessageToSend message) {
+        if(getNickname(uid) != null) {
+            message.appendText(getNickname(uid));
+        } else {
+            message.appendAt(uid);
+        }
     }
 
     public static synchronized void init() {

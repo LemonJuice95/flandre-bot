@@ -5,10 +5,12 @@ import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,13 +18,14 @@ import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupSongAliasListCommand extends GroupCommandRunner {
-    private static final String commandPattern = "^\\[CQ:at,qq=%d]\\s*.+有什么别[名称]$";
-
-    private final Pattern pattern;
+    private static final Pattern commandPattern = Pattern.compile(".+有什么别[名称]");
+    private static final MessagePattern messagePattern = new MessagePattern.Builder()
+            .nextNode(AtNode.atBot())
+            .nextNode(new RegexNode(commandPattern))
+            .build();
 
     public GroupSongAliasListCommand(Message command) {
         super(command);
-        this.pattern = Pattern.compile(String.format(commandPattern, command.selfId));
     }
 
     @Override
@@ -32,7 +35,7 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return this.pattern.matcher(this.command.message).matches();
+        return messagePattern.matcher(this.command.message).matches();
     }
 
     @Override
@@ -71,7 +74,7 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
     }
 
     private String getSongName() {
-        String message = this.command.message.replace(CQCode.at(this.command.selfId), "").trim();
+        String message = this.command.message.getSegments().get(1).toString().trim();
         Pattern pattern = Pattern.compile("^(.+)有什么别[名称]$");
         Matcher matcher = pattern.matcher(message);
         return matcher.find() ? matcher.group(1) : "";

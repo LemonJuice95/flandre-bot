@@ -1,19 +1,27 @@
 package io.lemonjuice.flandre_bot.commands.group.misc;
 
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Choose1From2Command extends GroupCommandRunner {
-    private final String[] options;
+
+    private static final Pattern commandPattern = Pattern.compile("(.+)还是(.+)");
+    private static final MessagePattern messagePattern = new MessagePattern.Builder()
+            .nextNode(AtNode.atBot())
+            .nextNode(new RegexNode(commandPattern))
+            .build();
 
     public Choose1From2Command(Message command) {
         super(command);
-        this.options = this.getOptions();
     }
 
     @Override
@@ -23,22 +31,18 @@ public class Choose1From2Command extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        if(!this.command.message.startsWith(CQCode.at(this.command.selfId)))
-            return false;
-        return this.options.length == 2;
+        return messagePattern.matcher(this.command).matches();
     }
 
     @Override
     public void apply() {
         int index = ThreadLocalRandom.current().nextInt(2);
-        this.command.getContext().replyWithText("芙兰建议你" + this.options[index] +"哦！");
+        this.command.getContext().replyWithText("芙兰建议你" + this.getOptions()[index] +"哦！");
     }
 
     private String[] getOptions() {
-        return this.command.message
-                .replace(CQCode.at(this.command.selfId), "")
-                .trim()
-                .split("还是");
+        Matcher matcher = commandPattern.matcher(this.command.message.getSegments().get(1).toString());
+        return matcher.find() ? new String[]{matcher.group(1), matcher.group(2)} : new String[]{};
     }
 
     @Override

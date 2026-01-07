@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot.commands.group.maimai.open_chars;
 
 import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.SimpleGroupCommandRunner;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
@@ -10,14 +11,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StopOpenCharsCommand extends GroupCommandRunner {
-    private static final String commandPatternRaw = "^\\[CQ:at,qq=%d]\\s*/结束开字母";
-
-    private final Pattern commandPattern;
+public class StopOpenCharsCommand extends SimpleGroupCommandRunner {
 
     public StopOpenCharsCommand(Message command) {
         super(command);
-        this.commandPattern = Pattern.compile(String.format(commandPatternRaw, command.selfId));
     }
 
     @Override
@@ -26,9 +23,13 @@ public class StopOpenCharsCommand extends GroupCommandRunner {
     }
 
     @Override
-    public boolean matches() {
-        Matcher matcher = this.commandPattern.matcher(this.command.message.trim());
-        return matcher.matches();
+    protected boolean needAtFirst() {
+        return true;
+    }
+
+    @Override
+    protected String getCommandBody() {
+        return "/结束开字母";
     }
 
     @Override

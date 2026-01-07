@@ -3,10 +3,12 @@ package io.lemonjuice.flandre_bot.commands.group.func;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
 import java.util.List;
 import java.util.Random;
@@ -21,6 +23,11 @@ public class GroupDiceCommand extends GroupCommandRunner {
     private static final Pattern fudge2 = Pattern.compile("^(\\d+)?dF(.2)?$", Pattern.CASE_INSENSITIVE);
     private static final Pattern fudge1 = Pattern.compile("^(\\d+)?dF.1$", Pattern.CASE_INSENSITIVE);
 
+    private static final MessagePattern messagePattern = new MessagePattern.Builder()
+            .nextNode(AtNode.atBot())
+            .nextNode(new RegexNode(commandPattern))
+            .build();
+
     public GroupDiceCommand(Message command) {
         super(command);
     }
@@ -32,9 +39,7 @@ public class GroupDiceCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        String message = this.command.message.replace(CQCode.at(this.command.selfId), "").trim();
-        return this.command.message.startsWith(CQCode.at(this.command.selfId)) &&
-                message.startsWith("/rd");
+        return messagePattern.matcher(this.command.message).matches();
     }
 
     @Override
@@ -51,7 +56,7 @@ public class GroupDiceCommand extends GroupCommandRunner {
     }
 
     private String getExpression() {
-        String message = this.command.message.replace(CQCode.at(this.command.selfId), "").trim();
+        String message = this.command.message.getSegments().get(1).toString();
         Matcher matcher = commandPattern.matcher(message);
         return matcher.find() ? matcher.group(1) : "";
     }
@@ -68,17 +73,17 @@ public class GroupDiceCommand extends GroupCommandRunner {
         }
 
         //标准骰
-        if(this.standard.matcher(expression).matches()) {
+        if(standard.matcher(expression).matches()) {
             return this.standardDice(expression, random);
         }
 
         //fudge/fate骰2
-        if(this.fudge2.matcher(expression).matches()) {
+        if(fudge2.matcher(expression).matches()) {
             return this.fudgeDice(expression, random, 2);
         }
 
         //fudge/fate骰1
-        if(this.fudge1.matcher(expression).matches()) {
+        if(fudge1.matcher(expression).matches()) {
             return this.fudgeDice(expression, random, 1);
         }
 

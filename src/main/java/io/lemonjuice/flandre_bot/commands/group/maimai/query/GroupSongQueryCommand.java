@@ -6,29 +6,30 @@ import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
+import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
-import io.lemonjuice.flandre_bot_framework.utils.CQCode;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
 public class GroupSongQueryCommand extends GroupCommandRunner {
-    private static final String pattern1 = "^\\[CQ:at,qq=%d]\\s*/mai\\s+song.+";
-    private static final String pattern2 = "^\\[CQ:at,qq=%d]\\s*.+是什么歌$";
-    
-    private final Pattern commandPattern1;
-    private final Pattern commandPattern2;
+    private static final Pattern commandPattern1 = Pattern.compile("/mai\\s+song\\s+.+");
+    private static final Pattern commandPattern2 = Pattern.compile(".+是什么歌");
+
+    private static final MessagePattern messagePattern = new MessagePattern.Builder()
+            .nextNode(AtNode.atBot())
+            .nextOrNodes(new RegexNode(commandPattern1), new RegexNode(commandPattern2))
+            .build();
 
     public GroupSongQueryCommand(Message command) {
         super(command);
-        this.commandPattern1 = Pattern.compile(String.format(pattern1, command.selfId));
-        this.commandPattern2 = Pattern.compile(String.format(pattern2, command.selfId));
     }
 
     @Override
@@ -38,16 +39,15 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return this.commandPattern1.matcher(this.command.message).matches() ||
-                this.commandPattern2.matcher(this.command.message).matches();
+        return messagePattern.matcher(this.command).matches();
     }
 
     @Override
     public void apply() {
         String name = "";
-        if(this.commandPattern1.matcher(this.command.message).matches()) {
+        if(commandPattern1.matcher(this.command.message.getSegments().get(1).toString().trim()).matches()) {
             name = getName1();
-        } else if(this.commandPattern2.matcher(this.command.message).matches()) {
+        } else if(commandPattern2.matcher(this.command.message.getSegments().get(1).toString().trim()).matches()) {
             name = getName2();
         }
 
@@ -60,7 +60,10 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
                 int songId = songs.getFirst().id;
                 BufferedImage image = SongInfoGenerator.generate(songId);
                 if (image != null) {
-                    this.command.getContext().replyWithText("你要找的是不是：\n" + CQCode.image(image, "PNG"));
+                    this.command.getContext().prepareMessageToSend()
+                            .appendReply()
+                            .appendImage(image, "PNG")
+                            .send();
                 } else {
                     this.command.getContext().replyWithText("诶？！图片生成失败了...");
                 }
@@ -81,14 +84,14 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
     }
 
     private String getName1() {
-        String message = this.command.message.replace(CQCode.at(this.command.selfId), "").trim();
+        String message = this.command.message.getSegments().get(1).toString().trim();
         Pattern pattern = Pattern.compile("/mai\\s+song\\s+(.+)");
         Matcher matcher = pattern.matcher(message);
         return matcher.find() ? matcher.group(1) : "";
     }
 
     private String getName2() {
-        String message = this.command.message.replace(CQCode.at(this.command.selfId), "").trim();
+        String message = this.command.message.getSegments().get(1).toString().trim();
         Pattern pattern = Pattern.compile("^(.+)是什么歌$");
         Matcher matcher = pattern.matcher(message);
         return matcher.find() ? matcher.group(1).replace("&#91;", "[").replace("&#93;", "]") : "";
