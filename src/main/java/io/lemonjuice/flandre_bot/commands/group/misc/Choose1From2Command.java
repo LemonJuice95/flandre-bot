@@ -13,7 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Choose1From2Command extends GroupCommandRunner {
-
     private static final Pattern commandPattern = Pattern.compile("(.+)还是(.+)");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
@@ -41,7 +40,7 @@ public class Choose1From2Command extends GroupCommandRunner {
     }
 
     private String[] getOptions() {
-        Matcher matcher = commandPattern.matcher(this.command.message.getSegments().get(1).toString());
+        Matcher matcher = commandPattern.matcher(this.command.message.getSegments().get(1).toString().trim());
         return matcher.find() ? new String[]{matcher.group(1), matcher.group(2)} : new String[]{};
     }
 
