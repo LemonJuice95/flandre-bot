@@ -62,6 +62,8 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
                 if (image != null) {
                     this.command.getContext().prepareMessageToSend()
                             .appendReply()
+                            .appendText("你要找的是不是：")
+                            .newLine()
                             .appendImage(image, "PNG")
                             .send();
                 } else {
