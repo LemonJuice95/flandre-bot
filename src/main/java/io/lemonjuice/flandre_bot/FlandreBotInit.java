@@ -6,11 +6,13 @@ import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
 import io.lemonjuice.flandre_bot.console.ConsoleCommandInit;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot.scheduled.ScheduledTaskManager;
+import io.lemonjuice.flandre_bot.segment.FileMessageSegment;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
 import io.lemonjuice.flandre_bot_framework.event.annotation.SubscribeEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotInitEvent;
 import io.lemonjuice.flandre_bot_framework.event.meta.BotStopEvent;
+import io.lemonjuice.flandre_bot_framework.event.meta.SegmentTypeRegisterEvent;
 import lombok.extern.log4j.Log4j2;
 
 @EventSubscriber
@@ -24,6 +26,11 @@ public class FlandreBotInit {
         NicknameManager.init();
         ScheduledTaskManager.init();
         K11PeopleNumberCommand.init();
+    }
+
+    @SubscribeEvent
+    public void onSegmentRegister(SegmentTypeRegisterEvent event) {
+        event.register("file", FileMessageSegment::new);
     }
 
     @SubscribeEvent
