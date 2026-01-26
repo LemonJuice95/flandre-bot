@@ -44,7 +44,7 @@
   "hug-reversed": {
     "msg": ["芙兰抱抱", "<selfAt>抱抱", "<selfAt>芙兰抱抱"],
     "replies": [
-      "抱抱<user>哦~", "<user>也喜欢被抱在怀里吗？", "（抱住<user>）"
+      "抱抱<user>哦~", "<user>也喜欢被抱在怀里吗？", "（抱住<user>）","（摸摸怀里的<user>）"
     ]
   }
 }
