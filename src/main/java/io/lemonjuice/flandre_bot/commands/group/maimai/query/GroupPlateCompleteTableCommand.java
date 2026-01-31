@@ -39,7 +39,7 @@ public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message).matches();
+        return messagePattern.matcher(this.command.message.trim()).matches();
     }
 
     @Override

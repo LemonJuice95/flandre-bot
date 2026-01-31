@@ -39,7 +39,7 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command).matches();
+        return messagePattern.matcher(this.command.message.trim()).matches();
     }
 
     @Override

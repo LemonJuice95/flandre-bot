@@ -15,6 +15,7 @@ import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GroupSimpleInteractionCommand extends GroupCommandRunner {
@@ -38,7 +39,7 @@ public class GroupSimpleInteractionCommand extends GroupCommandRunner {
                     key.append("<selfAt>");
                 }
             } else {
-                key.append(seg.toString().replace("<selfAt>", "").trim());
+                key.append(seg.toString().replace("<selfAt>", "##PLACEHOLDER_\uE000\uE001\uE002##").trim());
             }
         }
         return INTERACTION_MAP.containsKey(key.toString());
