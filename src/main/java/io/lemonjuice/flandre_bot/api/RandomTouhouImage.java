@@ -27,7 +27,7 @@ public class RandomTouhouImage {
         }
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url1 = "https://img.paulzzh.com/touhou/random?type=json&size=all" + (tag.isEmpty() ? "" : "&tag=" + tag);
-            StringBuilder url2 = new StringBuilder("https://static.paulzzh.com/touhou/webp/");
+            StringBuilder url2 = new StringBuilder("https://img.paulzzh.com/touhou/webp/");
 
             HttpGet get1 = new HttpGet(url1);
             HttpResponse response1 = httpClient.execute(get1);
