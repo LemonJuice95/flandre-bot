@@ -70,7 +70,7 @@ public class SimpleInteractRepliesResource extends Resource<Map<String, List<Lis
                 result.add(new TextMessageSegment(str.substring(0, matcher.start())));
                 result.add(new ImageMessageSegment(path));
             }
-            str = matcher.replaceFirst("");
+            str = str.substring(matcher.end());
             matcher = image_pattern.matcher(str);
         }
         if(!str.isBlank()) {
