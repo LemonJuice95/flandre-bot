@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.console;
 
+import io.lemonjuice.flandre_bot_framework.account.ContextManager;
 import io.lemonjuice.flandre_bot_framework.console.BotConsole;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleCommandRunner;
 import io.lemonjuice.flandre_bot_framework.console.ConsoleListener;
@@ -18,17 +19,29 @@ public class SendTextCommand extends ConsoleCommandRunner {
     public void apply() {
         try {
             String type = this.args[0];
-            long id = Long.parseLong(this.args[1]);
-            MessageContext context;
-            switch (type) {
-                case "group" -> context = new GroupContext(id);
-                case "private" -> context = new FriendContext(id);
-                default -> context = new MessageContext();
+            if(!this.args[1].equals("all")) {
+                long id = Long.parseLong(this.args[1]);
+                MessageContext context;
+                switch (type) {
+                    case "group" -> context = new GroupContext(id);
+                    case "private" -> context = new FriendContext(id);
+                    default -> context = new MessageContext();
+                }
+                context.sendText(this.args[2]);
+            } else {
+                switch (type) {
+                    case "group" -> ContextManager.getGroups().forEach(ctx -> ctx.sendText(this.args[2]));
+                    case "private" -> ContextManager.getFriends().forEach(ctx -> ctx.sendText(this.args[2]));
+                    default -> {
+                        BotConsole.println("格式错误，命令用法: sendmsg <group|private> <qqId|all> <消息内容>");
+                        return;
+                    }
+                }
             }
-            context.sendText(this.args[2]);
+
             BotConsole.println("消息已发送");
         } catch (Exception e) {
-            BotConsole.println("格式错误，命令用法: sendmsg <group|private> <qqId> <消息内容>");
+            BotConsole.println("格式错误，命令用法: sendmsg <group|private> <qqId|all> <消息内容>");
         }
     }
 
@@ -44,6 +57,6 @@ public class SendTextCommand extends ConsoleCommandRunner {
 
     @Override
     public String getUsingFormat() {
-        return "'sendmsg <group|private> <qqId> <消息内容>'";
+        return "'sendmsg <group|private> <qqId|all> <消息内容>'";
     }
 }
