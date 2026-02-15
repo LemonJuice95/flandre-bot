@@ -16,6 +16,7 @@ import io.lemonjuice.flandre_bot.commands.group.maimai.query.*;
 import io.lemonjuice.flandre_bot.commands.group.misc.Choose1From2Command;
 import io.lemonjuice.flandre_bot.commands.group.misc.GroupHelpCommand;
 import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
+import io.lemonjuice.flandre_bot.commands.privat.IPCommand;
 import io.lemonjuice.flandre_bot_framework.command.CommandRegister;
 
 public class CommandInit {
@@ -56,5 +57,7 @@ public class CommandInit {
         COMMANDS.register(StopOpenCharsCommand::new);
         COMMANDS.register(OpenCharCommand::new);
         COMMANDS.register(OCGuessSongCommand::new);
+
+        COMMANDS.register(IPCommand::new);
     }
 }
