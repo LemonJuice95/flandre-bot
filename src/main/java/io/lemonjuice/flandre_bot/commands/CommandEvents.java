@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.commands;
 
+import io.lemonjuice.flandre_bot.commands.privat.IPCommand;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot.func.FunctionEnableManager;
 import io.lemonjuice.flandre_bot_framework.command.CommandRunner;
@@ -24,6 +25,9 @@ public class CommandEvents {
     @SubscribeEvent
     public void onPermissionDenied(PermissionDeniedEvent event) {
         Message message = event.getMessage();
+        if(event.getCommandRunner() instanceof IPCommand) {
+            return;
+        }
         message.getContext().replyWithText("权限不足，芙兰办不到呢……");
     }
 
