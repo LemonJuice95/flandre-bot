@@ -4,6 +4,7 @@ import io.lemonjuice.flan_sql_support.network.SQLCore;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.command.group.SimpleGroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.MessageToSend;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
 import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
@@ -77,8 +78,11 @@ public class GroupSignInCommand extends SimpleGroupCommandRunner {
                     tmp = "忌 ";
                 }
             }
-            this.command.getContext().replyWithText(NicknameManager.getNickname(this.command.userId) +
-                            reply.toString().trim());
+            MessageToSend replyMsg = this.command.getContext().prepareMessageToSend();
+            replyMsg.appendReply();
+            NicknameManager.appendNickname(this.command.userId, replyMsg);
+            replyMsg.appendText(reply.toString().trim())
+                    .send();
         } else {
             try (Connection co_ = SQLCore.getInstance().startConnection();
                  PreparedStatement ps_ = co_.prepareStatement("SELECT * FROM sign_in WHERE uid=? AND group_id=?")) {

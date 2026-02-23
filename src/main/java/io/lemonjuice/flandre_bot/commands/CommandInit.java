@@ -58,6 +58,6 @@ public class CommandInit {
         COMMANDS.register(OpenCharCommand::new);
         COMMANDS.register(OCGuessSongCommand::new);
 
-        COMMANDS.register(IPCommand::new);
+        COMMANDS.register(IPCommand::new);  
     }
 }
