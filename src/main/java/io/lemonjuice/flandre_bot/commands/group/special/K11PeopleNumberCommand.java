@@ -10,13 +10,16 @@ import lombok.extern.log4j.Log4j2;
 
 import java.sql.*;
 import java.time.LocalTime;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Log4j2
 @FunctionCommand(value = "k11_number", report = false)
 public class K11PeopleNumberCommand extends GroupCommandRunner {
-    private static final Object lock = new Object();
+    private static final Object dbLock = new Object();
+    private static final ReadWriteLock rwLock = new ReentrantReadWriteLock();
     private static final Pattern commandPattern = Pattern.compile("k([+\\-]?)(\\d+|j)");
 
     private volatile static UpdateInfo lastInfo;
@@ -43,8 +46,9 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
         String arg = this.matcher.group(2);
 
         if(arg.equals("j")) {
-            synchronized (lock) {
-                if(lastInfo != null) {
+            try {
+                rwLock.readLock().lock();
+                if (lastInfo != null) {
                     StringBuilder reply = new StringBuilder("芙兰看看...\n当前 k11 共有 ");
                     reply.append(lastInfo.number);
                     reply.append(" 人\n由 ");
@@ -57,49 +61,63 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
                 } else {
                     this.command.getContext().replyWithText("暂时还没收到汇报呢……");
                 }
+            } finally {
+                rwLock.readLock().unlock();
             }
         } else {
             String operator = this.matcher.group(1);
             int number = Integer.parseInt(arg);
-            switch (operator) {
-                case "+" -> number += lastInfo.number;
-                case "-" -> number = lastInfo.number - number;
-                default -> {}
-            }
-            if(number > 100) {
-                this.command.getContext().replyWithText("诶？！这么多人真的装得下吗？");
-            } else if(number < 0) {
-                this.command.getContext().replyWithText("诶？！人数是负数吗？这个要怎么做到呢……");
-            } else {
-                synchronized (lock) {
+            try {
+                rwLock.writeLock().lock();
+                int lastNumber = lastInfo != null ? lastInfo.number : 0;
+                switch (operator) {
+                    case "+" -> number += lastNumber;
+                    case "-" -> number = lastNumber - number;
+                    default -> {
+                    }
+                }
+                if (number > 100) {
+                    this.command.getContext().replyWithText("诶？！这么多人真的装得下吗？");
+                } else if (number < 0) {
+                    this.command.getContext().replyWithText("诶？！人数是负数吗？这个要怎么做到呢……");
+                } else {
                     lastInfo = new UpdateInfo(
                             this.command.sender.nickName,
                             this.command.userId,
                             LocalTime.now().toString().substring(0, 8),
                             number
                     );
+                    this.command.getContext().replyWithText("收到~k11现在一共有 " + number + " 人");
                 }
-                this.command.getContext().replyWithText("收到~k11现在一共有 " + number + " 人");
+            } finally {
+                rwLock.writeLock().unlock();
             }
         }
     }
 
     public static void refresh() {
-        synchronized (lock) {
-            lastInfo = null;
-            try (Connection connection = SQLCore.getInstance().startConnection();
-                 Statement statement = connection.createStatement()) {
-                statement.execute("DELETE FROM k11_number");
-            } catch (SQLException ignored) {
+        synchronized (dbLock) {
+            try {
+                rwLock.writeLock().lock();
+                lastInfo = null;
+                try (Connection connection = SQLCore.getInstance().startConnection();
+                     Statement statement = connection.createStatement()) {
+                    statement.execute("DELETE FROM k11_number");
+                } catch (SQLException e) {
+                    log.error("无法刷新数据库中的k11人数数据", e);
+                }
+            } finally {
+                rwLock.writeLock().unlock();
             }
         }
     }
 
     public static void init() {
-        synchronized (lock) {
+        synchronized (dbLock) {
             try (Connection connection = SQLCore.getInstance().startConnection();
                  PreparedStatement ps = connection.prepareStatement("SELECT * FROM k11_number");
                  ResultSet rs = ps.executeQuery()) {
+                rwLock.writeLock().lock();
                 if(rs.next()) {
                     lastInfo = new UpdateInfo(
                             rs.getString("username"),
@@ -109,16 +127,19 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
                     );
                 }
             } catch (SQLException e) {
-                log.error(e);
+                log.error("k11人数数据初始化失败！", e);
+            } finally {
+                rwLock.writeLock().unlock();
             }
         }
     }
 
     public static void save() {
-        synchronized (lock) {
+        synchronized (dbLock) {
             try (Connection connection = SQLCore.getInstance().startConnection();
                  Statement statement = connection.createStatement();
                  PreparedStatement ps = connection.prepareStatement("INSERT INTO k11_number(number,qq,username,at) VALUES(?,?,?,?)")) {
+                rwLock.readLock().lock();
                 statement.execute("DELETE FROM k11_number");
                 if(lastInfo != null) {
                     ps.setInt(1, lastInfo.number);
@@ -127,7 +148,10 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
                     ps.setString(4, lastInfo.time);
                     ps.execute();
                 }
-            } catch (SQLException ignored) {
+            } catch (SQLException e) {
+                log.error("k11人数数据保存失败！", e);
+            } finally {
+                rwLock.readLock().unlock();
             }
         }
     }
