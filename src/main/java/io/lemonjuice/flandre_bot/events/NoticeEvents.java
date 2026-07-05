@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot.events;
 
 import io.lemonjuice.flan_sql_support.network.SQLCore;
 import io.lemonjuice.flandre_bot.commands.CommandRunningStatistics;
+import io.lemonjuice.flandre_bot_framework.account.AccountInfo;
 import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
 import io.lemonjuice.flandre_bot_framework.event.annotation.SubscribeEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.NetworkMessageEvent;
@@ -22,8 +23,10 @@ import java.sql.SQLException;
 public class NoticeEvents {
     @SubscribeEvent
     public void onPoke(PokeEvent event) {
-        event.getContext().sendText("戳芙兰干嘛owo");
-        CommandRunningStatistics.addUsingCount("Poke");
+        if(event.getTargetId() == event.getSelfId()) {
+            event.getContext().sendText("戳芙兰干嘛owo");
+            CommandRunningStatistics.addUsingCount("Poke");
+        }
     }
 
     @SubscribeEvent
