@@ -23,6 +23,7 @@ public class NoticeEvents {
     @SubscribeEvent
     public void onPoke(PokeEvent event) {
         event.getContext().sendText("戳芙兰干嘛owo");
+        CommandRunningStatistics.addUsingCount("Poke");
     }
 
     @SubscribeEvent
