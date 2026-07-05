@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'com.gradleup.shadow' version '9.4.3'
 }
 
 group = 'io.github.lemonjuice95'
@@ -26,9 +26,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
 
     //框架及插件
-    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.23.1'
-    implementation 'io.github.lemonjuice95:flandre-sql-support:0.7.0'
-    implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.12.3'
+    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.25.0'
+    implementation 'io.github.lemonjuice95:flandre-sql-support:0.8.0'
+    implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.13.0'
 
     //定时任务
     implementation 'org.quartz-scheduler:quartz:2.5.0'
