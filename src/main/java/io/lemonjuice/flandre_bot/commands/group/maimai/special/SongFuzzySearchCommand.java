@@ -48,7 +48,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
     private static String SYS_MSG = "";
 
     private static final DateTimeFormatter cacheDateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-    private static final Pattern textPattern = Pattern.compile("/?mai (模糊搜歌|模糊匹配) (.+)");
+    private static final Pattern textPattern = Pattern.compile("/?mai\\s+(模糊搜歌|模糊匹配)\\s+(.+)");
     private static final MessagePattern commandPattern = MessagePattern.builder()
             .nextNode(AtNode.atBot())
             .nextNode(new RegexNode(textPattern))
