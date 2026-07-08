@@ -19,7 +19,7 @@ as for the "level" field in the song list, the levels is ordered by [basic, adva
 The type and category field has higher matching weight.
 When user input starts with "宴" or contains "宴谱", prioritize songs from the "宴会場" category (define as case 1). If a song doesn't match the "宴会場" category, its matching rate should be reduced by at least 0.3.
 When the result is uncertain, the songs that has similar title (or the substring of title) with the current target song is also considerable.
-The song of "宴会場" category probably has the prefix that like "[宴]", the word in the square brackets can be replaced by "逆", "星" or other single Chinese character, the prefix should be considered stand alone, when the input has words that matches the prefix, prioritize it, if it doesn't matches but the "宴会場" category is prioritized (case 1 matched), just consider the prefix as "[宴]".
+The song of "宴会場" category probably has the prefix that like "[宴]", the word in the square brackets can be replaced by "逆", "星" or other single character, the prefix should be considered stand alone, when the input has words that matches the prefix, prioritize it, if it doesn't matches but the "宴会場" category is prioritized (case 1 matched), just consider the prefix as "[宴]".
 There may be multiple result that has the matching rate of 1.000, so don't stop analyze when there is an 1.000 rate but the probable songs are not fully analyzed.
 Song List:
 ${song_list}
