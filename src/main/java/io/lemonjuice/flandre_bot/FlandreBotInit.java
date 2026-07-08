@@ -6,6 +6,7 @@ import io.lemonjuice.flan_sql_support.event.SQLPreCloseEvent;
 import io.lemonjuice.flandre_bot.commands.CommandInit;
 import io.lemonjuice.flandre_bot.commands.group.maimai.special.SongFuzzySearchCommand;
 import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
+import io.lemonjuice.flandre_bot.config.FlandreBotConfig;
 import io.lemonjuice.flandre_bot.console.ConsoleCommandInit;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot.scheduled.ScheduledTaskManager;
@@ -23,6 +24,7 @@ import lombok.extern.log4j.Log4j2;
 public class FlandreBotInit {
     @SubscribeEvent
     public void initBot(BotInitEvent event) {
+        FlandreBotConfig.init();
         ConsoleCommandInit.CONSOLE_COMMANDS.load();
         ResourceInit.RESOURCES.load();
         CommandInit.COMMANDS.load();
