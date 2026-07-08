@@ -156,6 +156,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
                 }
             } catch (JSONException e) {
                 log.error("解析AI回复失败！", e);
+                log.error("原始JSON文本: {}", result.toString());
                 this.command.getContext().sendText("抱歉……芙兰看不懂AI先生的回复呢……");
             }
         }
