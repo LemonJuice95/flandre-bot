@@ -175,7 +175,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
         String fileName = String.format("reply_%s.json", cacheDateFormatter.format(nowTime));
         File cacheFile = new File("./cache/ds_reply/mai_fuzzy_search/" + fileName);
         if(!cacheFile.getParentFile().exists()) {
-            cacheFile.getParentFile().mkdir();
+            cacheFile.getParentFile().mkdirs();
         }
         try (OutputStream output = new FileOutputStream(cacheFile)) {
             output.write(result.toString().getBytes(StandardCharsets.UTF_8));
