@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot;
 
 import io.lemonjuice.flan_sql_support.event.SQLPreCloseEvent;
 import io.lemonjuice.flandre_bot.commands.CommandInit;
+import io.lemonjuice.flandre_bot.commands.group.maimai.special.SongFuzzySearchCommand;
 import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
 import io.lemonjuice.flandre_bot.console.ConsoleCommandInit;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
@@ -22,6 +23,7 @@ public class FlandreBotInit {
     public void initBot(BotInitEvent event) {
         ConsoleCommandInit.CONSOLE_COMMANDS.load();
         ResourceInit.RESOURCES.load();
+        SongFuzzySearchCommand.init();
         CommandInit.COMMANDS.load();
         NicknameManager.init();
         ScheduledTaskManager.init();

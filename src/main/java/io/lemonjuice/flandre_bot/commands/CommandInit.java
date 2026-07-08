@@ -13,6 +13,7 @@ import io.lemonjuice.flandre_bot.commands.group.maimai.open_chars.OpenCharComman
 import io.lemonjuice.flandre_bot.commands.group.maimai.open_chars.StartOpenCharsCommand;
 import io.lemonjuice.flandre_bot.commands.group.maimai.open_chars.StopOpenCharsCommand;
 import io.lemonjuice.flandre_bot.commands.group.maimai.query.*;
+import io.lemonjuice.flandre_bot.commands.group.maimai.special.SongFuzzySearchCommand;
 import io.lemonjuice.flandre_bot.commands.group.misc.Choose1From2Command;
 import io.lemonjuice.flandre_bot.commands.group.misc.GroupHelpCommand;
 import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
@@ -57,6 +58,9 @@ public class CommandInit {
         COMMANDS.register(StopOpenCharsCommand::new);
         COMMANDS.register(OpenCharCommand::new);
         COMMANDS.register(OCGuessSongCommand::new);
+
+        //舞萌-DeepSeek
+        COMMANDS.register(SongFuzzySearchCommand::new);
 
         COMMANDS.register(IPCommand::new);  
     }

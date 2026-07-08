@@ -31,4 +31,6 @@ public class ResourceInit {
     //东方角色名
     public static final Resource<JSONObject> TOUHOU_CHARACTER_NAMES = RESOURCES.register(new JsonResource("assets/touhou_character_names_map.json"));
 
+    //Deepseek
+    public static final Resource<List<String>> MAI_FUZZY_SEARCH_SYS = RESOURCES.register(new TextLinesResource("assets/deepseek/mai_fuzzy_search_sys.txt"));
 }
