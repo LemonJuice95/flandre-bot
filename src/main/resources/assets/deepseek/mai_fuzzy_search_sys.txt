@@ -5,7 +5,7 @@ Response Format:
   "result": [
     {
       "song_id": <an integer, the song's id>,
-      "matching_rate": <an float between 0 and 1, rounded to three decimal places>
+      "matching_rate": <a float between 0 and 1, rounded to three decimal places>
     }
     {
       "song_id": ...
