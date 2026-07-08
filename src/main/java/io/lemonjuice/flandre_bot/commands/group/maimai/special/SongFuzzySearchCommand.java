@@ -31,7 +31,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.swing.text.html.parser.Entity;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +47,7 @@ import java.util.regex.Pattern;
 public class SongFuzzySearchCommand extends GroupCommandRunner {
     private static String SYS_MSG = "";
 
+    private static final DateTimeFormatter cacheDateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
     private static final Pattern textPattern = Pattern.compile("/?mai (模糊搜歌|模糊匹配) (.+)");
     private static final MessagePattern commandPattern = MessagePattern.builder()
             .nextNode(AtNode.atBot())
@@ -162,6 +170,20 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
         }
     }
 
+    private void outputResult(JSONObject result) {
+        ZonedDateTime nowTime = ZonedDateTime.now(ZoneId.of("Asia/Shanghai"));
+        String fileName = String.format("reply_%s.json", cacheDateFormatter.format(nowTime));
+        File cacheFile = new File("./cache/ds_reply/mai_fuzzy_search/" + fileName);
+        if(!cacheFile.getParentFile().exists()) {
+            cacheFile.getParentFile().mkdir();
+        }
+        try (OutputStream output = new FileOutputStream(cacheFile)) {
+            output.write(result.toString().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            log.error("输出AI回复失败！", e);
+        }
+    }
+
     private JSONObject callDeepseekAPI(String userInput) {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             HttpPost post = new HttpPost("https://api.deepseek.com/chat/completions");
@@ -179,6 +201,9 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
                 log.warn("无法识别的响应体: {}", EntityUtils.toString(response.getEntity()));
             }
             result.put("status_code", response.getStatusLine().getStatusCode());
+
+            this.outputResult(result);
+
             return result;
         } catch (IOException e) {
             log.error("Deepseek API 调用失败！", e);
