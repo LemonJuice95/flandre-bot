@@ -217,7 +217,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
         JSONObject result = new JSONObject();
 
         result.put("model", "deepseek-v4-flash");
-        result.put("temperature", 0.3);
+        result.put("temperature", 0.4);
         result.put("max_tokens", 32767);
         result.put("response_format", new JSONObject("{\"type\":\"json_object\"}"));
         result.put("thinking", new JSONObject("{\"type\":\"enabled\"}"));
