@@ -148,7 +148,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
                             reply.append(String.format("id%d %s(%s) (匹配度%.1f%%)",
                                     id,
                                     song.title,
-                                    song.type,
+                                    song.info.category.equals("宴会場") ? "宴会场" : song.type,
                                     songData.optFloat("matching_rate", 0.0F) * 100F)
                             );
                             reply.append("\n");
