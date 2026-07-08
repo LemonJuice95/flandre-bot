@@ -116,6 +116,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
             if(result.getInt("status_code") != 200) {
                 this.command.getContext().sendText("抱歉……AI先生不帮芙兰诶……\n联系一下bot管理员吧");
                 log.error("DeepSeek API调用失败！(HTTP ERROR {})", result.get("status_code"));
+                log.error("Response Body: {}", result.toString());
                 return;
             }
 
