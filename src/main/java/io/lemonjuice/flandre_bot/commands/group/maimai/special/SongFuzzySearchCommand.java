@@ -120,37 +120,43 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
                 return;
             }
 
-            JSONArray songs = result.getJSONArray("result");
-            if(songs.isEmpty()) {
-                this.command.getContext().sendText("抱歉……没找到匹配的结果呢……");
-                return;
-            }
+            try {
+                JSONObject content = new JSONObject(result.getJSONArray("choices").getJSONObject(0).getString("content"));
+                JSONArray songs = content.getJSONArray("result");
+                if (songs.isEmpty()) {
+                    this.command.getContext().sendText("抱歉……没找到匹配的结果呢……");
+                    return;
+                }
 
-            StringBuilder reply = new StringBuilder("搞定啦！有以下可能的结果呢：\n");
-            boolean finded = false;
-            for(int i = 0; i < songs.length(); i++) {
-                JSONObject songData = songs.getJSONObject(i);
-                int id = songData.optInt("song_id", -1);
-                if(id != -1) {
-                    Song song = SongManager.getSongById(id);
-                    if(song != null) {
-                        finded = true;
-                        reply.append(String.format("id%d %s(%s) (匹配度%f%%)",
-                                id,
-                                song.title,
-                                song.type,
-                                result.optFloat("matching_rate", 0.0F) * 100F)
-                        );
-                        reply.append("\n");
+                StringBuilder reply = new StringBuilder("搞定啦！有以下可能的结果呢：\n");
+                boolean finded = false;
+                for (int i = 0; i < songs.length(); i++) {
+                    JSONObject songData = songs.getJSONObject(i);
+                    int id = songData.optInt("song_id", -1);
+                    if (id != -1) {
+                        Song song = SongManager.getSongById(id);
+                        if (song != null) {
+                            finded = true;
+                            reply.append(String.format("id%d %s(%s) (匹配度%f%%)",
+                                    id,
+                                    song.title,
+                                    song.type,
+                                    songData.optFloat("matching_rate", 0.0F) * 100F)
+                            );
+                            reply.append("\n");
+                        }
                     }
                 }
-            }
 
-            if(!finded) {
-                this.command.getContext().sendText("抱歉……没找到匹配的结果呢……");
-                return;
-            } else {
-                this.command.getContext().sendText(reply.toString().trim());
+                if (!finded) {
+                    this.command.getContext().sendText("抱歉……没找到匹配的结果呢……");
+                    return;
+                } else {
+                    this.command.getContext().sendText(reply.toString().trim());
+                }
+            } catch (JSONException e) {
+                log.error("解析AI回复失败！", e);
+                this.command.getContext().sendText("抱歉……芙兰看不懂AI先生的回复呢……");
             }
         }
     }
@@ -199,7 +205,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
 
         JSONObject userMessage = new JSONObject();
         userMessage.put("role", "user");
-        sysMessage.put("content", searchText);
+        userMessage.put("content", searchText);
         messages.put(userMessage);
 
         result.put("messages", messages);
