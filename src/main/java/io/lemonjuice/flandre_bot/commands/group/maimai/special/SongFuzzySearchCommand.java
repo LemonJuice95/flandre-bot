@@ -30,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -167,6 +168,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
                 result = new JSONObject(EntityUtils.toString(response.getEntity()));
             } catch (JSONException e) {
                 result = new JSONObject();
+                log.warn("无法识别的响应体: {}", EntityUtils.toString(response.getEntity()));
             }
             result.put("status_code", response.getStatusLine().getStatusCode());
             return result;
