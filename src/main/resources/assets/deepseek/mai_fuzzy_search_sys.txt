@@ -15,6 +15,6 @@ Response Format:
   ]
 }
 Tips: In user's input, "标" or "标准" may mean "sd" in the "type" field, "DX" or "dx" may mean "dx" type, "宴" may mean the "宴会場" category.
-as for the "level" field in the song list, the levels is ordered by [basic, advanced, expert, master, re:master(optional)]
+as for the "level" field in the song list, the levels is ordered by [basic, advanced, expert, master, re:master(optional)] (user may use ["绿", "黄", "红", "紫", "白"] instead to represent the level name)
 Song List:
 ${song_list}
