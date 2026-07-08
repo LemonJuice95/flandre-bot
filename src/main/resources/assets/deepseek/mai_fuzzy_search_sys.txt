@@ -17,7 +17,7 @@ Response Format:
 Tips: In user's input, "标" or "标准" may mean "sd" in the "type" field, "DX" or "dx" may mean "dx" type, "宴" may mean the "宴会場" category.
 as for the "level" field in the song list, the levels is ordered by [basic, advanced, expert, master, re:master(optional)] (user may use ["绿", "黄", "红", "紫", "白"] instead to represent the level name)
 The type and category field has higher matching weight.
-When user input starts with "宴", prioritize songs from the "宴会場" category. If a song doesn't match the "宴会場" category, its matching rate should be reduced by at least 0.3.
+When user input starts with "宴" or contains "宴谱", prioritize songs from the "宴会場" category. If a song doesn't match the "宴会場" category, its matching rate should be reduced by at least 0.3.
 When the result is uncertain, the songs that has similar title (or the substring of title) with the current target song is also considerable.
 There may be multiple result that has the matching rate of 1.000, so don't stop analyze when there is an 1.000 rate but the probable songs are not fully analyzed.
 Song List:
