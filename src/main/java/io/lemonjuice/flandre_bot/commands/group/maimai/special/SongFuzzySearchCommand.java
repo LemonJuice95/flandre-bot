@@ -101,7 +101,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
             if(!matcher.find()) {
                 return;
             }
-            String userInput = matcher.group(1);
+            String userInput = matcher.group(2);
             if(userInput.isBlank()) {
                 return;
             }
@@ -121,7 +121,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
             }
 
             try {
-                JSONObject content = new JSONObject(result.getJSONArray("choices").getJSONObject(0).getString("content"));
+                JSONObject content = new JSONObject(result.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content"));
                 JSONArray songs = content.getJSONArray("result");
                 if (songs.isEmpty()) {
                     this.command.getContext().sendText("抱歉……没找到匹配的结果呢……");
