@@ -137,7 +137,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
                         Song song = SongManager.getSongById(id);
                         if (song != null) {
                             finded = true;
-                            reply.append(String.format("id%d %s(%s) (匹配度%f%%)",
+                            reply.append(String.format("id%d %s(%s) (匹配度%.1f%%)",
                                     id,
                                     song.title,
                                     song.type,
