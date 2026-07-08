@@ -1,5 +1,7 @@
 package io.lemonjuice.flandre_bot;
 
+import io.lemonjuice.flan_mai_plugin.event.SongInitializedEvent;
+import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flan_sql_support.event.SQLPreCloseEvent;
 import io.lemonjuice.flandre_bot.commands.CommandInit;
 import io.lemonjuice.flandre_bot.commands.group.maimai.special.SongFuzzySearchCommand;
@@ -23,11 +25,15 @@ public class FlandreBotInit {
     public void initBot(BotInitEvent event) {
         ConsoleCommandInit.CONSOLE_COMMANDS.load();
         ResourceInit.RESOURCES.load();
-        SongFuzzySearchCommand.init();
         CommandInit.COMMANDS.load();
         NicknameManager.init();
         ScheduledTaskManager.init();
         K11PeopleNumberCommand.init();
+    }
+
+    @SubscribeEvent
+    public void onSongInitialized(SongInitializedEvent event) {
+        SongFuzzySearchCommand.init();
     }
 
     @SubscribeEvent
