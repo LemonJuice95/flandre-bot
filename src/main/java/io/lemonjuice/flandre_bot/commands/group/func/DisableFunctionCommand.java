@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.commands.group.func;
 
 import io.lemonjuice.flan_sql_support.network.SQLCore;
+import io.lemonjuice.flandre_bot.func.FunctionEnableManager;
 import io.lemonjuice.flandre_bot.func.FunctionNameManager;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
@@ -47,16 +48,9 @@ public class DisableFunctionCommand extends GroupCommandRunner {
             return;
         }
 
-        if(FunctionNameManager.GROUP_FUNCTIONS.containsKey(funcMessage)) {
-            String funcName = FunctionNameManager.GROUP_FUNCTIONS.get(funcMessage);
-            try (Connection co = SQLCore.getInstance().startConnection();
-                 PreparedStatement ps = co.prepareStatement("DELETE FROM enabled_function WHERE func_name=? AND group_id=?")) {
-                ps.setString(1, funcName);
-                ps.setLong(2, this.command.groupId);
-                ps.execute();
-            } catch (SQLException e) {
-                log.error(e);
-            }
+        if(FunctionNameManager.CONFIGURABLE_GROUP_FUNCTIONS.containsKey(funcMessage)) {
+            String funcName = FunctionNameManager.CONFIGURABLE_GROUP_FUNCTIONS.get(funcMessage);
+            FunctionEnableManager.disableGroupFunc(this.command.groupId, funcName);
             this.command.getContext().replyWithText("已禁用功能 " + funcMessage);
         } else {
             this.command.getContext().replyWithText("未找到该功能\n使用 \"/可配置功能列表\" 来查询所有可以手动启用/禁用的功能");

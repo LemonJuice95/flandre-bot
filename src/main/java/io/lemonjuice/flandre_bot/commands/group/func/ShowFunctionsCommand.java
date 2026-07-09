@@ -30,7 +30,7 @@ public class ShowFunctionsCommand extends SimpleGroupCommandRunner {
 
     @Override
     public void apply() {
-        Set<String> functions = FunctionNameManager.GROUP_FUNCTIONS.keySet();
+        Set<String> functions = FunctionNameManager.CONFIGURABLE_GROUP_FUNCTIONS.keySet();
         StringBuilder messageRaw = new StringBuilder("当前可手动启用/禁用的功能有：\n");
         for(String s : functions) {
             messageRaw.append(s).append("\n");

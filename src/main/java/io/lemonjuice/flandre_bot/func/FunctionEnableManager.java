@@ -24,4 +24,28 @@ public class FunctionEnableManager {
             return false;
         }
     }
+
+    public static void enableGroupFunc(long groupId, String funcName) {
+        if(!isGroupFuncEnable(groupId, funcName)) {
+            try (Connection co = SQLCore.getInstance().startConnection();
+                 PreparedStatement ps = co.prepareStatement("INSERT INTO enabled_function(group_id,func_name) VALUES(?,?)")) {
+                ps.setLong(1, groupId);
+                ps.setString(2, funcName);
+                ps.execute();
+            } catch (SQLException e) {
+                log.error(e);
+            }
+        }
+    }
+
+    public static void disableGroupFunc(long groupId, String funcName) {
+        try (Connection co = SQLCore.getInstance().startConnection();
+             PreparedStatement ps = co.prepareStatement("DELETE FROM enabled_function WHERE group_id=? AND func_name=?")) {
+            ps.setLong(1, groupId);
+            ps.setString(2, funcName);
+            ps.execute();
+        } catch (SQLException e) {
+            log.error(e);
+        }
+    }
 }
