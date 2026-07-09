@@ -220,7 +220,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
         result.put("temperature", 0.4);
         result.put("max_tokens", 32767);
         result.put("response_format", new JSONObject("{\"type\":\"json_object\"}"));
-//        result.put("thinking", new JSONObject("{\"type\":\"enabled\"}"));
+        result.put("thinking", new JSONObject("{\"type\":\"disabled\"}"));
 
         JSONArray messages = new JSONArray();
 
