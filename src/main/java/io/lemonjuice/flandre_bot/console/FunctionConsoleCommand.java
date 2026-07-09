@@ -43,6 +43,7 @@ public class FunctionConsoleCommand extends ConsoleCommandRunner {
         } else {
             FunctionEnableManager.disableGroupFunc(groupId, funcName);
         }
+        BotConsole.println("操作已执行");
     }
 
     private void showList() {
