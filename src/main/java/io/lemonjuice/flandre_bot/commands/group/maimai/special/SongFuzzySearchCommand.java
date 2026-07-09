@@ -64,7 +64,6 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
             JSONObject songData = new JSONObject();
             songData.put("id", song.id);
             songData.put("title", song.title);
-            songData.put("version", song.info.from);
             songData.put("type", song.type);
             songData.put("category", song.info.category);
             songData.put("artist", song.info.artist);
@@ -76,6 +75,10 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
             JSONArray levels = new JSONArray();
             song.level.forEach(levels::put);
             songData.put("levels", levels);
+
+            JSONArray chartAuthor = new JSONArray();
+            song.charts.forEach(chart -> chartAuthor.put(chart.author));
+            songData.put("chart_author", chartAuthor);
 
             songList.put(songData);
         }
