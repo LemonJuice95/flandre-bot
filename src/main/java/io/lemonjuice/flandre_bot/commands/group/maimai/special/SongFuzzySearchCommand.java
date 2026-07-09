@@ -114,15 +114,15 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
                 return;
             }
 
-            this.command.getContext().sendText("AI先生思考需要一些时间，耐心等一下吧~");
+            this.command.getContext().replyWithText("AI先生思考需要一些时间，耐心等一下吧~");
 
             JSONObject result = this.callDeepseekAPI(userInput);
             if(result.getInt("status_code") == -1) {
-                this.command.getContext().sendText("抱歉……芙兰没能找到AI先生呢……\n联系一下bot管理员吧");
+                this.command.getContext().replyWithText("抱歉……芙兰没能找到AI先生呢……\n联系一下bot管理员吧");
                 return;
             }
             if(result.getInt("status_code") != 200) {
-                this.command.getContext().sendText("抱歉……AI先生不帮芙兰诶……\n联系一下bot管理员吧");
+                this.command.getContext().replyWithText("抱歉……AI先生不帮芙兰诶……\n联系一下bot管理员吧");
                 log.error("DeepSeek API调用失败！(HTTP ERROR {})", result.get("status_code"));
                 log.error("Response Body: {}", result.toString());
                 return;
@@ -132,7 +132,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
                 JSONObject content = new JSONObject(result.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content"));
                 JSONArray songs = content.getJSONArray("result");
                 if (songs.isEmpty()) {
-                    this.command.getContext().sendText("抱歉……没找到匹配的结果呢……");
+                    this.command.getContext().replyWithText("抱歉……没找到匹配的结果呢……");
                     return;
                 }
 
@@ -157,15 +157,15 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
                 }
 
                 if (!finded) {
-                    this.command.getContext().sendText("抱歉……没找到匹配的结果呢……");
+                    this.command.getContext().replyWithText("抱歉……没找到匹配的结果呢……");
                     return;
                 } else {
-                    this.command.getContext().sendText(reply.toString().trim());
+                    this.command.getContext().replyWithText(reply.toString().trim());
                 }
             } catch (JSONException e) {
                 log.error("解析AI回复失败！", e);
                 log.error("原始JSON文本: {}", result.toString());
-                this.command.getContext().sendText("抱歉……芙兰看不懂AI先生的回复呢……");
+                this.command.getContext().replyWithText("抱歉……芙兰看不懂AI先生的回复呢……");
             }
         }
     }
