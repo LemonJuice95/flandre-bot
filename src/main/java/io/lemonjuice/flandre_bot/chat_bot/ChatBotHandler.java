@@ -97,12 +97,13 @@ public class ChatBotHandler {
             String reply = "出错了！抱歉……联系一下bot管理员吧~";
             try {
                 result = new JSONObject(responseStr);
-                reply = result.getJSONArray("choice")
+                reply = result.getJSONArray("choices")
                         .getJSONObject(0)
                         .getJSONObject("message")
                         .getString("content");
             } catch (JSONException e) {
                 log.warn("无法识别的响应体: {}", responseStr);
+                message.getContext().replyWithText("出错了！抱歉……联系一下bot管理员吧~");
                 return;
             }
 
