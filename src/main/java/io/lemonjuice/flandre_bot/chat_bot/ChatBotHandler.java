@@ -53,6 +53,9 @@ public class ChatBotHandler {
 
     @SubscribeEvent
     public void commandBlocker(CommandRunEvent.Pre event) {
+        if(!ENABLED_GROUPS.containsKey(event.getMessage().groupId)) {
+            return;
+        }
         if(!(event.getCommandRunner() instanceof ChatBotSwitchCommand)) {
             event.setCancelled(true);
         }
@@ -84,6 +87,7 @@ public class ChatBotHandler {
 
             HttpResponse response = client.execute(post);
             if(response.getStatusLine().getStatusCode() != 200) {
+                message.getContext().replyWithText("出错了！抱歉……联系一下bot管理员吧~");
                 log.error("Chat Bot调用外部API失败！(HTTP ERROR {})", response.getStatusLine().getStatusCode());
                 return;
             }
