@@ -102,7 +102,7 @@ public class ChatBotHandler {
                         .getJSONObject("message")
                         .getString("content");
             } catch (JSONException e) {
-                log.warn("无法识别的响应体: {}", EntityUtils.toString(response.getEntity()));
+                log.warn("无法识别的响应体: {}", responseStr);
                 return;
             }
 
