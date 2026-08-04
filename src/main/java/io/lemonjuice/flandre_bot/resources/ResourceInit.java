@@ -33,4 +33,5 @@ public class ResourceInit {
 
     //Deepseek
     public static final Resource<List<String>> MAI_FUZZY_SEARCH_SYS = RESOURCES.register(new TextLinesResource("assets/deepseek/mai_fuzzy_search_sys.txt"));
+    public static final Resource<List<String>> CHAT_BOT_SYS = RESOURCES.register(new TextLinesResource("assets/deepseek/chat_bot.txt"));
 }

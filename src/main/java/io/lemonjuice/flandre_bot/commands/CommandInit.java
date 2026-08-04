@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.commands;
 
+import io.lemonjuice.flandre_bot.chat_bot.ChatBotSwitchCommand;
 import io.lemonjuice.flandre_bot.commands.group.daily.GroupSignInCommand;
 import io.lemonjuice.flandre_bot.commands.group.func.*;
 import io.lemonjuice.flandre_bot.commands.group.interaction.GroupClearNicknameCommand;
@@ -62,6 +63,9 @@ public class CommandInit {
         //舞萌-DeepSeek
         COMMANDS.register(SongFuzzySearchCommand::new);
 
-        COMMANDS.register(IPCommand::new);  
+        COMMANDS.register(IPCommand::new);
+
+        //AI聊天
+        COMMANDS.register(ChatBotSwitchCommand::new);
     }
 }
