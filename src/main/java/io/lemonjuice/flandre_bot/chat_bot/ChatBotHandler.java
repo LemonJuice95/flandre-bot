@@ -85,12 +85,14 @@ public class ChatBotHandler {
             HttpResponse response = client.execute(post);
             if(response.getStatusLine().getStatusCode() != 200) {
                 log.error("Chat Bot调用外部API失败！(HTTP ERROR {})", response.getStatusLine().getStatusCode());
+                return;
             }
 
+            String responseStr = EntityUtils.toString(response.getEntity());
             JSONObject result = new JSONObject();
             String reply = "出错了！抱歉……联系一下bot管理员吧~";
             try {
-                result = new JSONObject(EntityUtils.toString(response.getEntity()));
+                result = new JSONObject(responseStr);
                 reply = result.getJSONArray("choice")
                         .getJSONObject(0)
                         .getJSONObject("message")
