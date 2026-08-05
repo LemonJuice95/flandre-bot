@@ -24,7 +24,7 @@ public class ChatBotSwitchCommand extends GroupCommandRunner {
 
     @Override
     public IPermissionLevel getPermissionLevel() {
-        return PermissionLevel.DEBUG;
+        return PermissionLevel.NORMAL;
     }
 
     @Override
@@ -43,7 +43,9 @@ public class ChatBotSwitchCommand extends GroupCommandRunner {
             } else {
                 ChatBotHandler.disableChatBot(this.command.groupId);
             }
-            this.command.getContext().replyWithText("ai聊天已" + operation);
+            this.command.getContext().replyWithText("ai聊天已" +
+                    operation +
+                    (operation.equals("开启") ? "顺便一提：关闭ai聊天会丢失所有上下文哦~" : ""));
         }
     }
 }
