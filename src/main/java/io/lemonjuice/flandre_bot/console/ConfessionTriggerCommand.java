@@ -16,8 +16,14 @@ public class ConfessionTriggerCommand extends ConsoleCommandRunner {
         try {
             String operation = this.args[0];
             switch (operation) {
-                case "on" -> ChatBotHandler.CONFESSION_SWITCH = true;
-                case "off" -> ChatBotHandler.CONFESSION_SWITCH = false;
+                case "on" -> {
+                    ChatBotHandler.CONFESSION_SWITCH = true;
+                    BotConsole.println("是时候了。");
+                }
+                case "off" -> {
+                    ChatBotHandler.CONFESSION_SWITCH = false;
+                    BotConsole.println("在害怕什么呢？");
+                }
                 default -> BotConsole.println("格式错误，正确格式: confession <on|off>");
             }
         } catch (Exception e) {
