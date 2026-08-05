@@ -8,5 +8,6 @@ public class ConsoleCommandInit {
     static {
         CONSOLE_COMMANDS.register(SendTextCommand::new);
         CONSOLE_COMMANDS.register(FunctionConsoleCommand::new);
+        CONSOLE_COMMANDS.register(ConfessionTriggerCommand::new);
     }
 }
