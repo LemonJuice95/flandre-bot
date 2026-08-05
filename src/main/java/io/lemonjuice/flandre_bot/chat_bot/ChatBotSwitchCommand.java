@@ -45,7 +45,7 @@ public class ChatBotSwitchCommand extends GroupCommandRunner {
             }
             this.command.getContext().replyWithText("ai聊天已" +
                     operation +
-                    (operation.equals("开启") ? "顺便一提：关闭ai聊天会丢失所有上下文哦~" : ""));
+                    (operation.equals("开启") ? "\n顺便一提：关闭ai聊天会丢失所有上下文哦~" : ""));
         }
     }
 }
