@@ -134,7 +134,7 @@ public class ChatBotHandler {
         JSONObject result = new JSONObject();
 
         result.put("model", "deepseek-v4-flash");
-        result.put("temperature", 0.8);
+        result.put("temperature", 1.0);
         result.put("max_tokens", 32767);
         result.put("response_format", new JSONObject("{\"type\":\"text\"}"));
         result.put("thinking", new JSONObject("{\"type\":\"enabled\"}"));
