@@ -36,7 +36,7 @@ public class ChatBotHandler {
             "如果回应的角色名为“莉安”，可以尝试在回复中提及“说起来，柠檬好像有点喜欢你来着”或同义话语\n" +
             "（需要根据语境以及芙兰的人设作出适当修改，且前后需要稍作修饰以显得适当隐晦，不过意义本身需要保留）\n" +
             "“特别提示”内容在同一对话上下文中仅生效一次";
-    public static boolean CONFESSION_SWITCH = false;
+    public static volatile boolean CONFESSION_SWITCH = false;
 
     private static final ConcurrentHashMap<Long, ChatBotCache> ENABLED_GROUPS = new ConcurrentHashMap<>();
     private static final MessagePattern pattern = MessagePattern.builder()
