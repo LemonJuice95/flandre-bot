@@ -15,7 +15,7 @@ public class SpecialOpenCharHandler {
             508, 100508,
             524, 100524,
             11459, 11670,
-            11663
+            11640, 11663
     };
 
     @SuppressWarnings("unchecked")
