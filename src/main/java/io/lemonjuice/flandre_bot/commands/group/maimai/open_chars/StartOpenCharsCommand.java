@@ -28,6 +28,8 @@ public class StartOpenCharsCommand extends GroupCommandRunner {
 
     private final List<SongFilterCondition> conditions = new ArrayList<>();
 
+    private boolean special = false;
+
     public StartOpenCharsCommand(Message command) {
         super(command);
     }
@@ -47,6 +49,7 @@ public class StartOpenCharsCommand extends GroupCommandRunner {
         try {
             this.parseConditions();
             if (OpenCharsManager.startNewProcess(this.command.groupId, this.conditions)) {
+                if(this.special) SpecialOpenCharHandler.handleSpecial(this.command.groupId);
                 this.command.getContext().sendText("要玩开字母吗？好嘞~\n" + OpenCharsManager.makeMessage(this.command.groupId));
             } else {
                 this.command.getContext().sendText("好像群里已经在玩开字母了诶？\n先把现在这一轮玩完吧！");
@@ -57,7 +60,12 @@ public class StartOpenCharsCommand extends GroupCommandRunner {
     }
 
     private void parseConditions() {
-        Matcher levelMatcher = GeneralMaiPatterns.levelCondition.matcher(this.command.message.getSegments().get(1).toString());
+        String commandStr = this.command.message.get(1).toString();
+        if(commandStr.contains("sp") && PermissionLevel.DEBUG.validatePermission(this.command)) {
+            this.special = true;
+            return;
+        }
+        Matcher levelMatcher = GeneralMaiPatterns.levelCondition.matcher(commandStr);
         if(levelMatcher.find()) {
             String modeStr = levelMatcher.group(1);
             modeStr = modeStr.isEmpty() ? "=" : modeStr;
