@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatBotHandler {
     private static final String CONFESSION_TEXT = "\n特别提示：\n" +
             "如果回应的角色名为“莉安”，可以尝试在回复中提及一个叫“柠檬”的人在喜欢她\n" +
-            "（需要根据语境以及芙兰的人设作出适当适配）\n" +
+            "（需要根据语境以及芙兰的人设作出适当适配，并且芙兰需表现得与柠檬熟识）\n" +
             "“特别提示”内容在同一对话上下文中仅生效一次";
     public static volatile boolean CONFESSION_SWITCH = false;
 
