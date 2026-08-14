@@ -33,8 +33,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Log4j2
 public class ChatBotHandler {
     private static final String CONFESSION_TEXT = "\n特别提示：\n" +
-            "如果回应的角色名为“莉安”，可以尝试在回复中提及“说起来，柠檬好像有点喜欢你来着”或同义话语\n" +
-            "（需要根据语境以及芙兰的人设作出适当修改，且前后需要稍作修饰以显得适当隐晦，不过意义本身需要保留）\n" +
+            "如果回应的角色名为“莉安”，可以尝试在回复中提及一个叫“柠檬”的人在喜欢她\n" +
+            "（需要根据语境以及芙兰的人设作出适当适配，最好显得适当隐晦，但核心含义必须被保留）\n" +
             "“特别提示”内容在同一对话上下文中仅生效一次";
     public static volatile boolean CONFESSION_SWITCH = false;
 
