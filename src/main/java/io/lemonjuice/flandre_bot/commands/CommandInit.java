@@ -49,6 +49,7 @@ public class CommandInit {
 
         COMMANDS.register(GroupMaiHelpCommand::new);
 
+        COMMANDS.register(GroupBindDivingFishCommand::new);
         COMMANDS.register(GroupB50Command::new);
         COMMANDS.register(GroupPlateCompleteTableCommand::new);
         COMMANDS.register(GroupSongInfoCommand::new);

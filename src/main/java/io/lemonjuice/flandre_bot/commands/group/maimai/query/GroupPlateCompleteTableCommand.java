@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.commands.group.maimai.query;
 
 import io.lemonjuice.flan_mai_plugin.api.CompletionTableGenerator;
+import io.lemonjuice.flan_mai_plugin.exception.DivingFishException;
 import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flan_mai_plugin.utils.enums.MaiVersion;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
@@ -71,6 +72,12 @@ public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
                 }
             } catch (NotInitializedException e) {
                 this.command.getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
+            } catch (DivingFishException e) {
+                if (e instanceof DivingFishException.Unbound) {
+                    this.command.getContext().replyWithText("芙兰查不到你的成绩信息呢……\n你给芙兰授权了吗？\n如果没有的话请先使用“/水鱼授权”进行授权哦~");
+                } else {
+                    this.command.getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
+                }
             }
         }
     }
