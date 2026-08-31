@@ -35,6 +35,24 @@ public class ScheduledTaskManager {
                         .startNow()
                         .withSchedule(CronScheduleBuilder.cronSchedule("0 0 */3 * * ?"))
                         .build());
+
+        register(JobBuilder.newJob(BirthdayPrepareJob.class)
+                        .withIdentity("birthdayPrepare", "birthday")
+                        .build(),
+                TriggerBuilder.newTrigger()
+                        .withIdentity("birthdayPrepare", "birthday")
+                        .startNow()
+                        .withSchedule(CronScheduleBuilder.cronSchedule("0 58 23 * * ?"))
+                        .build());
+
+        register(JobBuilder.newJob(SendBirthdayGreetingsJob.class)
+                        .withIdentity("sendBirthdayGreetings", "birthday")
+                        .build(),
+                TriggerBuilder.newTrigger()
+                        .withIdentity("sendBirthdayGreetings", "birthday")
+                        .startNow()
+                        .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0 * * ?"))
+                        .build());
     }
 
     private static void register(JobDetail job, Trigger trigger) {

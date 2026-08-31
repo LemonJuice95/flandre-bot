@@ -16,6 +16,7 @@ import io.lemonjuice.flandre_bot.commands.group.maimai.open_chars.StopOpenCharsC
 import io.lemonjuice.flandre_bot.commands.group.maimai.query.*;
 import io.lemonjuice.flandre_bot.commands.group.maimai.special.SongFuzzySearchCommand;
 import io.lemonjuice.flandre_bot.commands.group.misc.Choose1From2Command;
+import io.lemonjuice.flandre_bot.commands.group.misc.GroupBirthdayCommand;
 import io.lemonjuice.flandre_bot.commands.group.misc.GroupHelpCommand;
 import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
 import io.lemonjuice.flandre_bot.commands.privat.IPCommand;
@@ -43,6 +44,7 @@ public class CommandInit {
 
         COMMANDS.register(GroupFortuneCookieCommand::new);
         COMMANDS.register(Choose1From2Command::new);
+        COMMANDS.register(GroupBirthdayCommand::new);
 
         //舞萌
         COMMANDS.register(K11PeopleNumberCommand::new);
