@@ -3,6 +3,7 @@ package io.lemonjuice.flandre_bot.scheduled;
 import io.lemonjuice.flandre_bot.utils.BirthdayManager;
 import io.lemonjuice.flandre_bot_framework.account.ContextManager;
 import io.lemonjuice.flandre_bot_framework.message.GroupContext;
+import io.lemonjuice.flandre_bot_framework.message.MessageToSend;
 import io.lemonjuice.flandre_bot_framework.model.GroupMember;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -43,6 +44,17 @@ public class BirthdayPrepareJob implements Job {
         }
         preparedCelebrants.entrySet().removeIf(entry -> entry.getValue().isEmpty());
 
-        SendBirthdayGreetingsJob.PREPARED_CELEBRANTS.putAll(preparedCelebrants);
+        List<MessageToSend> messages = new ArrayList<>();
+        preparedCelebrants.forEach((groupId, users) -> {
+            MessageToSend preparedMsg = ContextManager.getGroup(groupId).prepareMessageToSend();
+            for(long userId : users) {
+                preparedMsg.appendAt(userId);
+                preparedMsg.appendText(" ");
+            }
+            preparedMsg.appendText(String.format("芙兰祝%s生日快乐哦~", users.size() == 1 ? "你" : "你们"));
+            messages.add(preparedMsg);
+        });
+
+        SendBirthdayGreetingsJob.PREPARED_MESSAGES.addAll(messages);
     }
 }
