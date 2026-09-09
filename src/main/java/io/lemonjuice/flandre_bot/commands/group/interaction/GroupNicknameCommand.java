@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot.commands.group.interaction;
 
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AnySegmentNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -17,14 +18,16 @@ public class GroupNicknameCommand extends GroupCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/称呼\\s+(\\S*)");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
-            .nextNode(new RegexNode(commandPattern))
             .startGroup()
-            .nextNode(new AnySegmentNode())
-            .endGroup(MessagePattern.GroupFlag.LOOP, MessagePattern.GroupFlag.OPTIONAL)
+            .nextNode(new RegexNode(commandPattern))
+            .endGroup()
             .build();
+
+    private final MessageMatcher matcher;
 
     public GroupNicknameCommand(Message command) {
         super(command);
+        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -34,7 +37,7 @@ public class GroupNicknameCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message.trim()).matches();
+        return messagePattern.matcher(this.command.message.trim()).simplyMatches();
     }
 
     @Override
@@ -49,12 +52,12 @@ public class GroupNicknameCommand extends GroupCommandRunner {
     }
 
     private String getNickname() {
-        String message = this.command.message
-                .getSegments()
-                .get(1)
-                .toString()
-                .trim();
-        Matcher matcher = commandPattern.matcher(message);
-        return matcher.find() ? matcher.group(1) : "";
+        this.matcher.reset();
+        if(this.matcher.matches()) {
+            String message = this.matcher.group(1).toString();
+            Matcher matcher = commandPattern.matcher(message);
+            return matcher.find() ? matcher.group(1) : "";
+        }
+        return "";
     }
 }

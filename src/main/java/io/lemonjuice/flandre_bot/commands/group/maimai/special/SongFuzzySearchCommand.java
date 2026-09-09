@@ -6,6 +6,7 @@ import io.lemonjuice.flandre_bot.config.FlandreBotConfig;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
@@ -47,11 +48,16 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
     private static final Pattern textPattern = Pattern.compile("/?mai\\s+(模糊搜歌|模糊匹配)\\s+(.+)");
     private static final MessagePattern commandPattern = MessagePattern.builder()
             .nextNode(AtNode.atBot())
+            .startGroup()
             .nextNode(new RegexNode(textPattern))
+            .endGroup()
             .build();
+
+    private final MessageMatcher matcher;
 
     public SongFuzzySearchCommand(Message command) {
         super(command);
+        this.matcher = commandPattern.matcher(command);
     }
 
     public static void init() {
@@ -97,12 +103,12 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return commandPattern.matcher(command.message.trim()).matches();
+        return this.matcher.matches();
     }
 
     @Override
     public void apply() {
-        MessageSegment seg = this.command.message.get(1);
+        MessageSegment seg = this.matcher.group(1).get(1);
         if(seg instanceof TextMessageSegment textSeg) {
             Matcher matcher = textPattern.matcher(textSeg.getContent());
             if(!matcher.find()) {

@@ -6,6 +6,7 @@ import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
@@ -25,11 +26,16 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
 
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
+            .startGroup()
             .nextOrNodes(new RegexNode(commandPattern1), new RegexNode(commandPattern2))
+            .endGroup()
             .build();
+
+    private final MessageMatcher matcher;
 
     public GroupSongQueryCommand(Message command) {
         super(command);
+        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -39,15 +45,15 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message.trim()).matches();
+        return this.matcher.matches();
     }
 
     @Override
     public void apply() {
         String name = "";
-        if(commandPattern1.matcher(this.command.message.getSegments().get(1).toString().trim()).matches()) {
+        if(commandPattern1.matcher(this.matcher.group(1).toString().trim()).matches()) {
             name = getName1();
-        } else if(commandPattern2.matcher(this.command.message.getSegments().get(1).toString().trim()).matches()) {
+        } else if(commandPattern2.matcher(this.matcher.group(1).toString().trim()).matches()) {
             name = getName2();
         }
 
@@ -86,14 +92,14 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
     }
 
     private String getName1() {
-        String message = this.command.message.getSegments().get(1).toString().trim();
+        String message = this.matcher.group(1).toString().trim();
         Pattern pattern = Pattern.compile("/mai\\s+song\\s+(.+)");
         Matcher matcher = pattern.matcher(message);
         return matcher.find() ? matcher.group(1) : "";
     }
 
     private String getName2() {
-        String message = this.command.message.getSegments().get(1).toString().trim();
+        String message = this.matcher.group(1).toString().trim();
         Pattern pattern = Pattern.compile("^(.+)是什么歌$");
         Matcher matcher = pattern.matcher(message);
         return matcher.find() ? matcher.group(1).replace("&#91;", "[").replace("&#93;", "]") : "";

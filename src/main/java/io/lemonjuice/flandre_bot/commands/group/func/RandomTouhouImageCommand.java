@@ -4,6 +4,7 @@ import io.lemonjuice.flandre_bot.api.RandomTouhouImage;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
@@ -24,11 +25,16 @@ public class RandomTouhouImageCommand extends GroupCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/随机东方图(\\s+\\S+)?");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
+            .startGroup()
             .nextNode(new RegexNode(commandPattern))
+            .endGroup()
             .build();
+
+    private final MessageMatcher matcher;
 
     public RandomTouhouImageCommand(Message command) {
         super(command);
+        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -38,7 +44,7 @@ public class RandomTouhouImageCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message.trim()).matches();
+        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -60,12 +66,12 @@ public class RandomTouhouImageCommand extends GroupCommandRunner {
     }
 
     private String getTag() {
-        String message = this.command.message
-                .getSegments()
-                .get(1)
-                .toString()
-                .trim();
-        Matcher matcher = commandPattern.matcher(message);
-        return matcher.find() && matcher.group(1) != null ? matcher.group(1).trim() : "";
+        this.matcher.reset();
+        if(this.matcher.matches()) {
+            String message = this.matcher.group(1).toString();
+            Matcher matcher = commandPattern.matcher(message);
+            return matcher.find() && matcher.group(1) != null ? matcher.group(1).trim() : "";
+        }
+        return "";
     }
 }

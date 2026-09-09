@@ -6,9 +6,11 @@ import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
 import io.lemonjuice.flandre_bot_framework.event.annotation.SubscribeEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.CommandRunEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.MessageEvent;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.TypedSegmentNode;
+import io.lemonjuice.flandre_bot_framework.message.segment.ReplyMessageSegment;
 import io.lemonjuice.flandre_bot_framework.message.segment.TextMessageSegment;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import lombok.extern.log4j.Log4j2;
@@ -41,8 +43,11 @@ public class ChatBotHandler {
 
     private static final ConcurrentHashMap<Long, ChatBotCache> ENABLED_GROUPS = new ConcurrentHashMap<>();
     private static final MessagePattern pattern = MessagePattern.builder()
+            .nextOptNode(new TypedSegmentNode(ReplyMessageSegment.class))
             .nextNode(AtNode.atBot())
+            .startGroup()
             .nextNode(new TypedSegmentNode(TextMessageSegment.class))
+            .endGroup()
             .build();
     private static final String SYS_MSG;
 
@@ -72,16 +77,17 @@ public class ChatBotHandler {
         if(!ENABLED_GROUPS.containsKey(message.groupId)) {
             return;
         }
-        if(!pattern.matcher(message).matches() || ChatBotSwitchCommand.commandPattern.matcher(message).matches()) {
+        MessageMatcher matcher = pattern.matcher(message);
+        if(!matcher.matches() || ChatBotSwitchCommand.commandPattern.matcher(message).simplyMatches()) {
             return;
         }
-        Thread.startVirtualThread(() -> handleChatMsg(message));
+        Thread.startVirtualThread(() -> handleChatMsg(message, matcher));
     }
 
-    private static void handleChatMsg(Message message) {
+    private static void handleChatMsg(Message message, MessageMatcher matcher) {
         ChatBotCache cache = ENABLED_GROUPS.get(message.groupId);
         if(cache == null) return;
-        String userMessage = genUserMessage(message);
+        String userMessage = genUserMessage(message, matcher);
         JSONObject request = buildDsRequest(cache, userMessage);
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpPost post = new HttpPost("https://api.deepseek.com/chat/completions");
@@ -126,8 +132,8 @@ public class ChatBotHandler {
         }
     }
 
-    private static String genUserMessage(Message message) {
-        String text = message.message.get(1).toString();
+    private static String genUserMessage(Message message, MessageMatcher matcher) {
+        String text = matcher.group(1).toString();
         return String.format("%s: %s", message.sender.card, text);
     }
 

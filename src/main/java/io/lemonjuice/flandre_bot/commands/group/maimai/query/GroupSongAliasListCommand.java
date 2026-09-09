@@ -5,6 +5,7 @@ import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
@@ -21,11 +22,16 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
     private static final Pattern commandPattern = Pattern.compile(".+有什么别[名称]");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
+            .startGroup()
             .nextNode(new RegexNode(commandPattern))
+            .endGroup()
             .build();
+
+    private final MessageMatcher matcher;
 
     public GroupSongAliasListCommand(Message command) {
         super(command);
+        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -35,7 +41,7 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message.trim()).matches();
+        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -74,9 +80,13 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
     }
 
     private String getSongName() {
-        String message = this.command.message.getSegments().get(1).toString().trim();
-        Pattern pattern = Pattern.compile("^(.+)有什么别[名称]$");
-        Matcher matcher = pattern.matcher(message);
-        return matcher.find() ? matcher.group(1) : "";
+        this.matcher.reset();
+        if(this.matcher.matches()) {
+            String message = this.matcher.group(1).toString().trim();
+            Pattern pattern = Pattern.compile("^(.+)有什么别[名称]$");
+            Matcher matcher = pattern.matcher(message);
+            return matcher.find() ? matcher.group(1) : "";
+        }
+        return "";
     }
 }

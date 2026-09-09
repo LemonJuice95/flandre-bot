@@ -4,6 +4,7 @@ import io.lemonjuice.flan_mai_plugin.api.DivingFishB50Generator;
 import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
@@ -27,12 +28,19 @@ public class GroupB50Command extends GroupCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/?(mai\\s+)?b50(\\s+(\\d+))?");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
+            .startGroup()
             .nextNode(new RegexNode(commandPattern))
+            .endGroup()
+            .startGroup()
             .nextOptNode(new TypedSegmentNode(AtMessageSegment.class))
+            .endGroup()
             .build();
-    
+
+    private final MessageMatcher matcher;
+
     public GroupB50Command(Message command) {
         super(command);
+        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -42,7 +50,7 @@ public class GroupB50Command extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message.trim()).matches();
+        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -66,14 +74,17 @@ public class GroupB50Command extends GroupCommandRunner {
     }
 
     private long getQQIdParam() {
-        if(this.command.message.getSegments().size() == 3 &&
-                this.command.message.getSegments().get(2) instanceof AtMessageSegment atSeg) {
-            return atSeg.getQQ();
-        }
-        Matcher matcher = commandPattern.matcher(this.command.message.getSegments().get(1).toString());
-        if(matcher.find()) {
-            if(matcher.group(3) != null) {
-                return Long.parseLong(matcher.group(3).trim());
+        this.matcher.reset();
+        if(this.matcher.matches()) {
+            if (this.matcher.group(2) != null &&
+                    this.matcher.group(2).getFirst() instanceof AtMessageSegment atSeg) {
+                return atSeg.getQQ();
+            }
+            Matcher matcher = commandPattern.matcher(this.matcher.group(1).toString());
+            if (matcher.find()) {
+                if (matcher.group(3) != null) {
+                    return Long.parseLong(matcher.group(3).trim());
+                }
             }
         }
         return -1;

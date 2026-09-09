@@ -4,6 +4,7 @@ import io.lemonjuice.flan_sql_support.network.SQLCore;
 import io.lemonjuice.flandre_bot.func.FunctionEnableManager;
 import io.lemonjuice.flandre_bot.func.FunctionNameManager;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
@@ -23,11 +24,16 @@ public class DisableFunctionCommand extends GroupCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/禁用功能\\s+(\\S+)");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
+            .startGroup()
             .nextNode(new RegexNode(commandPattern))
+            .endGroup()
             .build();
+
+    private final MessageMatcher matcher;
 
     public DisableFunctionCommand(Message command) {
         super(command);
+        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -37,7 +43,7 @@ public class DisableFunctionCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message.trim()).matches();
+        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -58,11 +64,13 @@ public class DisableFunctionCommand extends GroupCommandRunner {
     }
 
     private String getFuncMessage() {
-        String message = this.command.message
-                .getSegments().get(1).toString()
-                .trim();
-        Matcher matcher = commandPattern.matcher(message);
+        this.matcher.reset();
+        if(this.matcher.matches()) {
+            String message = this.matcher.group(1).toString();
+            Matcher matcher = commandPattern.matcher(message);
 
-        return matcher.find() ? matcher.group(1) : "";
+            return matcher.find() ? matcher.group(1) : "";
+        }
+        return "";
     }
 }

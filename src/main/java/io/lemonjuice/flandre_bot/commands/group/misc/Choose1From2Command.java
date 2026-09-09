@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.commands.group.misc;
 
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
@@ -16,11 +17,16 @@ public class Choose1From2Command extends GroupCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("(.+)还是(.+)");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
+            .startGroup()
             .nextNode(new RegexNode(commandPattern))
+            .endGroup()
             .build();
+
+    private final MessageMatcher matcher;
 
     public Choose1From2Command(Message command) {
         super(command);
+        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -30,7 +36,7 @@ public class Choose1From2Command extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message.trim()).matches();
+        return this.matcher.matches();
     }
 
     @Override
@@ -40,7 +46,7 @@ public class Choose1From2Command extends GroupCommandRunner {
     }
 
     private String[] getOptions() {
-        Matcher matcher = commandPattern.matcher(this.command.message.getSegments().get(1).toString().trim());
+        Matcher matcher = commandPattern.matcher(this.matcher.group(1).toString().trim());
         return matcher.find() ? new String[]{matcher.group(1), matcher.group(2)} : new String[]{};
     }
 

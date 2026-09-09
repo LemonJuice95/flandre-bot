@@ -7,6 +7,7 @@ import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.RegexNode;
@@ -24,11 +25,16 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/?m(ai\\s+)?info\\s+(.+)");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
+            .startGroup()
             .nextNode(new RegexNode(commandPattern))
+            .endGroup()
             .build();
+
+    private final MessageMatcher matcher;
 
     public GroupSongInfoCommand(Message command) {
         super(command);
+        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -38,7 +44,7 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message.trim()).matches();
+        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -83,7 +89,11 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
     }
 
     private String getSongName() {
-        Matcher matcher = commandPattern.matcher(this.command.message.getSegments().get(1).toString());
-        return matcher.find() ? matcher.group(2).trim() : "";
+        this.matcher.reset();
+        if(this.matcher.matches()) {
+            Matcher matcher = commandPattern.matcher(this.matcher.group(1).toString());
+            return matcher.find() ? matcher.group(2).trim() : "";
+        }
+        return "";
     }
 }
