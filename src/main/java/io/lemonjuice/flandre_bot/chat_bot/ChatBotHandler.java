@@ -140,7 +140,7 @@ public class ChatBotHandler {
     private static JSONObject buildDsRequest(ChatBotCache cache, String newMessage) {
         JSONObject result = new JSONObject();
 
-        result.put("model", "deepseek-v4-flash");
+        result.put("model", "deepseek-flash");
         result.put("temperature", 0.9);
         result.put("max_tokens", 32767);
         result.put("response_format", new JSONObject("{\"type\":\"text\"}"));

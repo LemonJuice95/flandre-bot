@@ -221,7 +221,7 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
     private JSONObject genDSRequestData(String searchText) {
         JSONObject result = new JSONObject();
 
-        result.put("model", "deepseek-v4-flash");
+        result.put("model", "deepseek-flash");
         result.put("temperature", 0.4);
         result.put("max_tokens", 32767);
         result.put("response_format", new JSONObject("{\"type\":\"json_object\"}"));
