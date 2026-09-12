@@ -183,7 +183,7 @@ public class ChatBotHandler {
             }
         }
 
-        String text = String.format("%s: %s", message.sender.card, rawText.toString().trim());
+        String text = String.format("%s: %s", message.sender.card.isEmpty() ? message.sender.nickName : message.sender.card, rawText.toString().trim());
 
         if(imageIds.isEmpty()) {
             return new ChatBotMessage.Body(text);
