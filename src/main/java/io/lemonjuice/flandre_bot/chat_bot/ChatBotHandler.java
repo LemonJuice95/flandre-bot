@@ -2,23 +2,29 @@ package io.lemonjuice.flandre_bot.chat_bot;
 
 import io.lemonjuice.flandre_bot.config.FlandreBotConfig;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
+import io.lemonjuice.flandre_bot_framework.FlandreBot;
 import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
 import io.lemonjuice.flandre_bot_framework.event.annotation.SubscribeEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.CommandRunEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.MessageEvent;
+import io.lemonjuice.flandre_bot_framework.message.MessageSegmentList;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.TypedSegmentNode;
+import io.lemonjuice.flandre_bot_framework.message.segment.ImageMessageSegment;
+import io.lemonjuice.flandre_bot_framework.message.segment.MessageSegment;
 import io.lemonjuice.flandre_bot_framework.message.segment.ReplyMessageSegment;
 import io.lemonjuice.flandre_bot_framework.message.segment.TextMessageSegment;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import lombok.extern.log4j.Log4j2;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -26,8 +32,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 //Love, Death & Robots
@@ -46,10 +62,13 @@ public class ChatBotHandler {
             .nextOptNode(new TypedSegmentNode(ReplyMessageSegment.class))
             .nextNode(AtNode.atBot())
             .startGroup()
-            .nextNode(new TypedSegmentNode(TextMessageSegment.class))
-            .endGroup()
+            .nextOrNodes(new TypedSegmentNode(TextMessageSegment.class), new TypedSegmentNode(ImageMessageSegment.class))
+            .endGroup(MessagePattern.GroupFlag.LOOP)
             .build();
     private static final String SYS_MSG;
+    private static final ConcurrentHashMap<String, ChatBotCachedFile> CACHED_FILES = new ConcurrentHashMap<>();
+    private static final int CACHED_FILES_EXPIRES_IN = 10800;
+    private static final DateTimeFormatter cacheDateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     static {
         List<String> rawMessage = ResourceInit.CHAT_BOT_SYS.get();
@@ -87,9 +106,10 @@ public class ChatBotHandler {
     private static void handleChatMsg(Message message, MessageMatcher matcher) {
         ChatBotCache cache = ENABLED_GROUPS.get(message.groupId);
         if(cache == null) return;
-        String userMessage = genUserMessage(message, matcher);
-        JSONObject request = buildDsRequest(cache, userMessage);
         try (CloseableHttpClient client = HttpClients.createDefault()) {
+            ChatBotMessage.Body userMessage = genUserMessage(message, matcher, client);
+            JSONObject request = buildDsRequest(cache, userMessage);
+
             HttpPost post = new HttpPost("https://api.deepseek.com/chat/completions");
             post.setHeader("Accept", "application/json");
             post.setHeader("Authorization", String.format("Bearer %s", FlandreBotConfig.DEEPSEEK_API_KEY.get()));
@@ -108,6 +128,7 @@ public class ChatBotHandler {
             String reply = "出错了！抱歉……联系一下bot管理员吧~";
             try {
                 result = new JSONObject(responseStr);
+                outputDsResponse(result);
                 reply = result.getJSONArray("choices")
                         .getJSONObject(0)
                         .getJSONObject("message")
@@ -120,24 +141,105 @@ public class ChatBotHandler {
 
             cache.pushBack(
                     new ChatBotMessage(ChatBotMessage.Role.USER, userMessage),
-                    new ChatBotMessage(ChatBotMessage.Role.ASSISTANT, reply)
+                    new ChatBotMessage(ChatBotMessage.Role.ASSISTANT, new ChatBotMessage.Body(reply))
             );
 
             message.getContext().replyWithText(reply);
 
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             message.getContext().replyWithText("出错了！抱歉……联系一下bot管理员吧~");
-            log.error("Chat Bot调用外部API失败！", e);
+            log.error("处理chat bot消息失败！", e);
         }
     }
 
-    private static String genUserMessage(Message message, MessageMatcher matcher) {
-        String text = matcher.group(1).toString();
-        return String.format("%s: %s", message.sender.card, text);
+    private static void outputDsResponse(JSONObject response) {
+        ZonedDateTime nowTime = ZonedDateTime.now(ZoneId.of("Asia/Shanghai"));
+        String fileName = String.format("reply_%s.json", cacheDateFormatter.format(nowTime));
+        File cacheFile = new File("./cache/ds_reply/chat_bot/" + fileName);
+        if(!cacheFile.getParentFile().exists()) {
+            cacheFile.getParentFile().mkdirs();
+        }
+        try (OutputStream output = new FileOutputStream(cacheFile)) {
+            output.write(response.toString().getBytes(StandardCharsets.UTF_8));
+        } catch (IOException e) {
+            log.error("输出AI回复失败！", e);
+        }
     }
 
-    private static JSONObject buildDsRequest(ChatBotCache cache, String newMessage) {
+    private static ChatBotMessage.Body genUserMessage(Message message, MessageMatcher matcher, HttpClient client) throws IOException {
+        MessageSegmentList segments = matcher.group(1);
+        StringBuilder rawText = new StringBuilder();
+        List<String> imageIds = new ArrayList<>();
+        for(MessageSegment seg : segments) {
+            if(seg instanceof TextMessageSegment) {
+                rawText.append(seg.toString()).append("\n");
+            }
+            if(seg instanceof ImageMessageSegment) {
+                ImageMessageSegment imgSeg = (ImageMessageSegment) seg;
+                String imageId = handleImage(imgSeg, client);
+                imageIds.add(imageId);
+                rawText.append("${").append(imgSeg.getFile()).append("}\n");
+            }
+        }
+
+        String text = String.format("%s: %s", message.sender.card, rawText.toString().trim());
+
+        if(imageIds.isEmpty()) {
+            return new ChatBotMessage.Body(text);
+        } else {
+            return new ChatBotMessage.Body(text, imageIds);
+        }
+    }
+
+    /**
+     * @return ds file_id
+     */
+    private static String handleImage(ImageMessageSegment imgSeg, HttpClient client) throws IOException {
+        File imgFile = FlandreBot.getFileHelper().getImageFile(imgSeg);
+
+        ChatBotCachedFile cachedFile = CACHED_FILES.computeIfPresent(imgFile.getName(), (k, v) -> {
+            if(v.isValidNow()) return v;
+            return null;
+        });
+
+        if(cachedFile != null) {
+            return cachedFile.fileId();
+        }
+
+        HttpPost post = new HttpPost("https://api.deepseek.com/files");
+
+        post.addHeader("Authorization", String.format("Bearer %s", FlandreBotConfig.DEEPSEEK_API_KEY.get()));
+        post.addHeader("Accept", "application/json");
+
+        MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+
+        entityBuilder.addTextBody("purpose", "user_data");
+        entityBuilder.addTextBody("expires_after[anchor]", "created_at");
+        entityBuilder.addTextBody("expires_after[seconds]", String.valueOf(CACHED_FILES_EXPIRES_IN));
+        entityBuilder.addBinaryBody("file", imgFile);
+
+        post.setEntity(entityBuilder.build());
+
+        HttpResponse response = client.execute(post);
+        if(response.getStatusLine().getStatusCode() != 200) {
+            log.error("图片上传失败! (HTTP ERROR {})", response.getStatusLine().getStatusCode());
+        }
+
+        String responseStr = EntityUtils.toString(response.getEntity());
+        try {
+            JSONObject respJson = new JSONObject(responseStr);
+            String fileId = respJson.getString("id");
+            long expiresAt = respJson.optLong("expires_at", Long.MAX_VALUE);
+            CACHED_FILES.put(imgFile.getName(), new ChatBotCachedFile(expiresAt, fileId));
+            return fileId;
+        } catch (JSONException e) {
+            log.error("无法解析上传图片时的响应JSON", e);
+            throw e;
+        }
+    }
+
+    private static JSONObject buildDsRequest(ChatBotCache cache, ChatBotMessage.Body newMessage) {
         JSONObject result = new JSONObject();
 
         result.put("model", "deepseek-flash");
@@ -159,11 +261,32 @@ public class ChatBotHandler {
         for(ChatBotMessage cachedMsg : cachedMessages) {
             JSONObject msgJson = new JSONObject();
             msgJson.put("role", cachedMsg.role.toString());
-            msgJson.put("content", cachedMsg.message);
+            msgJson.put("content", serializeBody(cachedMsg.message));
             messages.put(msgJson);
         }
 
         result.put("messages", messages);
+
+        return result;
+    }
+
+    private static Object serializeBody(ChatBotMessage.Body body) {
+        if(body.fileIds() == null || body.fileIds().isEmpty()) {
+            return body.text();
+        }
+        JSONArray result = new JSONArray();
+
+        JSONObject textJson = new JSONObject();
+        textJson.put("type", "text");
+        textJson.put("text", body.text());
+        result.put(textJson);
+
+        for(String id : body.fileIds()) {
+            JSONObject fileJson = new JSONObject();
+            fileJson.put("type", "file");
+            fileJson.put("file_id", id);
+            result.put(fileJson);
+        }
 
         return result;
     }
