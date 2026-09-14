@@ -27,7 +27,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.46'
 
     //框架及插件
-    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.27.0.5'
+    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.27.0'
     implementation 'io.github.lemonjuice95:flandre-sql-support:0.8.0'
     implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.16.6'
 
@@ -37,6 +37,7 @@ dependencies {
 
     //http
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.14'
 
     //图片格式转换
     implementation 'com.twelvemonkeys.imageio:imageio-core:3.9.4'

@@ -59,7 +59,9 @@ public class ChatBotHandler {
 
     private static final ConcurrentHashMap<Long, ChatBotCache> ENABLED_GROUPS = new ConcurrentHashMap<>();
     private static final MessagePattern pattern = MessagePattern.builder()
+            .startGroup()
             .nextOptNode(new TypedSegmentNode(ReplyMessageSegment.class))
+            .endGroup()
             .nextNode(AtNode.atBot())
             .startGroup()
             .nextOrNodes(new TypedSegmentNode(TextMessageSegment.class), new TypedSegmentNode(ImageMessageSegment.class))
@@ -168,22 +170,50 @@ public class ChatBotHandler {
     }
 
     private static ChatBotMessage.Body genUserMessage(Message message, MessageMatcher matcher, HttpClient client) throws IOException {
-        MessageSegmentList segments = matcher.group(1);
-        StringBuilder rawText = new StringBuilder();
+        StringBuilder referredTextRaw = new StringBuilder();
+        String referredUsername = "";
         List<String> imageIds = new ArrayList<>();
+
+        MessageSegmentList replySegments = matcher.group(1);
+        if(replySegments != null) {
+            MessageSegment seg = replySegments.getFirst();
+            if(seg instanceof ReplyMessageSegment replySeg) {
+                Message referredMsg = replySeg.getReferredMsg();
+                referredUsername = referredMsg.sender.card.isEmpty() ? referredMsg.sender.nickName : referredMsg.sender.card;
+                for(MessageSegment segI : referredMsg.message) {
+                    if(segI instanceof ImageMessageSegment imgSeg) {
+                        String imageId = handleImage(imgSeg, client);
+                        imageIds.add(imageId);
+                        referredTextRaw.append("${").append(imgSeg.getFile()).append("}\n");
+                    } else {
+                        referredTextRaw.append(segI.toString()).append("\n");
+                    }
+                }
+            }
+        }
+        String referredText = referredTextRaw.toString();
+
+        StringBuilder rawText = new StringBuilder();
+        MessageSegmentList segments = matcher.group(2);
         for(MessageSegment seg : segments) {
             if(seg instanceof TextMessageSegment) {
                 rawText.append(seg.toString()).append("\n");
             }
-            if(seg instanceof ImageMessageSegment) {
-                ImageMessageSegment imgSeg = (ImageMessageSegment) seg;
+            if(seg instanceof ImageMessageSegment imgSeg) {
                 String imageId = handleImage(imgSeg, client);
                 imageIds.add(imageId);
                 rawText.append("${").append(imgSeg.getFile()).append("}\n");
             }
         }
 
-        String text = String.format("%s: %s", message.sender.card.isEmpty() ? message.sender.nickName : message.sender.card, rawText.toString().trim());
+        String text = String.format("%s%s: %s",
+                referredText.isBlank() ? "" : String.format("[reference]\n%s: %s\n[/reference]\n",
+                            referredUsername,
+                            referredText.trim()
+                        ),
+                message.sender.card.isEmpty() ? message.sender.nickName : message.sender.card,
+                rawText.toString().trim()
+        );
 
         if(imageIds.isEmpty()) {
             return new ChatBotMessage.Body(text);
