@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot.chat_bot;
 
 import io.lemonjuice.flandre_bot.config.FlandreBotConfig;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
+import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.FlandreBot;
 import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
 import io.lemonjuice.flandre_bot_framework.event.annotation.SubscribeEvent;
@@ -179,7 +180,7 @@ public class ChatBotHandler {
             MessageSegment seg = replySegments.getFirst();
             if(seg instanceof ReplyMessageSegment replySeg) {
                 Message referredMsg = replySeg.getReferredMsg();
-                referredUsername = referredMsg.sender.card.isEmpty() ? referredMsg.sender.nickName : referredMsg.sender.card;
+                referredUsername = getUsername(referredMsg);
                 for(MessageSegment segI : referredMsg.message) {
                     if(segI instanceof ImageMessageSegment imgSeg) {
                         String imageId = handleImage(imgSeg, client);
@@ -211,7 +212,7 @@ public class ChatBotHandler {
                             referredUsername,
                             referredText.trim()
                         ),
-                message.sender.card.isEmpty() ? message.sender.nickName : message.sender.card,
+                getUsername(message),
                 rawText.toString().trim()
         );
 
@@ -220,6 +221,14 @@ public class ChatBotHandler {
         } else {
             return new ChatBotMessage.Body(text, imageIds);
         }
+    }
+
+    private static String getUsername(Message message) {
+        String result = NicknameManager.getOrDefault(message.userId, message.sender.nickName);
+        if (!message.sender.card.isEmpty()) {
+            result = message.sender.card;
+        }
+        return result;
     }
 
     /**

@@ -29,6 +29,10 @@ public class NicknameManager {
         return NICKNAMES.get(uid);
     }
 
+    public static String getOrDefault(long uid, String defaultName) {
+        return NICKNAMES.getOrDefault(uid, defaultName);
+    }
+
     public static void appendNickname(long uid, MessageToSend message) {
         if(getNickname(uid) != null) {
             message.appendText(getNickname(uid));
