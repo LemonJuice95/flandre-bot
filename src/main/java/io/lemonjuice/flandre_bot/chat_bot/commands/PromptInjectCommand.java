@@ -48,6 +48,7 @@ public class PromptInjectCommand extends GroupPatternCommandRunner {
                 String content = matcher1.group(2);
                 if(!operation.equals("clear") && content == null) {
                     this.command.getContext().replyWithText("命令格式似乎有误呢……检查一下吧~");
+                    return;
                 }
                 switch (operation) {
                     case "write" ->  ChatBotHandler.injectPrompt(this.command.groupId,
