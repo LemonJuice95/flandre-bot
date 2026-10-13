@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.commands;
 
-import io.lemonjuice.flandre_bot.chat_bot.ChatBotSwitchCommand;
+import io.lemonjuice.flandre_bot.chat_bot.commands.ChatBotSwitchCommand;
+import io.lemonjuice.flandre_bot.chat_bot.commands.PromptInjectCommand;
 import io.lemonjuice.flandre_bot.commands.group.daily.GroupSignInCommand;
 import io.lemonjuice.flandre_bot.commands.group.func.*;
 import io.lemonjuice.flandre_bot.commands.group.interaction.GroupClearNicknameCommand;
@@ -70,5 +71,6 @@ public class CommandInit {
 
         //AI聊天
         COMMANDS.register(ChatBotSwitchCommand::new);
+        COMMANDS.register(PromptInjectCommand::new);
     }
 }

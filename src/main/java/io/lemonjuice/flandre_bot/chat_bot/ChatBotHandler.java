@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.chat_bot;
 
+import io.lemonjuice.flandre_bot.chat_bot.commands.ChatBotSwitchCommand;
 import io.lemonjuice.flandre_bot.config.FlandreBotConfig;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
@@ -33,7 +34,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,7 +44,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 //Love, Death & Robots
@@ -59,6 +58,7 @@ public class ChatBotHandler {
     public static volatile boolean CONFESSION_SWITCH = false;
 
     private static final ConcurrentHashMap<Long, ChatBotCache> ENABLED_GROUPS = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Long, String> INJECTED_PROMPTS = new ConcurrentHashMap<>();
     private static final MessagePattern pattern = MessagePattern.builder()
             .startGroup()
             .nextOptNode(new TypedSegmentNode(ReplyMessageSegment.class))
@@ -68,7 +68,7 @@ public class ChatBotHandler {
             .nextOrNodes(new TypedSegmentNode(TextMessageSegment.class), new TypedSegmentNode(ImageMessageSegment.class))
             .endGroup(MessagePattern.GroupFlag.LOOP)
             .build();
-    private static final String SYS_MSG;
+    public static final String SYS_MSG;
     private static final ConcurrentHashMap<String, ChatBotCachedFile> CACHED_FILES = new ConcurrentHashMap<>();
     private static final int CACHED_FILES_EXPIRES_IN = 10800;
     private static final DateTimeFormatter cacheDateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -81,6 +81,14 @@ public class ChatBotHandler {
             msgBuilder.append("\n");
         }
         SYS_MSG = msgBuilder.toString().trim();
+    }
+
+    public static void injectPrompt(long groupId, String prompt) {
+        INJECTED_PROMPTS.put(groupId, prompt);
+    }
+
+    public static void clearInject(long groupId) {
+        INJECTED_PROMPTS.remove(groupId);
     }
 
     @SubscribeEvent
@@ -111,7 +119,7 @@ public class ChatBotHandler {
         if(cache == null) return;
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             ChatBotMessage.Body userMessage = genUserMessage(message, matcher, client);
-            JSONObject request = buildDsRequest(cache, userMessage);
+            JSONObject request = buildDsRequest(message.groupId, cache, userMessage);
 
             HttpPost post = new HttpPost("https://api.deepseek.com/chat/completions");
             post.setHeader("Accept", "application/json");
@@ -278,7 +286,7 @@ public class ChatBotHandler {
         }
     }
 
-    private static JSONObject buildDsRequest(ChatBotCache cache, ChatBotMessage.Body newMessage) {
+    private static JSONObject buildDsRequest(long groupId, ChatBotCache cache, ChatBotMessage.Body newMessage) {
         JSONObject result = new JSONObject();
 
         result.put("model", "deepseek-flash");
@@ -290,9 +298,10 @@ public class ChatBotHandler {
         JSONArray messages = new JSONArray();
         JSONObject sysMsg = new JSONObject();
         sysMsg.put("role", "system");
-        sysMsg.put("content", SYS_MSG
-            + (CONFESSION_SWITCH ? CONFESSION_TEXT : "")
-        );
+
+        String content = INJECTED_PROMPTS.getOrDefault(groupId,
+                SYS_MSG + (CONFESSION_SWITCH ? CONFESSION_TEXT : ""));
+        sysMsg.put("content", content);
         messages.put(sysMsg);
 
         List<ChatBotMessage> cachedMessages = cache.getMessages();

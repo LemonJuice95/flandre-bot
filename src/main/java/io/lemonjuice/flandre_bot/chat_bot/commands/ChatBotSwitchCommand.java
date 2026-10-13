@@ -1,5 +1,6 @@
-package io.lemonjuice.flandre_bot.chat_bot;
+package io.lemonjuice.flandre_bot.chat_bot.commands;
 
+import io.lemonjuice.flandre_bot.chat_bot.ChatBotHandler;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
