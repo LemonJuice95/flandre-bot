@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PromptInjectCommand extends GroupPatternCommandRunner {
-    private static final Pattern pattern = Pattern.compile("/prompt_inject\\s+(write|overwrite|clear)\\s+(.+)?");
+    private static final Pattern pattern = Pattern.compile("/prompt_inject\\s+(write|overwrite|clear)(\\s+.+)?");
     public static final MessagePattern commandPattern = MessagePattern.builder()
             .nextNode(AtNode.atBot())
             .startGroup()
@@ -45,7 +45,7 @@ public class PromptInjectCommand extends GroupPatternCommandRunner {
             Matcher matcher1 = pattern.matcher(textSeg.getContent().trim());
             if(matcher1.matches()) {
                 String operation = matcher1.group(1);
-                String content = matcher1.group(2);
+                String content = matcher1.group(2).trim();
                 switch (operation) {
                     case "write" ->  ChatBotHandler.injectPrompt(this.command.groupId,
                             ChatBotHandler.INJECTED_PROMPTS.getOrDefault(this.command.groupId, ChatBotHandler.SYS_MSG) + "\n" + content);
