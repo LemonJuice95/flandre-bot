@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.chat_bot;
 
 import io.lemonjuice.flandre_bot.chat_bot.commands.ChatBotSwitchCommand;
+import io.lemonjuice.flandre_bot.chat_bot.commands.PromptInjectCommand;
 import io.lemonjuice.flandre_bot.config.FlandreBotConfig;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
@@ -96,7 +97,8 @@ public class ChatBotHandler {
         if(!ENABLED_GROUPS.containsKey(event.getMessage().groupId)) {
             return;
         }
-        if(!(event.getCommandRunner() instanceof ChatBotSwitchCommand)) {
+        if(!(event.getCommandRunner() instanceof ChatBotSwitchCommand) &&
+                !(event.getCommandRunner() instanceof PromptInjectCommand)) {
             event.setCancelled(true);
         }
     }
@@ -108,7 +110,9 @@ public class ChatBotHandler {
             return;
         }
         MessageMatcher matcher = pattern.matcher(message);
-        if(!matcher.matches() || ChatBotSwitchCommand.commandPattern.matcher(message).simplyMatches()) {
+        if(!matcher.matches() ||
+                ChatBotSwitchCommand.commandPattern.matcher(message).simplyMatches() ||
+                PromptInjectCommand.commandPattern.matcher(message).simplyMatches()) {
             return;
         }
         Thread.startVirtualThread(() -> handleChatMsg(message, matcher));

@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class PromptInjectCommand extends GroupPatternCommandRunner {
     private static final Pattern pattern = Pattern.compile("/prompt_inject\\s+(write|overwrite|clear)\\s+(.+)?");
-    private static final MessagePattern commandPattern = MessagePattern.builder()
+    public static final MessagePattern commandPattern = MessagePattern.builder()
             .nextNode(AtNode.atBot())
             .startGroup()
             .nextNode(new RegexNode(pattern))
