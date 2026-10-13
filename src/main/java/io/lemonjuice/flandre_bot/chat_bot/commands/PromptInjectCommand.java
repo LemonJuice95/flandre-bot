@@ -45,11 +45,14 @@ public class PromptInjectCommand extends GroupPatternCommandRunner {
             Matcher matcher1 = pattern.matcher(textSeg.getContent().trim());
             if(matcher1.matches()) {
                 String operation = matcher1.group(1);
-                String content = matcher1.group(2).trim();
+                String content = matcher1.group(2);
+                if(!operation.equals("clear") && content == null) {
+                    this.command.getContext().replyWithText("命令格式似乎有误呢……检查一下吧~");
+                }
                 switch (operation) {
                     case "write" ->  ChatBotHandler.injectPrompt(this.command.groupId,
-                            ChatBotHandler.INJECTED_PROMPTS.getOrDefault(this.command.groupId, ChatBotHandler.SYS_MSG) + "\n" + content);
-                    case "overwrite" -> ChatBotHandler.injectPrompt(this.command.groupId, content);
+                            ChatBotHandler.INJECTED_PROMPTS.getOrDefault(this.command.groupId, ChatBotHandler.SYS_MSG) + "\n" + content.trim());
+                    case "overwrite" -> ChatBotHandler.injectPrompt(this.command.groupId, content.trim());
                     case "clear" -> ChatBotHandler.clearInject(this.command.groupId);
                 }
                 this.command.getContext().replyWithText("操作成功~");
