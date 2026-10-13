@@ -337,4 +337,8 @@ public class ChatBotHandler {
     public static void disableChatBot(long groupId) {
         ENABLED_GROUPS.remove(groupId);
     }
+
+    public static void cleanCachedFile() {
+        CACHED_FILES.entrySet().removeIf((entry) -> !entry.getValue().isValidNow());
+    }
 }

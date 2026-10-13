@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.scheduled;
 
 import io.lemonjuice.flandre_bot.CacheCleaner;
+import io.lemonjuice.flandre_bot.chat_bot.ChatBotHandler;
 import io.lemonjuice.flandre_bot_framework.network.NetworkContainer;
 import lombok.extern.log4j.Log4j2;
 import org.quartz.Job;
@@ -13,6 +14,7 @@ public class ThreeHoursRefreshJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         this.refreshMessages();
         CacheCleaner.clean();
+        ChatBotHandler.cleanCachedFile();
     }
 
     private void refreshMessages() {
