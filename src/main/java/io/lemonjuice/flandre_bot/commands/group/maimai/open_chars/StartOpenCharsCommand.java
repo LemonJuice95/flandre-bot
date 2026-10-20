@@ -5,7 +5,9 @@ import io.lemonjuice.flan_mai_plugin.games.condition.LevelCondition;
 import io.lemonjuice.flan_mai_plugin.games.condition.SongFilterCondition;
 import io.lemonjuice.flandre_bot.commands.group.maimai.GeneralMaiPatterns;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
+import io.lemonjuice.flandre_bot_framework.command.annotations.Resettable;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -20,7 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_games")
-public class StartOpenCharsCommand extends GroupCommandRunner {
+public class StartOpenCharsCommand extends GroupPatternCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/舞萌开字母(\\s+\\S+)?");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
@@ -29,14 +31,13 @@ public class StartOpenCharsCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
+    @Resettable
     private final List<SongFilterCondition> conditions = new ArrayList<>();
-    private final MessageMatcher matcher;
-
+    @Resettable
     private boolean special = false;
 
     public StartOpenCharsCommand(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -45,8 +46,8 @@ public class StartOpenCharsCommand extends GroupCommandRunner {
     }
 
     @Override
-    public boolean matches() {
-        return this.matcher.simplyMatches();
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override
@@ -65,23 +66,34 @@ public class StartOpenCharsCommand extends GroupCommandRunner {
     }
 
     private void parseConditions() {
-        this.matcher.reset();
-        if(this.matcher.matches()) {
-            String commandStr = this.matcher.group(1).toString();
-            if (commandStr.contains("sp") && PermissionLevel.DEBUG.validatePermission(this.getCommand())) {
-                this.special = true;
-                return;
-            }
-            Matcher levelMatcher = GeneralMaiPatterns.levelCondition.matcher(commandStr);
-            if (levelMatcher.find()) {
-                String modeStr = levelMatcher.group(1);
-                modeStr = modeStr.isEmpty() ? "=" : modeStr;
-                LevelCondition.Mode mode = GeneralMaiPatterns.LEVEL_MODE_MAP.get(modeStr);
-
-                String level = levelMatcher.group(2);
-                LevelCondition levelCondition = new LevelCondition(mode, level);
-                this.conditions.add(levelCondition);
-            }
+        String commandStr = this.matcher.group(1).toString();
+        if (commandStr.contains("sp") && PermissionLevel.DEBUG.validatePermission(this.getCommand())) {
+            this.special = true;
+            return;
         }
+        Matcher levelMatcher = GeneralMaiPatterns.levelCondition.matcher(commandStr);
+        if (levelMatcher.find()) {
+            String modeStr = levelMatcher.group(1);
+            modeStr = modeStr.isEmpty() ? "=" : modeStr;
+            LevelCondition.Mode mode = GeneralMaiPatterns.LEVEL_MODE_MAP.get(modeStr);
+
+            String level = levelMatcher.group(2);
+            LevelCondition levelCondition = new LevelCondition(mode, level);
+            this.conditions.add(levelCondition);
+        }
+    }
+
+    @Override
+    public void free() {
+        super.free();
+        this.conditions.clear();
+        this.special = false;
+    }
+
+    @Override
+    public void reset(Message command) {
+        super.reset(command);
+        this.conditions.clear();
+        this.special = false;
     }
 }

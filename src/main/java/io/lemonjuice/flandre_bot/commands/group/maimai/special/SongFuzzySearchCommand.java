@@ -6,6 +6,7 @@ import io.lemonjuice.flandre_bot.config.FlandreBotConfig;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -41,7 +42,7 @@ import java.util.regex.Pattern;
 
 @Log4j2
 @FunctionCommand(value = "mai_deepseek", report = false)
-public class SongFuzzySearchCommand extends GroupCommandRunner {
+public class SongFuzzySearchCommand extends GroupPatternCommandRunner {
     private static String SYS_MSG = "";
 
     private static final DateTimeFormatter cacheDateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -53,11 +54,8 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
-
     public SongFuzzySearchCommand(Message command) {
         super(command);
-        this.matcher = commandPattern.matcher(command);
     }
 
     public static void init() {
@@ -97,13 +95,13 @@ public class SongFuzzySearchCommand extends GroupCommandRunner {
     }
 
     @Override
-    public IPermissionLevel getPermissionLevel() {
-        return PermissionLevel.NORMAL;
+    public MessagePattern getPattern() {
+        return commandPattern;
     }
 
     @Override
-    public boolean matches() {
-        return this.matcher.matches();
+    public IPermissionLevel getPermissionLevel() {
+        return PermissionLevel.NORMAL;
     }
 
     @Override

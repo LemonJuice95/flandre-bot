@@ -4,6 +4,7 @@ import io.lemonjuice.flan_mai_plugin.api.DivingFishB50Generator;
 import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -24,7 +25,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
-public class GroupB50Command extends GroupCommandRunner {
+public class GroupB50Command extends GroupPatternCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/?(mai\\s+)?b50(\\s+(\\d+))?");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
@@ -36,21 +37,18 @@ public class GroupB50Command extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
-
     public GroupB50Command(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
+    }
+
+    @Override
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override
     public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
-    }
-
-    @Override
-    public boolean matches() {
-        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -74,17 +72,14 @@ public class GroupB50Command extends GroupCommandRunner {
     }
 
     private long getQQIdParam() {
-        this.matcher.reset();
-        if(this.matcher.matches()) {
-            if (this.matcher.group(2) != null &&
-                    this.matcher.group(2).getFirst() instanceof AtMessageSegment atSeg) {
-                return atSeg.getQQ();
-            }
-            Matcher matcher = commandPattern.matcher(this.matcher.group(1).toString());
-            if (matcher.find()) {
-                if (matcher.group(3) != null) {
-                    return Long.parseLong(matcher.group(3).trim());
-                }
+        if (this.matcher.group(2) != null &&
+                this.matcher.group(2).getFirst() instanceof AtMessageSegment atSeg) {
+            return atSeg.getQQ();
+        }
+        Matcher matcher = commandPattern.matcher(this.matcher.group(1).toString());
+        if (matcher.find()) {
+            if (matcher.group(3) != null) {
+                return Long.parseLong(matcher.group(3).trim());
             }
         }
         return -1;

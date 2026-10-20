@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot.commands.group.misc;
 
 import io.lemonjuice.flandre_bot.utils.BirthdayManager;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -16,7 +17,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class GroupBirthdayCommand extends GroupCommandRunner {
+public class GroupBirthdayCommand extends GroupPatternCommandRunner {
     private static final Pattern pattern = Pattern.compile("/生日 (\\d+)/(\\d+)");
     private static final MessagePattern messagePattern = MessagePattern.builder()
             .nextNode(AtNode.atBot())
@@ -25,10 +26,8 @@ public class GroupBirthdayCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
     public GroupBirthdayCommand(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -37,8 +36,8 @@ public class GroupBirthdayCommand extends GroupCommandRunner {
     }
 
     @Override
-    public boolean matches() {
-        return this.matcher.matches();
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override

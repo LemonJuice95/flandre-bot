@@ -3,6 +3,7 @@ package io.lemonjuice.flandre_bot.commands.group.func;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -18,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @FunctionCommand("dice")
-public class GroupDiceCommand extends GroupCommandRunner {
+public class GroupDiceCommand extends GroupPatternCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/rd\\s+(\\S+)");
     private static final Pattern standard = Pattern.compile("^(\\d+)?d\\d+$", Pattern.CASE_INSENSITIVE);
     private static final Pattern fudge2 = Pattern.compile("^(\\d+)?dF(.2)?$", Pattern.CASE_INSENSITIVE);
@@ -31,20 +32,18 @@ public class GroupDiceCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
     public GroupDiceCommand(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
+    }
+
+    @Override
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override
     public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
-    }
-
-    @Override
-    public boolean matches() {
-        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -61,13 +60,9 @@ public class GroupDiceCommand extends GroupCommandRunner {
     }
 
     private String getExpression() {
-        this.matcher.reset();
-        if(this.matcher.matches()) {
-            String message = this.matcher.group(1).toString();
-            Matcher matcher = commandPattern.matcher(message);
-            return matcher.find() ? matcher.group(1) : "";
-        }
-        return "";
+        String message = this.matcher.group(1).toString();
+        Matcher matcher = commandPattern.matcher(message);
+        return matcher.find() ? matcher.group(1) : "";
     }
 
     private String getResult(String expression) {

@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.commands.group.misc;
 
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -13,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Choose1From2Command extends GroupCommandRunner {
+public class Choose1From2Command extends GroupPatternCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("(.+)还是(.+)");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
@@ -22,21 +23,18 @@ public class Choose1From2Command extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
-
     public Choose1From2Command(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
+    }
+
+    @Override
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override
     public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
-    }
-
-    @Override
-    public boolean matches() {
-        return this.matcher.matches();
     }
 
     @Override

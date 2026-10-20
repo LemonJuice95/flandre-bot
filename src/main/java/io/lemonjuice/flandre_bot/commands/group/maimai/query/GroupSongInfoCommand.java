@@ -7,6 +7,7 @@ import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -21,7 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
-public class GroupSongInfoCommand extends GroupCommandRunner {
+public class GroupSongInfoCommand extends GroupPatternCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/?m(ai\\s+)?info\\s+(.+)");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
@@ -30,21 +31,18 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
-
     public GroupSongInfoCommand(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
+    }
+
+    @Override
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override
     public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
-    }
-
-    @Override
-    public boolean matches() {
-        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -89,11 +87,7 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
     }
 
     private String getSongName() {
-        this.matcher.reset();
-        if(this.matcher.matches()) {
-            Matcher matcher = commandPattern.matcher(this.matcher.group(1).toString());
-            return matcher.find() ? matcher.group(2).trim() : "";
-        }
-        return "";
+        Matcher matcher = commandPattern.matcher(this.matcher.group(1).toString());
+        return matcher.find() ? matcher.group(2).trim() : "";
     }
 }

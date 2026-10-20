@@ -2,6 +2,7 @@ package io.lemonjuice.flandre_bot.commands.group.special;
 
 import io.lemonjuice.flan_sql_support.network.SQLCore;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
+import io.lemonjuice.flandre_bot_framework.command.annotations.Resettable;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot_framework.model.Message;
 import io.lemonjuice.flandre_bot_framework.permission.IPermissionLevel;
@@ -24,6 +25,7 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
 
     private volatile static UpdateInfo lastInfo;
 
+    @Resettable
     private final Matcher matcher;
 
     public K11PeopleNumberCommand(Message command) {
@@ -154,6 +156,18 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
                 rwLock.readLock().unlock();
             }
         }
+    }
+
+    @Override
+    public void free() {
+        super.free();
+        this.matcher.reset("");
+    }
+
+    @Override
+    public void reset(Message command) {
+        super.reset(command);
+        this.matcher.reset(command.message.toString().trim());
     }
 
     public record UpdateInfo(String userName, long qq, String time, int number) {

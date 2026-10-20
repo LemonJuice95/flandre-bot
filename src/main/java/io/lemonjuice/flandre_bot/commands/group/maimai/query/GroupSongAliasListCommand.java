@@ -5,6 +5,7 @@ import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -18,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
-public class GroupSongAliasListCommand extends GroupCommandRunner {
+public class GroupSongAliasListCommand extends GroupPatternCommandRunner {
     private static final Pattern commandPattern = Pattern.compile(".+有什么别[名称]");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
@@ -27,11 +28,8 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
-
     public GroupSongAliasListCommand(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
@@ -40,8 +38,8 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
     }
 
     @Override
-    public boolean matches() {
-        return this.matcher.simplyMatches();
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override

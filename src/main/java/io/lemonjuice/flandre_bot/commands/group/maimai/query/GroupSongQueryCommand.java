@@ -6,6 +6,7 @@ import io.lemonjuice.flan_mai_plugin.model.Song;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -20,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @FunctionCommand("maimai_query")
-public class GroupSongQueryCommand extends GroupCommandRunner {
+public class GroupSongQueryCommand extends GroupPatternCommandRunner {
     private static final Pattern commandPattern1 = Pattern.compile("/mai\\s+song\\s+.+");
     private static final Pattern commandPattern2 = Pattern.compile(".+是什么歌");
 
@@ -31,21 +32,18 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
-
     public GroupSongQueryCommand(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
+    }
+
+    @Override
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override
     public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
-    }
-
-    @Override
-    public boolean matches() {
-        return this.matcher.matches();
     }
 
     @Override

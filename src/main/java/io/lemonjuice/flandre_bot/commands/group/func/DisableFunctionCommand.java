@@ -4,6 +4,7 @@ import io.lemonjuice.flan_sql_support.network.SQLCore;
 import io.lemonjuice.flandre_bot.func.FunctionEnableManager;
 import io.lemonjuice.flandre_bot.func.FunctionNameManager;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -20,7 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Log4j2
-public class DisableFunctionCommand extends GroupCommandRunner {
+public class DisableFunctionCommand extends GroupPatternCommandRunner {
     private static final Pattern commandPattern = Pattern.compile("/禁用功能\\s+(\\S+)");
     private static final MessagePattern messagePattern = new MessagePattern.Builder()
             .nextNode(AtNode.atBot())
@@ -29,21 +30,18 @@ public class DisableFunctionCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
-
     public DisableFunctionCommand(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
+    }
+
+    @Override
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override
     public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.ADMIN;
-    }
-
-    @Override
-    public boolean matches() {
-        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -64,13 +62,9 @@ public class DisableFunctionCommand extends GroupCommandRunner {
     }
 
     private String getFuncMessage() {
-        this.matcher.reset();
-        if(this.matcher.matches()) {
-            String message = this.matcher.group(1).toString();
-            Matcher matcher = commandPattern.matcher(message);
+        String message = this.matcher.group(1).toString();
+        Matcher matcher = commandPattern.matcher(message);
 
-            return matcher.find() ? matcher.group(1) : "";
-        }
-        return "";
+        return matcher.find() ? matcher.group(1) : "";
     }
 }

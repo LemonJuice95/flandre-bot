@@ -6,6 +6,7 @@ import io.lemonjuice.flan_mai_plugin.exception.NotInitializedException;
 import io.lemonjuice.flan_mai_plugin.utils.enums.MaiVersion;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -21,7 +22,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @FunctionCommand("maimai_query")
-public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
+public class GroupPlateCompleteTableCommand extends GroupPatternCommandRunner {
     private static final String versions = Arrays.stream(MaiVersion.values()).map(MaiVersion::getMatchingNames).collect(Collectors.joining()).replaceFirst("真", "");
 
     private static final Pattern commandPattern = Pattern.compile(String.format("([%s霸](极|将|神|舞舞|者))完成表", versions));
@@ -32,11 +33,13 @@ public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
-
     public GroupPlateCompleteTableCommand(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
+    }
+
+    @Override
+    public MessagePattern getPattern() {
+        return messagePattern;
     }
 
     @Override
@@ -45,47 +48,39 @@ public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
     }
 
     @Override
-    public boolean matches() {
-        return this.matcher.simplyMatches();
-    }
-
-    @Override
     public void apply() {
-        this.matcher.reset();
-        if(this.matcher.matches()) {
-            Matcher matcher = commandPattern.matcher(this.matcher.group(1).toString().trim());
-            if (matcher.find()) {
+        Matcher matcher = commandPattern.matcher(this.matcher.group(1).toString().trim());
+        if (matcher.find()) {
+            try {
+                String plateName = matcher.group(1);
+                if (plateName.charAt(0) == '舞' || plateName.equals("霸者")) {
+                    this.getCommand().getContext().replyWithText("芙兰暂时还不会画[舞]系牌子的表格呢……");
+                    return;
+                }
                 try {
-                    String plateName = matcher.group(1);
-                    if (plateName.charAt(0) == '舞' || plateName.equals("霸者")) {
-                        this.getCommand().getContext().replyWithText("芙兰暂时还不会画[舞]系牌子的表格呢……");
-                        return;
-                    }
-                    try {
-                        BufferedImage image = CompletionTableGenerator.generateWithPlates(this.getCommand().userId, plateName);
-                        if (image != null) {
-                            this.getCommand().getContext().prepareMessageToSend()
-                                    .appendReply()
-                                    .appendImage(image, "PNG")
-                                    .send();
-                        } else {
-                            this.getCommand().getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
-                        }
-                    } catch (IllegalArgumentException e) {
-                        if (e.getMessage().equals("不存在的牌子")) {
-                            this.getCommand().getContext().replyWithText("没有这样的牌子哦~");
-                        } else {
-                            throw e;
-                        }
-                    }
-                } catch (NotInitializedException e) {
-                    this.getCommand().getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
-                } catch (DivingFishException e) {
-                    if (e instanceof DivingFishException.Unbound) {
-                        this.getCommand().getContext().replyWithText("芙兰查不到你的成绩信息呢……\n你给芙兰授权了吗？\n如果没有的话请先使用“/水鱼授权”进行授权哦~");
+                    BufferedImage image = CompletionTableGenerator.generateWithPlates(this.getCommand().userId, plateName);
+                    if (image != null) {
+                        this.getCommand().getContext().prepareMessageToSend()
+                                .appendReply()
+                                .appendImage(image, "PNG")
+                                .send();
                     } else {
                         this.getCommand().getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
                     }
+                } catch (IllegalArgumentException e) {
+                    if (e.getMessage().equals("不存在的牌子")) {
+                        this.getCommand().getContext().replyWithText("没有这样的牌子哦~");
+                    } else {
+                        throw e;
+                    }
+                }
+            } catch (NotInitializedException e) {
+                this.getCommand().getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
+            } catch (DivingFishException e) {
+                if (e instanceof DivingFishException.Unbound) {
+                    this.getCommand().getContext().replyWithText("芙兰查不到你的成绩信息呢……\n你给芙兰授权了吗？\n如果没有的话请先使用“/水鱼授权”进行授权哦~");
+                } else {
+                    this.getCommand().getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
                 }
             }
         }

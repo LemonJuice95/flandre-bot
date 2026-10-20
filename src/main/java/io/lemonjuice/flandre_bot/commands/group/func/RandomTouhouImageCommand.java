@@ -4,6 +4,7 @@ import io.lemonjuice.flandre_bot.api.RandomTouhouImage;
 import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
+import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessageMatcher;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
 import io.lemonjuice.flandre_bot_framework.message.pattern.node.AtNode;
@@ -19,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @FunctionCommand("random_touhou_image")
-public class RandomTouhouImageCommand extends GroupCommandRunner {
+public class RandomTouhouImageCommand extends GroupPatternCommandRunner {
     private static final JSONObject NAME_TAGS = ResourceInit.TOUHOU_CHARACTER_NAMES.get();
 
     private static final Pattern commandPattern = Pattern.compile("/随机东方图(\\s+\\S+)?");
@@ -30,21 +31,18 @@ public class RandomTouhouImageCommand extends GroupCommandRunner {
             .endGroup()
             .build();
 
-    private final MessageMatcher matcher;
+    @Override
+    public MessagePattern getPattern() {
+        return messagePattern;
+    }
 
     public RandomTouhouImageCommand(Message command) {
         super(command);
-        this.matcher = messagePattern.matcher(command);
     }
 
     @Override
     public IPermissionLevel getPermissionLevel() {
         return PermissionLevel.NORMAL;
-    }
-
-    @Override
-    public boolean matches() {
-        return this.matcher.simplyMatches();
     }
 
     @Override
@@ -66,12 +64,8 @@ public class RandomTouhouImageCommand extends GroupCommandRunner {
     }
 
     private String getTag() {
-        this.matcher.reset();
-        if(this.matcher.matches()) {
-            String message = this.matcher.group(1).toString();
-            Matcher matcher = commandPattern.matcher(message);
-            return matcher.find() && matcher.group(1) != null ? matcher.group(1).trim() : "";
-        }
-        return "";
+        String message = this.matcher.group(1).toString();
+        Matcher matcher = commandPattern.matcher(message);
+        return matcher.find() && matcher.group(1) != null ? matcher.group(1).trim() : "";
     }
 }
