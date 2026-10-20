@@ -28,7 +28,7 @@ public class GroupClearNicknameCommand extends SimpleGroupCommandRunner {
 
     @Override
     public void apply() {
-        NicknameManager.removeNickname(this.command.userId);
-        this.command.getContext().replyWithText("了解~ 芙兰以后不会再用昵称称呼你啦");
+        NicknameManager.removeNickname(this.getCommand().userId);
+        this.getCommand().getContext().replyWithText("了解~ 芙兰以后不会再用昵称称呼你啦");
     }
 }

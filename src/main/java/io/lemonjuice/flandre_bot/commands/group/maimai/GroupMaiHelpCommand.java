@@ -33,6 +33,6 @@ public class GroupMaiHelpCommand extends SimpleGroupCommandRunner {
 
     @Override
     public void apply() {
-        this.command.getContext().sendForwardMessage(DOC);
+        this.getCommand().getContext().sendForwardMessage(DOC);
     }
 }

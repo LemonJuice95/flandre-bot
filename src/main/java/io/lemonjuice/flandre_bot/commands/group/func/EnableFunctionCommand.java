@@ -51,16 +51,16 @@ public class EnableFunctionCommand extends GroupCommandRunner {
     public void apply() {
         String funcMessage = this.getFuncMessage();
         if(funcMessage.isEmpty()) {
-            this.command.getContext().replyWithText("格式错误\n正确格式：/启用功能 <功能名称>\n使用 \"/可配置功能列表\" 来查询所有可以手动启用/禁用的功能");
+            this.getCommand().getContext().replyWithText("格式错误\n正确格式：/启用功能 <功能名称>\n使用 \"/可配置功能列表\" 来查询所有可以手动启用/禁用的功能");
             return;
         }
 
         if(FunctionNameManager.CONFIGURABLE_GROUP_FUNCTIONS.containsKey(funcMessage)) {
             String funcName = FunctionNameManager.CONFIGURABLE_GROUP_FUNCTIONS.get(funcMessage);
-            FunctionEnableManager.enableGroupFunc(this.command.groupId, funcName);
-            this.command.getContext().replyWithText("已启用功能 " + funcMessage);
+            FunctionEnableManager.enableGroupFunc(this.getCommand().groupId, funcName);
+            this.getCommand().getContext().replyWithText("已启用功能 " + funcMessage);
         } else {
-            this.command.getContext().replyWithText("未找到该功能\n使用 \"/可配置功能列表\" 来查询所有可以手动启用/禁用的功能");
+            this.getCommand().getContext().replyWithText("未找到该功能\n使用 \"/可配置功能列表\" 来查询所有可以手动启用/禁用的功能");
         }
     }
 

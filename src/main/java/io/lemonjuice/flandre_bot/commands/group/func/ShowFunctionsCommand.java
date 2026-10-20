@@ -35,6 +35,6 @@ public class ShowFunctionsCommand extends SimpleGroupCommandRunner {
         for(String s : functions) {
             messageRaw.append(s).append("\n");
         }
-        this.command.getContext().replyWithText(messageRaw.toString().trim());
+        this.getCommand().getContext().replyWithText(messageRaw.toString().trim());
     }
 }

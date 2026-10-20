@@ -51,7 +51,7 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
             List<Song> songList = SongManager.searchSong(name);
 
             if (songList.isEmpty()) {
-                this.command.getContext().replyWithText("没有找到叫做\"" + name + "\"的歌曲诶...");
+                this.getCommand().getContext().replyWithText("没有找到叫做\"" + name + "\"的歌曲诶...");
             } else if (songList.size() == 1) {
                 Song song = songList.getFirst();
                 StringBuilder reply = new StringBuilder("找到啦！\nid");
@@ -62,7 +62,7 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
                 for (String alias : song.alias) {
                     reply.append(alias).append("\n");
                 }
-                this.command.getContext().replyWithText(reply.toString().trim());
+                this.getCommand().getContext().replyWithText(reply.toString().trim());
             } else {
                 StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
                 for (Song s : songList) {
@@ -72,10 +72,10 @@ public class GroupSongAliasListCommand extends GroupCommandRunner {
                     reply.append(s.title);
                     reply.append("\n");
                 }
-                this.command.getContext().replyWithText(reply.toString().trim());
+                this.getCommand().getContext().replyWithText(reply.toString().trim());
             }
         } catch (NotInitializedException e) {
-            this.command.getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
+            this.getCommand().getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
         }
     }
 

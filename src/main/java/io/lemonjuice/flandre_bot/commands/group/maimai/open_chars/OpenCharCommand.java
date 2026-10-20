@@ -23,31 +23,31 @@ public class OpenCharCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return OpenCharsManager.hasProcess(this.command.groupId) &&
-                commandPattern.matcher(this.command.message.toString()).matches();
+        return OpenCharsManager.hasProcess(this.getCommand().groupId) &&
+                commandPattern.matcher(this.getCommand().message.toString()).matches();
     }
 
     @Override
     public void apply() {
-        Matcher matcher = commandPattern.matcher(this.command.message.toString().trim());
+        Matcher matcher = commandPattern.matcher(this.getCommand().message.toString().trim());
         if(matcher.find()) {
             String str = matcher.group(1);
             if(str.length() != 1) {
-                this.command.getContext().replyWithText("一次只能开一个字符哦~");
+                this.getCommand().getContext().replyWithText("一次只能开一个字符哦~");
             } else {
-                OpenCharsProcess process = OpenCharsManager.getProcess(this.command.groupId);
+                OpenCharsProcess process = OpenCharsManager.getProcess(this.getCommand().groupId);
                 if(process.openChar(str.charAt(0))) {
-                    this.command.getContext().sendText(OpenCharsManager.makeMessage(this.command.groupId));
+                    this.getCommand().getContext().sendText(OpenCharsManager.makeMessage(this.getCommand().groupId));
                     if(process.checkAccomplished()) {
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException ignored) {
                         }
-                        OpenCharsManager.stopProcess(this.command.groupId);
-                        this.command.getContext().sendText("看样子游戏结束了呢~");
+                        OpenCharsManager.stopProcess(this.getCommand().groupId);
+                        this.getCommand().getContext().sendText("看样子游戏结束了呢~");
                     }
                 } else {
-                    this.command.getContext().replyWithText("这个字符已经被开过了哦~");
+                    this.getCommand().getContext().replyWithText("这个字符已经被开过了哦~");
                 }
             }
         }

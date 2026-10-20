@@ -47,19 +47,19 @@ public class PromptInjectCommand extends GroupPatternCommandRunner {
                 String operation = matcher1.group(1);
                 String content = matcher1.group(2);
                 if(!operation.equals("clear") && content == null) {
-                    this.command.getContext().replyWithText("命令格式似乎有误呢……检查一下吧~");
+                    this.getCommand().getContext().replyWithText("命令格式似乎有误呢……检查一下吧~");
                     return;
                 }
                 switch (operation) {
-                    case "write" ->  ChatBotHandler.injectPrompt(this.command.groupId,
-                            ChatBotHandler.INJECTED_PROMPTS.getOrDefault(this.command.groupId, ChatBotHandler.SYS_MSG) + "\n" + content.trim());
-                    case "overwrite" -> ChatBotHandler.injectPrompt(this.command.groupId, content.trim());
-                    case "clear" -> ChatBotHandler.clearInject(this.command.groupId);
+                    case "write" ->  ChatBotHandler.injectPrompt(this.getCommand().groupId,
+                            ChatBotHandler.INJECTED_PROMPTS.getOrDefault(this.getCommand().groupId, ChatBotHandler.SYS_MSG) + "\n" + content.trim());
+                    case "overwrite" -> ChatBotHandler.injectPrompt(this.getCommand().groupId, content.trim());
+                    case "clear" -> ChatBotHandler.clearInject(this.getCommand().groupId);
                 }
-                this.command.getContext().replyWithText("操作成功~");
+                this.getCommand().getContext().replyWithText("操作成功~");
                 return;
             }
         }
-        this.command.getContext().replyWithText("命令格式似乎有误呢……检查一下吧~");
+        this.getCommand().getContext().replyWithText("命令格式似乎有误呢……检查一下吧~");
     }
 }

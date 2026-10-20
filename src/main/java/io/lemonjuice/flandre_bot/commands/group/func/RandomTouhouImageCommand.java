@@ -53,10 +53,10 @@ public class RandomTouhouImageCommand extends GroupCommandRunner {
         tag = tryMappingTag(tag);
         String image = RandomTouhouImage.get(tag);
         if(image.isEmpty()) {
-            this.command.getContext().replyWithText("获取失败……芙兰明明已经很努力了……");
+            this.getCommand().getContext().replyWithText("获取失败……芙兰明明已经很努力了……");
             return;
         }
-        this.command.getContext().sendMessage(List.of(new ImageMessageSegment("file:///" + image)));
+        this.getCommand().getContext().sendMessage(List.of(new ImageMessageSegment("file:///" + image)));
     }
 
     private String tryMappingTag(String rawTag) {

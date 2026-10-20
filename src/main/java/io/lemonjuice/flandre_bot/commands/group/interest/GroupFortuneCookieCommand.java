@@ -43,14 +43,14 @@ public class GroupFortuneCookieCommand extends SimpleGroupCommandRunner {
 
     @Override
     public void apply() {
-        UUID uuid = new UUID(this.command.groupId, this.command.userId);
+        UUID uuid = new UUID(this.getCommand().groupId, this.getCommand().userId);
         int index = ThreadLocalRandom.current().nextInt(COOKIES.size());
         if(Objects.equals(CACHE.putIfAbsent(uuid, index), null)) {
-            this.command.getContext().replyWithText("送" + NicknameManager.getNickname(this.command.userId) +
+            this.getCommand().getContext().replyWithText("送" + NicknameManager.getNickname(this.getCommand().userId) +
                     "一块可口的饼干！\n咦？饼干里面有一张纸条，上面写着: \n“" +
                     COOKIES.get(index) + "”");
         } else {
-            this.command.getContext().replyWithText("你好像刚刚才领取过饼干诶……留下一些给别人吧~\n芙兰每个整点都会烤一次饼干！\n上一次你领到的饼干纸条是：\n“" +
+            this.getCommand().getContext().replyWithText("你好像刚刚才领取过饼干诶……留下一些给别人吧~\n芙兰每个整点都会烤一次饼干！\n上一次你领到的饼干纸条是：\n“" +
                     COOKIES.get(CACHE.get(uuid)) + "”");
         }
     }

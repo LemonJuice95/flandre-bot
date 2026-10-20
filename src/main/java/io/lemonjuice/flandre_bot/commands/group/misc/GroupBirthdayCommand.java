@@ -49,10 +49,10 @@ public class GroupBirthdayCommand extends GroupCommandRunner {
                 int month = Integer.parseInt(matcher.group(1));
                 int day = Integer.parseInt(matcher.group(2));
                 LocalDate localDate = LocalDate.of(2000, month, day);
-                BirthdayManager.updateBirthDay(this.command.userId, month, day);
-                this.command.getContext().replyWithText("芙兰记住你的生日了哦~");
+                BirthdayManager.updateBirthDay(this.getCommand().userId, month, day);
+                this.getCommand().getContext().replyWithText("芙兰记住你的生日了哦~");
             } catch (NumberFormatException | DateTimeException e) {
-                this.command.getContext().replyWithText("日期的格式好像不太对呢……检查一下吧！");
+                this.getCommand().getContext().replyWithText("日期的格式好像不太对呢……检查一下吧！");
             }
         }
     }

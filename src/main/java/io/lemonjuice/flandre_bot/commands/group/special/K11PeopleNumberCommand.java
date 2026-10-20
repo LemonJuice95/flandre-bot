@@ -57,9 +57,9 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
                     reply.append(lastInfo.qq);
                     reply.append(") 上报于 ");
                     reply.append(lastInfo.time);
-                    this.command.getContext().replyWithText(reply.toString().trim());
+                    this.getCommand().getContext().replyWithText(reply.toString().trim());
                 } else {
-                    this.command.getContext().replyWithText("暂时还没收到汇报呢……");
+                    this.getCommand().getContext().replyWithText("暂时还没收到汇报呢……");
                 }
             } finally {
                 rwLock.readLock().unlock();
@@ -77,17 +77,17 @@ public class K11PeopleNumberCommand extends GroupCommandRunner {
                     }
                 }
                 if (number > 100) {
-                    this.command.getContext().replyWithText("诶？！这么多人真的装得下吗？");
+                    this.getCommand().getContext().replyWithText("诶？！这么多人真的装得下吗？");
                 } else if (number < 0) {
-                    this.command.getContext().replyWithText("诶？！人数是负数吗？这个要怎么做到呢……");
+                    this.getCommand().getContext().replyWithText("诶？！人数是负数吗？这个要怎么做到呢……");
                 } else {
                     lastInfo = new UpdateInfo(
-                            this.command.sender.nickName,
-                            this.command.userId,
+                            this.getCommand().sender.nickName,
+                            this.getCommand().userId,
                             LocalTime.now().toString().substring(0, 8),
                             number
                     );
-                    this.command.getContext().replyWithText("收到~k11现在一共有 " + number + " 人");
+                    this.getCommand().getContext().replyWithText("收到~k11现在一共有 " + number + " 人");
                 }
             } finally {
                 rwLock.writeLock().unlock();

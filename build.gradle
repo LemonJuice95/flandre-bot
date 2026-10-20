@@ -7,8 +7,8 @@ group = 'io.github.lemonjuice95'
 version = '0.2.0'
 
 repositories {
-    mavenCentral()
     mavenLocal()
+    mavenCentral()
 }
 
 jar {
@@ -19,6 +19,14 @@ jar {
     }
 }
 
+shadowJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    filesMatching('META-INF/services/**') {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+    mergeServiceFiles('META-INF/services')
+}
+
 dependencies {
     testImplementation platform('org.junit:junit-bom:6.0.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -27,9 +35,10 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.46'
 
     //框架及插件
-    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.27.0'
-    implementation 'io.github.lemonjuice95:flandre-sql-support:0.8.0'
-    implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.16.6'
+    implementation 'io.github.lemonjuice95:flandre-bot-framework:0.31.0.4'
+    annotationProcessor 'io.github.lemonjuice95:flandre-bot-framework:0.31.0.4:processor'
+    implementation 'io.github.lemonjuice95:flandre-sql-support:0.11.0'
+    implementation 'io.github.lemonjuice95:flandre-mai-plugin:0.18.0'
 
     //定时任务
     implementation 'org.quartz-scheduler:quartz:2.5.0'

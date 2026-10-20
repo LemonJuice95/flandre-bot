@@ -42,7 +42,7 @@ public class Choose1From2Command extends GroupCommandRunner {
     @Override
     public void apply() {
         int index = ThreadLocalRandom.current().nextInt(2);
-        this.command.getContext().replyWithText("芙兰建议你" + this.getOptions()[index] +"哦！");
+        this.getCommand().getContext().replyWithText("芙兰建议你" + this.getOptions()[index] +"哦！");
     }
 
     private String[] getOptions() {

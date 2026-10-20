@@ -58,33 +58,33 @@ public class GroupPlateCompleteTableCommand extends GroupCommandRunner {
                 try {
                     String plateName = matcher.group(1);
                     if (plateName.charAt(0) == '舞' || plateName.equals("霸者")) {
-                        this.command.getContext().replyWithText("芙兰暂时还不会画[舞]系牌子的表格呢……");
+                        this.getCommand().getContext().replyWithText("芙兰暂时还不会画[舞]系牌子的表格呢……");
                         return;
                     }
                     try {
-                        BufferedImage image = CompletionTableGenerator.generateWithPlates(this.command.userId, plateName);
+                        BufferedImage image = CompletionTableGenerator.generateWithPlates(this.getCommand().userId, plateName);
                         if (image != null) {
-                            this.command.getContext().prepareMessageToSend()
+                            this.getCommand().getContext().prepareMessageToSend()
                                     .appendReply()
                                     .appendImage(image, "PNG")
                                     .send();
                         } else {
-                            this.command.getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
+                            this.getCommand().getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
                         }
                     } catch (IllegalArgumentException e) {
                         if (e.getMessage().equals("不存在的牌子")) {
-                            this.command.getContext().replyWithText("没有这样的牌子哦~");
+                            this.getCommand().getContext().replyWithText("没有这样的牌子哦~");
                         } else {
                             throw e;
                         }
                     }
                 } catch (NotInitializedException e) {
-                    this.command.getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
+                    this.getCommand().getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
                 } catch (DivingFishException e) {
                     if (e instanceof DivingFishException.Unbound) {
-                        this.command.getContext().replyWithText("芙兰查不到你的成绩信息呢……\n你给芙兰授权了吗？\n如果没有的话请先使用“/水鱼授权”进行授权哦~");
+                        this.getCommand().getContext().replyWithText("芙兰查不到你的成绩信息呢……\n你给芙兰授权了吗？\n如果没有的话请先使用“/水鱼授权”进行授权哦~");
                     } else {
-                        this.command.getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
+                        this.getCommand().getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
                     }
                 }
             }

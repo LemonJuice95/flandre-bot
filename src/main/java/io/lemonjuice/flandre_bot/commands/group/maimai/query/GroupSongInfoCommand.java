@@ -54,17 +54,17 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
             List<Song> songs = SongManager.searchSong(name);
 
             if (songs.isEmpty()) {
-                this.command.getContext().replyWithText("没有找到叫做\"" + name + "\"的歌曲诶...");
+                this.getCommand().getContext().replyWithText("没有找到叫做\"" + name + "\"的歌曲诶...");
             } else if (songs.size() == 1) {
                 int songId = songs.getFirst().id;
-                BufferedImage image = SongPlayDataGenerator.generate(this.command.userId, songId);
+                BufferedImage image = SongPlayDataGenerator.generate(this.getCommand().userId, songId);
                 if (image != null) {
-                    this.command.getContext().prepareMessageToSend()
+                    this.getCommand().getContext().prepareMessageToSend()
                             .appendReply()
                             .appendImage(image, "PNG")
                             .send();
                 } else {
-                    this.command.getContext().replyWithText("诶？！图片生成失败了...");
+                    this.getCommand().getContext().replyWithText("诶？！图片生成失败了...");
                 }
             } else {
                 StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
@@ -75,15 +75,15 @@ public class GroupSongInfoCommand extends GroupCommandRunner {
                     reply.append(s.title);
                     reply.append("\n");
                 }
-                this.command.getContext().replyWithText(reply.toString().trim());
+                this.getCommand().getContext().replyWithText(reply.toString().trim());
             }
         } catch (NotInitializedException e) {
-            this.command.getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
+            this.getCommand().getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
         } catch (DivingFishException e) {
             if (e instanceof DivingFishException.Unbound) {
-                this.command.getContext().replyWithText("芙兰查不到你的成绩信息呢……\n你给芙兰授权了吗？\n如果没有的话请先使用“/水鱼授权”进行授权哦~");
+                this.getCommand().getContext().replyWithText("芙兰查不到你的成绩信息呢……\n你给芙兰授权了吗？\n如果没有的话请先使用“/水鱼授权”进行授权哦~");
             } else {
-                this.command.getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
+                this.getCommand().getContext().replyWithText("诶？生成失败了……\n芙兰不是故意的……");
             }
         }
     }

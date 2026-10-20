@@ -46,7 +46,7 @@ public class GroupSignInCommand extends SimpleGroupCommandRunner {
 
     @Override
     public void apply() {
-        if(this.checkCanSignIn(this.command.userId, this.command.groupId)) {
+        if(this.checkCanSignIn(this.getCommand().userId, this.getCommand().groupId)) {
             if(THINGS.size() < 4) {
                 return;
             }
@@ -61,9 +61,9 @@ public class GroupSignInCommand extends SimpleGroupCommandRunner {
 
             try (Connection co = SQLCore.getInstance().startConnection();
                  PreparedStatement ps = co.prepareStatement("INSERT INTO sign_in VALUES(?,?,?,?,?)")) {
-                ps.setLong(1, this.command.userId);
-                ps.setLong(2, this.command.groupId);
-                ps.setLong(3, (long) this.command.time);
+                ps.setLong(1, this.getCommand().userId);
+                ps.setLong(2, this.getCommand().groupId);
+                ps.setLong(3, (long) this.getCommand().time);
                 ps.setInt(4, fortune);
                 ps.setString(5, thingsStr);
                 ps.execute();
@@ -78,16 +78,16 @@ public class GroupSignInCommand extends SimpleGroupCommandRunner {
                     tmp = "忌 ";
                 }
             }
-            MessageToSend replyMsg = this.command.getContext().prepareMessageToSend();
+            MessageToSend replyMsg = this.getCommand().getContext().prepareMessageToSend();
             replyMsg.appendReply();
-            NicknameManager.appendNickname(this.command.userId, replyMsg);
+            NicknameManager.appendNickname(this.getCommand().userId, replyMsg);
             replyMsg.appendText(reply.toString().trim())
                     .send();
         } else {
             try (Connection co_ = SQLCore.getInstance().startConnection();
                  PreparedStatement ps_ = co_.prepareStatement("SELECT * FROM sign_in WHERE uid=? AND group_id=?")) {
-                ps_.setLong(1, this.command.userId);
-                ps_.setLong(2, this.command.groupId);
+                ps_.setLong(1, this.getCommand().userId);
+                ps_.setLong(2, this.getCommand().groupId);
                 try (ResultSet record = ps_.executeQuery()) {
                     record.next();
                     int fortune = record.getInt("fortune");
@@ -101,7 +101,7 @@ public class GroupSignInCommand extends SimpleGroupCommandRunner {
                             tmp = "忌 ";
                         }
                     }
-                    this.command.getContext().replyWithText(reply.toString().trim());
+                    this.getCommand().getContext().replyWithText(reply.toString().trim());
                 }
             } catch (SQLException e) {
                 log.error(e);

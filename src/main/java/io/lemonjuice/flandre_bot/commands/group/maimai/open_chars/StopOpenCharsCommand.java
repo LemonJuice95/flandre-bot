@@ -34,10 +34,10 @@ public class StopOpenCharsCommand extends SimpleGroupCommandRunner {
 
     @Override
     public void apply() {
-        if(OpenCharsManager.hasProcess(this.command.groupId)) {
-            this.command.getContext().sendText("诶？不玩了吗？好吧……");
+        if(OpenCharsManager.hasProcess(this.getCommand().groupId)) {
+            this.getCommand().getContext().sendText("诶？不玩了吗？好吧……");
             StringBuilder answer = new StringBuilder("下面是这次的答案：\n");
-            List<Song> songs = OpenCharsManager.getProcess(this.command.groupId).getSongs();
+            List<Song> songs = OpenCharsManager.getProcess(this.getCommand().groupId).getSongs();
             for(int i = 0; i < songs.size(); i++) {
                 answer.append("[");
                 answer.append(i);
@@ -49,10 +49,10 @@ public class StopOpenCharsCommand extends SimpleGroupCommandRunner {
                 Thread.sleep(1000);
             } catch (InterruptedException ignored) {
             }
-            this.command.getContext().sendText(answer.toString().trim());
-            OpenCharsManager.stopProcess(this.command.groupId);
+            this.getCommand().getContext().sendText(answer.toString().trim());
+            OpenCharsManager.stopProcess(this.getCommand().groupId);
         } else {
-            this.command.getContext().sendText("群里没有正在进行的开字母哦~");
+            this.getCommand().getContext().sendText("群里没有正在进行的开字母哦~");
         }
     }
 }

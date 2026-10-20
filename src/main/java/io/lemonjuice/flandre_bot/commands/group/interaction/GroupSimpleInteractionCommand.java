@@ -33,7 +33,7 @@ public class GroupSimpleInteractionCommand extends GroupCommandRunner {
     @Override
     public boolean matches() {
         StringBuilder key = new StringBuilder();
-        for(MessageSegment seg : this.command.message.getSegments()) {
+        for(MessageSegment seg : this.getCommand().message.getSegments()) {
             if(seg instanceof AtMessageSegment atSeg) {
                 if(atSeg.getQQ() == AccountInfo.getBotId()) {
                     key.append("<selfAt>");
@@ -48,7 +48,7 @@ public class GroupSimpleInteractionCommand extends GroupCommandRunner {
     @Override
     public void apply() {
         StringBuilder key = new StringBuilder();
-        for(MessageSegment seg : this.command.message.getSegments()) {
+        for(MessageSegment seg : this.getCommand().message.getSegments()) {
             if(seg instanceof AtMessageSegment atSeg) {
                 if(atSeg.getQQ() == AccountInfo.getBotId()) {
                     key.append("<selfAt>");
@@ -65,15 +65,15 @@ public class GroupSimpleInteractionCommand extends GroupCommandRunner {
                 String text = textSeg.getContent();
                 if(text.startsWith("<reply>")) {
                     text = text.replace("<reply>", "");
-                    reply.add(new ReplyMessageSegment(this.command.messageId));
+                    reply.add(new ReplyMessageSegment(this.getCommand().messageId));
                 }
-                if(NicknameManager.getNickname(this.command.userId) != null) {
-                    reply.add(new TextMessageSegment(text.replace("<user>", NicknameManager.getNickname(this.command.userId))));
+                if(NicknameManager.getNickname(this.getCommand().userId) != null) {
+                    reply.add(new TextMessageSegment(text.replace("<user>", NicknameManager.getNickname(this.getCommand().userId))));
                 } else {
                     String[] spReply = text.split("<user>", -1);
                     for(int i = 0; i < spReply.length - 1; i++) {
                         reply.add(new TextMessageSegment(spReply[i]));
-                        reply.add(new AtMessageSegment(this.command.userId));
+                        reply.add(new AtMessageSegment(this.getCommand().userId));
                     }
                     reply.add(new TextMessageSegment(spReply[spReply.length - 1]));
                 }
@@ -81,6 +81,6 @@ public class GroupSimpleInteractionCommand extends GroupCommandRunner {
                 reply.add(seg);
             }
         }
-        this.command.getContext().sendMessage(reply);
+        this.getCommand().getContext().sendMessage(reply);
     }
 }

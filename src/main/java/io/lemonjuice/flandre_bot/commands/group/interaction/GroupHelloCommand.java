@@ -44,10 +44,10 @@ public class GroupHelloCommand extends SimpleGroupCommandRunner {
         List<String> repliesNow = REPLIES.get(PeriodOfDay.getCurrent());
         String[] replyRaw = repliesNow.get(random.nextInt(repliesNow.size()))
                 .split("<user>", -1);
-        MessageToSend reply = this.command.getContext().prepareMessageToSend();
+        MessageToSend reply = this.getCommand().getContext().prepareMessageToSend();
         for(int i = 0; i < replyRaw.length - 1; i++) {
             reply.appendText(replyRaw[i]);
-            NicknameManager.appendNickname(this.command.userId, reply);
+            NicknameManager.appendNickname(this.getCommand().userId, reply);
         }
         reply.appendText(replyRaw[replyRaw.length - 1]);
         reply.send();

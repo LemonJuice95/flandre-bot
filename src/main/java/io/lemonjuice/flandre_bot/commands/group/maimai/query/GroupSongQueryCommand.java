@@ -61,19 +61,19 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
             List<Song> songs = SongManager.searchSong(name);
 
             if (songs.isEmpty()) {
-                this.command.getContext().replyWithText("没有找到叫做\"" + name + "\"的歌曲诶...");
+                this.getCommand().getContext().replyWithText("没有找到叫做\"" + name + "\"的歌曲诶...");
             } else if (songs.size() == 1) {
                 int songId = songs.getFirst().id;
                 BufferedImage image = SongInfoGenerator.generate(songId);
                 if (image != null) {
-                    this.command.getContext().prepareMessageToSend()
+                    this.getCommand().getContext().prepareMessageToSend()
                             .appendReply()
                             .appendText("你要找的是不是：")
                             .newLine()
                             .appendImage(image, "PNG")
                             .send();
                 } else {
-                    this.command.getContext().replyWithText("诶？！图片生成失败了...");
+                    this.getCommand().getContext().replyWithText("诶？！图片生成失败了...");
                 }
             } else {
                 StringBuilder reply = new StringBuilder("好像有不止一首歌叫这个名字呢\n芙兰帮你列出来了哦~\n\n");
@@ -84,10 +84,10 @@ public class GroupSongQueryCommand extends GroupCommandRunner {
                     reply.append(s.title);
                     reply.append("\n");
                 }
-                this.command.getContext().replyWithText(reply.toString().trim());
+                this.getCommand().getContext().replyWithText(reply.toString().trim());
             }
         } catch (NotInitializedException e) {
-            this.command.getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
+            this.getCommand().getContext().replyWithText("曲目信息还没加载完呢，稍等一会吧~");
         }
     }
 

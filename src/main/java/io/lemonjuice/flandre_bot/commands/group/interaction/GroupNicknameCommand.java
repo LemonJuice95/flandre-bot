@@ -37,17 +37,17 @@ public class GroupNicknameCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return messagePattern.matcher(this.command.message.trim()).simplyMatches();
+        return messagePattern.matcher(this.getCommand().message.trim()).simplyMatches();
     }
 
     @Override
     public void apply() {
         String nickname = this.getNickname();
         if(!nickname.isEmpty()) {
-            NicknameManager.updateNickname(this.command.userId, nickname);
-            this.command.getContext().replyWithText("唔……记住啦！\n芙兰以后就叫你" + nickname + "啦！");
+            NicknameManager.updateNickname(this.getCommand().userId, nickname);
+            this.getCommand().getContext().replyWithText("唔……记住啦！\n芙兰以后就叫你" + nickname + "啦！");
         } else {
-            this.command.getContext().replyWithText("诶？要芙兰叫你什么？没有听清呢……");
+            this.getCommand().getContext().replyWithText("诶？要芙兰叫你什么？没有听清呢……");
         }
     }
 

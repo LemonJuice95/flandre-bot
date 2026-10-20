@@ -24,40 +24,40 @@ public class OCGuessSongCommand extends GroupCommandRunner {
 
     @Override
     public boolean matches() {
-        return OpenCharsManager.hasProcess(this.command.groupId) &&
-                commandPattern.matcher(this.command.message.toString().trim()).matches();
+        return OpenCharsManager.hasProcess(this.getCommand().groupId) &&
+                commandPattern.matcher(this.getCommand().message.toString().trim()).matches();
     }
 
     @Override
     public void apply() {
-        Matcher matcher = commandPattern.matcher(this.command.message.toString().trim());
+        Matcher matcher = commandPattern.matcher(this.getCommand().message.toString().trim());
         if(matcher.find()) {
             int index = Integer.parseInt(matcher.group(1));
             String name = matcher.group(2);
             try {
-                OpenCharsProcess process = OpenCharsManager.getProcess(this.command.groupId);
+                OpenCharsProcess process = OpenCharsManager.getProcess(this.getCommand().groupId);
                 if(!process.isSongUnknown(index)) {
-                    this.command.getContext().replyWithText("这首歌曲的名字已经完全出来了\n不需要猜了呢~");
+                    this.getCommand().getContext().replyWithText("这首歌曲的名字已经完全出来了\n不需要猜了呢~");
                 } else if(process.guessSong(name, index)) {
-                    StringBuilder reply = new StringBuilder(NicknameManager.getNickname(this.command.userId));
+                    StringBuilder reply = new StringBuilder(NicknameManager.getNickname(this.getCommand().userId));
                     reply.append("猜对[");
                     reply.append(index);
                     reply.append("]号歌曲啦！\n");
-                    reply.append(OpenCharsManager.makeMessage(this.command.groupId));
-                    this.command.getContext().sendText(reply.toString());
+                    reply.append(OpenCharsManager.makeMessage(this.getCommand().groupId));
+                    this.getCommand().getContext().sendText(reply.toString());
                     if(process.checkAccomplished()) {
-                        OpenCharsManager.stopProcess(this.command.groupId);
+                        OpenCharsManager.stopProcess(this.getCommand().groupId);
                         try {
                             Thread.sleep(1000);
                         } catch (InterruptedException ignored) {
                         }
-                        this.command.getContext().sendText("看样子游戏结束了呢~");
+                        this.getCommand().getContext().sendText("看样子游戏结束了呢~");
                     }
                 } else {
-                    this.command.getContext().replyWithText("哼哼~猜错了哦~");
+                    this.getCommand().getContext().replyWithText("哼哼~猜错了哦~");
                 }
             } catch (IndexOutOfBoundsException e) {
-                this.command.getContext().replyWithText("编号超出范围了呢……");
+                this.getCommand().getContext().replyWithText("编号超出范围了呢……");
             }
         }
     }

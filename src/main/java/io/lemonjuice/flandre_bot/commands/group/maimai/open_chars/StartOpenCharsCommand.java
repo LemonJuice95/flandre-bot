@@ -53,14 +53,14 @@ public class StartOpenCharsCommand extends GroupCommandRunner {
     public void apply() {
         try {
             this.parseConditions();
-            if (OpenCharsManager.startNewProcess(this.command.groupId, this.conditions)) {
-                if(this.special) SpecialOpenCharHandler.handleSpecial(this.command.groupId);
-                this.command.getContext().sendText("要玩开字母吗？好嘞~\n" + OpenCharsManager.makeMessage(this.command.groupId));
+            if (OpenCharsManager.startNewProcess(this.getCommand().groupId, this.conditions)) {
+                if(this.special) SpecialOpenCharHandler.handleSpecial(this.getCommand().groupId);
+                this.getCommand().getContext().sendText("要玩开字母吗？好嘞~\n" + OpenCharsManager.makeMessage(this.getCommand().groupId));
             } else {
-                this.command.getContext().sendText("好像群里已经在玩开字母了诶？\n先把现在这一轮玩完吧！");
+                this.getCommand().getContext().sendText("好像群里已经在玩开字母了诶？\n先把现在这一轮玩完吧！");
             }
         } catch (NotInitializedException e) {
-            this.command.getContext().replyWithText("功能还没初始化完成呢，耐心等一会吧~");
+            this.getCommand().getContext().replyWithText("功能还没初始化完成呢，耐心等一会吧~");
         }
     }
 
@@ -68,7 +68,7 @@ public class StartOpenCharsCommand extends GroupCommandRunner {
         this.matcher.reset();
         if(this.matcher.matches()) {
             String commandStr = this.matcher.group(1).toString();
-            if (commandStr.contains("sp") && PermissionLevel.DEBUG.validatePermission(this.command)) {
+            if (commandStr.contains("sp") && PermissionLevel.DEBUG.validatePermission(this.getCommand())) {
                 this.special = true;
                 return;
             }

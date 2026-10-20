@@ -32,13 +32,13 @@ public class GroupBindDivingFishCommand extends SimpleGroupCommandRunner {
     @Override
     public void apply() {
         try {
-            JSONObject result = MaiMaiProberAuthApi.bindRequest(this.command.userId);
+            JSONObject result = MaiMaiProberAuthApi.bindRequest(this.getCommand().userId);
             String url = result.getString("verification_uri_complete");
             int duration = result.getInt("expires_in");
-            this.command.getContext().replyWithText(String.format("芙兰看看……好了！在%d秒内点击下面的链接就可以了哦~\n%s", duration, url));
+            this.getCommand().getContext().replyWithText(String.format("芙兰看看……好了！在%d秒内点击下面的链接就可以了哦~\n%s", duration, url));
         } catch (Exception e) {
             log.error("发起水鱼授权请求失败！", e);
-            this.command.getContext().replyWithText("出错了！抱歉……联系一下bot管理员吧~");
+            this.getCommand().getContext().replyWithText("出错了！抱歉……联系一下bot管理员吧~");
         }
     }
 }

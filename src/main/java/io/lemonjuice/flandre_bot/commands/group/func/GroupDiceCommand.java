@@ -52,11 +52,11 @@ public class GroupDiceCommand extends GroupCommandRunner {
         String expression = this.getExpression();
         String result = getResult(expression);
         if(result.isEmpty()) {
-            this.command.getContext().replyWithText("诶？骰子表达式好像不对……\n再检查一下吧~");
+            this.getCommand().getContext().replyWithText("诶？骰子表达式好像不对……\n再检查一下吧~");
         } else if(result.equals("too_much")) {
-            this.command.getContext().replyWithText("骰子数量太多啦，芙兰会数不过来的……");
+            this.getCommand().getContext().replyWithText("骰子数量太多啦，芙兰会数不过来的……");
         } else {
-            this.command.getContext().replyWithText(NicknameManager.getNickname(this.command.userId) + "投掷骰子的结果为：\n" + expression + "=" + result);
+            this.getCommand().getContext().replyWithText(NicknameManager.getNickname(this.getCommand().userId) + "投掷骰子的结果为：\n" + expression + "=" + result);
         }
     }
 

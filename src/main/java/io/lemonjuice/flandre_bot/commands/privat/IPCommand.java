@@ -41,15 +41,15 @@ public class IPCommand extends SimplePrivateCommandRunner {
             HttpGet get = new HttpGet("http://icanhazip.com");
             HttpResponse response = httpClient.execute(get);
             if(response.getStatusLine().getStatusCode() != 200) {
-                this.command.getContext().sendText(String.format("抱歉呢……ip获取失败了（HTTP ERROR %d）", response.getStatusLine().getStatusCode()));
+                this.getCommand().getContext().sendText(String.format("抱歉呢……ip获取失败了（HTTP ERROR %d）", response.getStatusLine().getStatusCode()));
                 return;
             } else {
                 String ip = EntityUtils.toString(response.getEntity());
-                this.command.getContext().sendText("芙兰目前的ip为：\n" + ip);
+                this.getCommand().getContext().sendText("芙兰目前的ip为：\n" + ip);
             }
         } catch (IOException e) {
             log.error("无法获取ip！", e);
-            this.command.getContext().sendText("抱歉呢……ip获取失败了");
+            this.getCommand().getContext().sendText("抱歉呢……ip获取失败了");
         }
     }
 }
