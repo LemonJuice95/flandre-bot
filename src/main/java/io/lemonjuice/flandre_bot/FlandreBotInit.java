@@ -41,11 +41,6 @@ public class FlandreBotInit {
     }
 
     @SubscribeEvent
-    public void onSegmentRegister(SegmentTypeRegisterEvent event) {
-        event.register("file", FileMessageSegment::new);
-    }
-
-    @SubscribeEvent
     public void onBotStop(BotStopEvent event) {
         ChatBotHandler.saveAll();
         CacheCleaner.clean();
