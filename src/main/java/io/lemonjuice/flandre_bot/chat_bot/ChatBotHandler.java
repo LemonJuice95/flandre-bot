@@ -317,7 +317,7 @@ public class ChatBotHandler {
         JSONObject result = new JSONObject();
 
         result.put("model", "deepseek-flash");
-        result.put("temperature", 0.9);
+        result.put("temperature", FlandreBotConfig.CHATBOT_TEMPERATURE.get());
         result.put("max_tokens", 32767);
         result.put("response_format", new JSONObject("{\"type\":\"text\"}"));
         result.put("thinking", new JSONObject("{\"type\":\"enabled\"}"));
