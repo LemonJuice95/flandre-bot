@@ -45,6 +45,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -388,10 +389,18 @@ public class ChatBotHandler {
     }
 
     public static synchronized void readAll() {
-        ContextManager.getGroups().forEach(gCtx -> {
-            ChatBotContext ctx = ChatBotPersistence.read(gCtx.getGroupId());
+        File rootDir = new File(FlandreBotConfig.CHATBOT_PERSISTENCE_ROOT.get());
+        String[] names = rootDir.list((_, name) -> name.endsWith(".json"));
+        if(names == null) return;
+        List<Long> groupIds = Arrays.stream(names)
+                .map(str -> str.substring(0, str.lastIndexOf(".")))
+                .map(Long::valueOf)
+                .toList();
+
+        groupIds.forEach(id -> {
+            ChatBotContext ctx = ChatBotPersistence.read(id);
             if(ctx != null) {
-                ENABLED_GROUPS.put(gCtx.getGroupId(), ctx);
+                ENABLED_GROUPS.put(id, ctx);
             }
         });
     }
