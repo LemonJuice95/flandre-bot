@@ -6,6 +6,7 @@ import io.lemonjuice.flandre_bot.config.FlandreBotConfig;
 import io.lemonjuice.flandre_bot.resources.ResourceInit;
 import io.lemonjuice.flandre_bot.utils.NicknameManager;
 import io.lemonjuice.flandre_bot_framework.FlandreBot;
+import io.lemonjuice.flandre_bot_framework.account.ContextManager;
 import io.lemonjuice.flandre_bot_framework.event.annotation.EventSubscriber;
 import io.lemonjuice.flandre_bot_framework.event.annotation.SubscribeEvent;
 import io.lemonjuice.flandre_bot_framework.event.msg.CommandRunEvent;
@@ -382,8 +383,17 @@ public class ChatBotHandler {
         }
     }
 
-    public static void saveAll() {
+    public static synchronized void saveAll() {
         ENABLED_GROUPS.forEach(ChatBotPersistence::save);
+    }
+
+    public static synchronized void readAll() {
+        ContextManager.getGroups().forEach(gCtx -> {
+            ChatBotContext ctx = ChatBotPersistence.read(gCtx.getGroupId());
+            if(ctx != null) {
+                ENABLED_GROUPS.put(gCtx.getGroupId(), ctx);
+            }
+        });
     }
 
     public static void cleanCachedFile() {

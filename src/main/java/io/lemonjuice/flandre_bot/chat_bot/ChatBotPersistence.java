@@ -26,6 +26,7 @@ public class ChatBotPersistence {
 
     public static ChatBotContext read(long groupId) {
         File file = new File(String.format("%s%d.txt", FlandreBotConfig.CHATBOT_PERSISTENCE_ROOT.get(), groupId));
+        if(!file.exists()) return null;
         try (InputStream input = new FileInputStream(file)) {
             JSONTokener tokener = new JSONTokener(input);
             JSONObject json = new JSONObject(tokener);
