@@ -15,7 +15,7 @@ import java.util.List;
 @Log4j2
 public class ChatBotPersistence {
     public static void save(long groupId, ChatBotContext ctx) {
-        File file = new File(String.format("%s%d.txt", FlandreBotConfig.CHATBOT_PERSISTENCE_ROOT.get(), groupId));
+        File file = new File(String.format("%s%d.json", FlandreBotConfig.CHATBOT_PERSISTENCE_ROOT.get(), groupId));
         JSONObject serialized = serialize(ctx);
         try (OutputStream output = new FileOutputStream(file)) {
             output.write(serialized.toString().getBytes(StandardCharsets.UTF_8));
@@ -25,7 +25,7 @@ public class ChatBotPersistence {
     }
 
     public static ChatBotContext read(long groupId) {
-        File file = new File(String.format("%s%d.txt", FlandreBotConfig.CHATBOT_PERSISTENCE_ROOT.get(), groupId));
+        File file = new File(String.format("%s%d.json", FlandreBotConfig.CHATBOT_PERSISTENCE_ROOT.get(), groupId));
         if(!file.exists()) return null;
         try (InputStream input = new FileInputStream(file)) {
             JSONTokener tokener = new JSONTokener(input);
