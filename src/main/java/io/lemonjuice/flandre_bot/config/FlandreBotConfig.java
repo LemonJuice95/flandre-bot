@@ -1,5 +1,7 @@
 package io.lemonjuice.flandre_bot.config;
 
+import io.lemonjuice.flandre_bot_framework.config.BotConfig;
+import io.lemonjuice.flandre_bot_framework.config.ConfigItem;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
@@ -11,16 +13,12 @@ import java.util.function.Supplier;
 
 @Log4j2
 public class FlandreBotConfig {
-    private static final Properties properties = new Properties();
-    private static final File cfgFile = new File("./config/bot.properties");
+    private static final BotConfig CONFIG = new BotConfig("./config/bot-custom.properties", "config/bot-custom.properties");
 
-    public static final Supplier<String> DEEPSEEK_API_KEY = () -> properties.getProperty("deepseek.api_key");
+    public static final ConfigItem<String> DEEPSEEK_API_KEY = CONFIG.register(CONFIG::getString, "deepseek.api_key", "");
+    public static final ConfigItem<Integer> CHATBOT_CACHE_SIZE = CONFIG.register(CONFIG::getInt, "chatbot.cache.size", 400);
 
     public static void init() {
-        try (InputStream input = new FileInputStream(cfgFile)) {
-            properties.load(input);
-        } catch (IOException e) {
-            log.warn("自定义配置读取失败！", e);
-        }
+        CONFIG.load();
     }
 }

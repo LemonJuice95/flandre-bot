@@ -27,6 +27,7 @@ public class FlandreBotInit {
         FlandreBotConfig.init();
         ConsoleCommandInit.CONSOLE_COMMANDS.load();
         ResourceInit.RESOURCES.load();
+        ResourceInit.initPromptPresets();
         CommandInit.COMMANDS.load();
         NicknameManager.init();
         ScheduledTaskManager.init();

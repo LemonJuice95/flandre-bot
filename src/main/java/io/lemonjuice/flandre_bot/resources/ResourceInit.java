@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ResourceInit {
     public static final ResourceRegister RESOURCES = new ResourceRegister();
@@ -33,5 +34,18 @@ public class ResourceInit {
 
     //Deepseek
     public static final Resource<List<String>> MAI_FUZZY_SEARCH_SYS = RESOURCES.register(new TextLinesResource("assets/deepseek/mai_fuzzy_search_sys.txt"));
-    public static final Resource<List<String>> CHAT_BOT_SYS = RESOURCES.register(new TextLinesResource("assets/deepseek/chat_bot.txt"));
+    public static final Resource<List<String>> CHAT_BOT_SYS = RESOURCES.register(new TextLinesResource("assets/deepseek/chat_bot_default.txt"));
+
+    //prompt presets
+    public static final Resource<List<String>> CB_PROMPT_PRESET_BOM = RESOURCES.register(new OuterTextLinesResource("./assets/deepseek/chat_bot/prompt_preset_bom.txt"));
+    public static final Map<String, Resource<List<String>>> CB_PROMPT_PRESETS = new ConcurrentHashMap<>();
+
+    public static void initPromptPresets() {
+        CB_PROMPT_PRESETS.put("default", CHAT_BOT_SYS);
+        CB_PROMPT_PRESET_BOM.get().forEach((key) -> {
+            CB_PROMPT_PRESETS.put(key, new OuterTextLinesResource(String.format("./assets/deepseek/chat_bot/%s.txt", key)));
+        });
+        CB_PROMPT_PRESETS.values().forEach(Resource::init);
+    }
+
 }

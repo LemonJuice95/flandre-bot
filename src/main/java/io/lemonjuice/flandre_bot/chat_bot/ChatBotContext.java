@@ -1,17 +1,24 @@
 package io.lemonjuice.flandre_bot.chat_bot;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class ChatBotCache {
+public class ChatBotContext {
     private final int maxSize;
     private final Queue<ChatBotMessage> messages;
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
+    @Setter
+    @Getter
+    private volatile String prompt;
 
-    public ChatBotCache(int maxSize) {
+    public ChatBotContext(int maxSize, String prompt) {
         this.maxSize = maxSize;
         this.messages = new ArrayDeque<>(maxSize + 5);
+        this.prompt = prompt;
     }
 
     public void pushBack(ChatBotMessage... messages) {

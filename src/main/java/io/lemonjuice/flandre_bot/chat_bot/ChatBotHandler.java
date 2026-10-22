@@ -46,6 +46,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 //Love, Death & Robots
 @EventSubscriber
@@ -58,7 +59,7 @@ public class ChatBotHandler {
             "“特别提示”内容在同一对话上下文中仅生效一次";
     public static volatile boolean CONFESSION_SWITCH = false;
 
-    private static final ConcurrentHashMap<Long, ChatBotCache> ENABLED_GROUPS = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Long, ChatBotContext> ENABLED_GROUPS = new ConcurrentHashMap<>();
     public static final ConcurrentHashMap<Long, String> INJECTED_PROMPTS = new ConcurrentHashMap<>();
     private static final MessagePattern pattern = MessagePattern.builder()
             .startGroup()
@@ -86,10 +87,31 @@ public class ChatBotHandler {
 
     public static void injectPrompt(long groupId, String prompt) {
         INJECTED_PROMPTS.put(groupId, prompt);
+        ENABLED_GROUPS.compute(groupId, (id, ctx) -> {
+            if(ctx != null) ctx.setPrompt(prompt);
+            return ctx;
+        });
     }
 
     public static void clearInject(long groupId) {
         INJECTED_PROMPTS.remove(groupId);
+        ENABLED_GROUPS.compute(groupId, (id, ctx) -> {
+            if(ctx != null) ctx.setPrompt(SYS_MSG);
+            return ctx;
+        });
+    }
+
+    public static boolean injectPromptWithPreset(long groupId, String key) {
+        if(ResourceInit.CB_PROMPT_PRESETS.containsKey(key)) {
+            String prompt = String.join("\n", ResourceInit.CB_PROMPT_PRESETS.get(key).get());
+            INJECTED_PROMPTS.put(groupId, prompt);
+            ENABLED_GROUPS.compute(groupId, (id, ctx) -> {
+                if(ctx != null) ctx.setPrompt(prompt);
+                return ctx;
+            });
+            return true;
+        }
+        return false;
     }
 
     @SubscribeEvent
@@ -119,7 +141,7 @@ public class ChatBotHandler {
     }
 
     private static void handleChatMsg(Message message, MessageMatcher matcher) {
-        ChatBotCache cache = ENABLED_GROUPS.get(message.groupId);
+        ChatBotContext cache = ENABLED_GROUPS.get(message.groupId);
         if(cache == null) return;
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             ChatBotMessage.Body userMessage = genUserMessage(message, matcher, client);
@@ -290,7 +312,7 @@ public class ChatBotHandler {
         }
     }
 
-    private static JSONObject buildDsRequest(long groupId, ChatBotCache cache, ChatBotMessage.Body newMessage) {
+    private static JSONObject buildDsRequest(long groupId, ChatBotContext cache, ChatBotMessage.Body newMessage) {
         JSONObject result = new JSONObject();
 
         result.put("model", "deepseek-flash");
@@ -303,8 +325,9 @@ public class ChatBotHandler {
         JSONObject sysMsg = new JSONObject();
         sysMsg.put("role", "system");
 
-        String content = INJECTED_PROMPTS.getOrDefault(groupId,
-                SYS_MSG + (CONFESSION_SWITCH ? CONFESSION_TEXT : ""));
+//        String content = INJECTED_PROMPTS.getOrDefault(groupId,
+//                SYS_MSG + (CONFESSION_SWITCH ? CONFESSION_TEXT : ""));
+        String content = ENABLED_GROUPS.get(groupId).getPrompt() + (CONFESSION_SWITCH ? CONFESSION_TEXT : "");
         sysMsg.put("content", content);
         messages.put(sysMsg);
 
@@ -344,7 +367,8 @@ public class ChatBotHandler {
     }
 
     public static void enableChatBot(long groupId) {
-        ENABLED_GROUPS.putIfAbsent(groupId, new ChatBotCache(100));
+        ENABLED_GROUPS.putIfAbsent(groupId,
+                new ChatBotContext(FlandreBotConfig.CHATBOT_CACHE_SIZE.get(), INJECTED_PROMPTS.getOrDefault(groupId, SYS_MSG)));
     }
 
     public static void disableChatBot(long groupId) {
