@@ -17,6 +17,7 @@ public class FlandreBotConfig {
 
     public static final ConfigItem<String> DEEPSEEK_API_KEY = CONFIG.register(CONFIG::getString, "deepseek.api_key", "");
     public static final ConfigItem<Integer> CHATBOT_CACHE_SIZE = CONFIG.register(CONFIG::getInt, "chatbot.cache.size", 400);
+    public static final ConfigItem<String> CHATBOT_PERSISTENCE_ROOT = CONFIG.register(CONFIG::getString, "chatbot.persistence.root_dir", "./persistence/chat_bot/");
 
     public static void init() {
         CONFIG.load();

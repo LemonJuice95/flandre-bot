@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ChatBotContext {
+    @Getter
     private final int maxSize;
     private final Queue<ChatBotMessage> messages;
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
@@ -19,6 +20,18 @@ public class ChatBotContext {
         this.maxSize = maxSize;
         this.messages = new ArrayDeque<>(maxSize + 5);
         this.prompt = prompt;
+    }
+
+    public void pushBack(Collection<ChatBotMessage> messages) {
+        try {
+            lock.writeLock().lock();
+            this.messages.addAll(messages);
+            while(this.messages.size() > maxSize) {
+                this.messages.poll();
+            }
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 
     public void pushBack(ChatBotMessage... messages) {

@@ -3,6 +3,7 @@ package io.lemonjuice.flandre_bot;
 import io.lemonjuice.flan_mai_plugin.event.SongInitializedEvent;
 import io.lemonjuice.flan_mai_plugin.utils.SongManager;
 import io.lemonjuice.flan_sql_support.event.SQLPreCloseEvent;
+import io.lemonjuice.flandre_bot.chat_bot.ChatBotHandler;
 import io.lemonjuice.flandre_bot.commands.CommandInit;
 import io.lemonjuice.flandre_bot.commands.group.maimai.special.SongFuzzySearchCommand;
 import io.lemonjuice.flandre_bot.commands.group.special.K11PeopleNumberCommand;
@@ -46,6 +47,7 @@ public class FlandreBotInit {
 
     @SubscribeEvent
     public void onBotStop(BotStopEvent event) {
+        ChatBotHandler.saveAll();
         CacheCleaner.clean();
     }
 

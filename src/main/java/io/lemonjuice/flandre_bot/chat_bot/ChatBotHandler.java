@@ -345,7 +345,7 @@ public class ChatBotHandler {
         return result;
     }
 
-    private static Object serializeBody(ChatBotMessage.Body body) {
+    public static Object serializeBody(ChatBotMessage.Body body) {
         if(body.fileIds() == null || body.fileIds().isEmpty()) {
             return body.text();
         }
@@ -367,12 +367,23 @@ public class ChatBotHandler {
     }
 
     public static void enableChatBot(long groupId) {
-        ENABLED_GROUPS.putIfAbsent(groupId,
-                new ChatBotContext(FlandreBotConfig.CHATBOT_CACHE_SIZE.get(), INJECTED_PROMPTS.getOrDefault(groupId, SYS_MSG)));
+        ChatBotContext ctx = ChatBotPersistence.read(groupId);
+        if(ctx == null) {
+            ctx = new ChatBotContext(FlandreBotConfig.CHATBOT_CACHE_SIZE.get(), INJECTED_PROMPTS.getOrDefault(groupId, SYS_MSG));
+        }
+
+        ENABLED_GROUPS.putIfAbsent(groupId, ctx);
     }
 
     public static void disableChatBot(long groupId) {
-        ENABLED_GROUPS.remove(groupId);
+        ChatBotContext ctx = ENABLED_GROUPS.remove(groupId);
+        if(ctx != null) {
+            ChatBotPersistence.save(groupId, ctx);
+        }
+    }
+
+    public static void saveAll() {
+        ENABLED_GROUPS.forEach(ChatBotPersistence::save);
     }
 
     public static void cleanCachedFile() {
