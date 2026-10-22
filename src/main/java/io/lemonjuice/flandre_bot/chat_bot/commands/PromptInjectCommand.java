@@ -47,7 +47,7 @@ public class PromptInjectCommand extends GroupPatternCommandRunner {
             if(matcher1.matches()) {
                 String operation = matcher1.group(1);
                 String content = matcher1.group(2);
-                if(!operation.equals("clear") && content == null) {
+                if(!operation.equals("clear") && !operation.equals("show_presets") && content == null) {
                     this.getCommand().getContext().replyWithText("命令格式似乎有误呢……检查一下吧~");
                     return;
                 }
