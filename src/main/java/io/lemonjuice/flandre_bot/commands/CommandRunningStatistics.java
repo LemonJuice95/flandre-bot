@@ -47,15 +47,15 @@ public class CommandRunningStatistics {
         Map<String, Integer> result = new HashMap<>();
         if(all) {
             BotCommandLookup.GROUP_COMMANDS.forEach((f) -> {
-                CommandRunner runner = f.apply(Message.DUMMY);
+                CommandRunner runner = f.provider.apply(Message.DUMMY);
                 result.put(runner.getClass().getSimpleName(), 0);
             });
             BotCommandLookup.PRIVATE_COMMANDS.forEach((f) -> {
-                CommandRunner runner = f.apply(Message.DUMMY);
+                CommandRunner runner = f.provider.apply(Message.DUMMY);
                 result.put(runner.getClass().getSimpleName(), 0);
             });
             BotCommandLookup.FRIEND_COMMANDS.forEach((f) -> {
-                CommandRunner runner = f.apply(Message.DUMMY);
+                CommandRunner runner = f.provider.apply(Message.DUMMY);
                 result.put(runner.getClass().getSimpleName(), 0);
             });
             result.put("Poke", 0);
