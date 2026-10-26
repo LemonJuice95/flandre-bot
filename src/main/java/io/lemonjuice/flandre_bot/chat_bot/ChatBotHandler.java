@@ -46,6 +46,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -74,6 +75,7 @@ public class ChatBotHandler {
             .build();
     public static final String SYS_MSG;
     private static final ConcurrentHashMap<String, ChatBotCachedFile> CACHED_FILES = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, ChatBotCachedFile> CACHED_FILES_ID = new ConcurrentHashMap<>();
     private static final int CACHED_FILES_EXPIRES_IN = 10800;
     private static final DateTimeFormatter cacheDateFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
@@ -306,7 +308,9 @@ public class ChatBotHandler {
             JSONObject respJson = new JSONObject(responseStr);
             String fileId = respJson.getString("id");
             long expiresAt = respJson.optLong("expires_at", Long.MAX_VALUE);
-            CACHED_FILES.put(imgFile.getName(), new ChatBotCachedFile(expiresAt, fileId));
+            ChatBotCachedFile cached = new ChatBotCachedFile(expiresAt, fileId, imgFile.getName());
+            CACHED_FILES.put(imgFile.getName(), cached);
+            CACHED_FILES_ID.put(fileId, cached);
             return fileId;
         } catch (JSONException e) {
             log.error("无法解析上传图片时的响应JSON", e);
@@ -334,9 +338,11 @@ public class ChatBotHandler {
         messages.put(sysMsg);
 
         List<ChatBotMessage> cachedMessages = cache.getMessages();
+
         cachedMessages.add(new ChatBotMessage(ChatBotMessage.Role.USER, newMessage));
         for(ChatBotMessage cachedMsg : cachedMessages) {
             JSONObject msgJson = new JSONObject();
+            filterFiles(cachedMsg.message);
             msgJson.put("role", cachedMsg.role.toString());
             msgJson.put("content", serializeBody(cachedMsg.message));
             messages.put(msgJson);
@@ -345,6 +351,18 @@ public class ChatBotHandler {
         result.put("messages", messages);
 
         return result;
+    }
+
+    private static void filterFiles(ChatBotMessage.Body body) {
+        body.fileIds().removeIf(fileId -> CACHED_FILES_ID.compute(fileId, (_, val) -> {
+                    if (val == null) return null;
+                    if (!val.isValidNow()) {
+                        CACHED_FILES.remove(val.fileName());
+                        return null;
+                    }
+                    return val;
+                }
+        ) == null);
     }
 
     public static Object serializeBody(ChatBotMessage.Body body) {
