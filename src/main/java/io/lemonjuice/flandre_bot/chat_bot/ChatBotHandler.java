@@ -354,6 +354,8 @@ public class ChatBotHandler {
     }
 
     private static void filterFiles(ChatBotMessage.Body body) {
+        if(body.fileIds() == null) return;
+
         body.fileIds().removeIf(fileId -> CACHED_FILES_ID.compute(fileId, (_, val) -> {
                     if (val == null) return null;
                     if (!val.isValidNow()) {
