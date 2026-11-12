@@ -19,7 +19,7 @@ public class ChatBotContext {
 
     public ChatBotContext(int maxSize, String prompt) {
         this.maxSize = maxSize;
-        this.messages = new ArrayDeque<>(maxSize + 5);
+        this.messages = new ArrayDeque<>(maxSize + 10);
         this.prompt = prompt;
     }
 
