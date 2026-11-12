@@ -57,7 +57,7 @@ public class ChatBotPersistence {
 
     public static ChatBotContext deserialize(JSONObject json) {
         ChatBotContext ctx = new ChatBotContext(
-                json.optInt("size", FlandreBotConfig.CHATBOT_CACHE_SIZE.get()),
+                json.optInt("size", FlandreBotConfig.CHATBOT_CACHE_SIZE.get() + FlandreBotConfig.CHATBOT_CONTEXT_STEP.get()),
                 json.optString("prompt", ChatBotHandler.SYS_MSG)
         );
 

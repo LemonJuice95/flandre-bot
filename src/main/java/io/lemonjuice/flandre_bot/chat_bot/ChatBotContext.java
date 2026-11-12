@@ -1,5 +1,6 @@
 package io.lemonjuice.flandre_bot.chat_bot;
 
+import io.lemonjuice.flandre_bot.config.FlandreBotConfig;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,8 +27,11 @@ public class ChatBotContext {
         try {
             lock.writeLock().lock();
             this.messages.addAll(messages);
-            while(this.messages.size() > maxSize) {
-                this.messages.poll();
+            if(this.messages.size() > this.maxSize) {
+                int targetSize = Math.max(0, this.maxSize - FlandreBotConfig.CHATBOT_CONTEXT_STEP.get());
+                while (this.messages.size() > targetSize) {
+                    this.messages.poll();
+                }
             }
         } finally {
             lock.writeLock().unlock();
@@ -38,8 +42,11 @@ public class ChatBotContext {
         try {
             lock.writeLock().lock();
             this.messages.addAll(Arrays.asList(messages));
-            while(this.messages.size() > maxSize) {
-                this.messages.poll();
+            if(this.messages.size() > this.maxSize) {
+                int targetSize = Math.max(0, this.maxSize - FlandreBotConfig.CHATBOT_CONTEXT_STEP.get());
+                while (this.messages.size() > targetSize) {
+                    this.messages.poll();
+                }
             }
         } finally {
             lock.writeLock().unlock();
@@ -50,8 +57,11 @@ public class ChatBotContext {
         try {
             lock.writeLock().lock();
             this.messages.add(message);
-            while (this.messages.size() > maxSize) {
-                this.messages.poll();
+            if(this.messages.size() > this.maxSize) {
+                int targetSize = Math.max(0, this.maxSize - FlandreBotConfig.CHATBOT_CONTEXT_STEP.get());
+                while (this.messages.size() > targetSize) {
+                    this.messages.poll();
+                }
             }
         } finally {
             lock.writeLock().unlock();

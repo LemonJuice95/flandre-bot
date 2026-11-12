@@ -19,6 +19,7 @@ public class FlandreBotConfig {
     public static final ConfigItem<Integer> CHATBOT_CACHE_SIZE = CONFIG.register(CONFIG::getInt, "chatbot.cache.size", 400);
     public static final ConfigItem<String> CHATBOT_PERSISTENCE_ROOT = CONFIG.register(CONFIG::getString, "chatbot.persistence.root_dir", "./persistence/chat_bot/");
     public static final ConfigItem<Double> CHATBOT_TEMPERATURE = CONFIG.register(CONFIG::getDouble, "chatbot.temperature", 0.75);
+    public static final ConfigItem<Integer> CHATBOT_CONTEXT_STEP = CONFIG.register(CONFIG::getInt, "chatbot.context.step_size", 200);
 
     public static void init() {
         CONFIG.load();

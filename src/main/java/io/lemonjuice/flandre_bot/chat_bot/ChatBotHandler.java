@@ -391,7 +391,7 @@ public class ChatBotHandler {
     public static void enableChatBot(long groupId) {
         ChatBotContext ctx = ChatBotPersistence.read(groupId);
         if(ctx == null) {
-            ctx = new ChatBotContext(FlandreBotConfig.CHATBOT_CACHE_SIZE.get(), INJECTED_PROMPTS.getOrDefault(groupId, SYS_MSG));
+            ctx = new ChatBotContext(FlandreBotConfig.CHATBOT_CACHE_SIZE.get() + FlandreBotConfig.CHATBOT_CONTEXT_STEP.get(), INJECTED_PROMPTS.getOrDefault(groupId, SYS_MSG));
         }
 
         ENABLED_GROUPS.putIfAbsent(groupId, ctx);
