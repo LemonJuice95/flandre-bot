@@ -19,6 +19,7 @@ public class FunctionNameManager {
             "maimai_query",
             "maimai_games",
             "k11_number",
-            "mai_deepseek"
+            "mai_deepseek",
+            "chat_bot"
     );
 }

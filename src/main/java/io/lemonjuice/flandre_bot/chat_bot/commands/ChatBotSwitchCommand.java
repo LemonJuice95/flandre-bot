@@ -1,6 +1,7 @@
 package io.lemonjuice.flandre_bot.chat_bot.commands;
 
 import io.lemonjuice.flandre_bot.chat_bot.ChatBotHandler;
+import io.lemonjuice.flandre_bot.func.FunctionCommand;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupCommandRunner;
 import io.lemonjuice.flandre_bot_framework.command.group.GroupPatternCommandRunner;
 import io.lemonjuice.flandre_bot_framework.message.pattern.MessagePattern;
@@ -13,6 +14,7 @@ import io.lemonjuice.flandre_bot_framework.permission.PermissionLevel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@FunctionCommand("chat_bot")
 public class ChatBotSwitchCommand extends GroupPatternCommandRunner {
     private static final Pattern pattern = Pattern.compile("/(开启|关闭)ai聊天", Pattern.CASE_INSENSITIVE);
     public static final MessagePattern commandPattern = MessagePattern.builder()
